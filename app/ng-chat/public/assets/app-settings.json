@@ -1,0 +1,9 @@
+{
+  "googleAuthApiBaseUrl": "https://www.googleapis.com/oauth2/v1/",
+  "invidiousApiBaseUrl": "",
+  "youtubeApiBaseUrl": "https://www.googleapis.com/youtube/v3/",
+  "ytDlpApiBaseUrl": "",
+  "regionCode": "US",
+  "languageCode": "en",
+  "supportedSocialMedias": {}
+}

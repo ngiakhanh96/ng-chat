@@ -1,0 +1,81 @@
+{
+  "name": "ng-chat",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "chat",
+  "sourceRoot": "app/ng-chat/src",
+  "tags": ["scope:app-ng-chat"],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/app/ng-chat",
+        "browser": "app/ng-chat/src/main.ts",
+        "tsConfig": "app/ng-chat/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "app/ng-chat/public"
+          }
+        ],
+        "inlineStyleLanguage": "scss",
+        "styles": ["app/ng-chat/src/styles.scss"],
+        "server": "app/ng-chat/src/main.server.ts",
+        "ssr": {
+          "entry": "app/ng-chat/src/server.ts"
+        },
+        "outputMode": "server"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "ng-chat:build:production"
+        },
+        "development": {
+          "buildTarget": "ng-chat:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "ng-chat:build",
+        "port": 4200,
+        "staticFilePath": "dist/app/ng-chat/browser",
+        "spa": true
+      }
+    }
+  }
+}
