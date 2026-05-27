@@ -8,20 +8,11 @@ import { MemoryStorage } from './memory-storage.service';
 export class LocalStorage implements Storage {
   private readonly storage: Storage;
   private platformId = inject(PLATFORM_ID);
-
   constructor() {
-    this.storage = this.getStorage();
-  }
-
-  private getStorage(): Storage {
-    if (!isPlatformBrowser(this.platformId)) {
-      return new MemoryStorage();
-    }
-
-    try {
-      return window.localStorage;
-    } catch {
-      return new MemoryStorage();
+    if (isPlatformBrowser(this.platformId)) {
+      this.storage = window.localStorage;
+    } else {
+      this.storage = new MemoryStorage();
     }
   }
 

@@ -8,20 +8,11 @@ import { MemoryStorage } from './memory-storage.service';
 export class SessionStorage implements Storage {
   private readonly storage: Storage;
   private platformId = inject(PLATFORM_ID);
-
   constructor() {
-    this.storage = this.getStorage();
-  }
-
-  private getStorage(): Storage {
-    if (!isPlatformBrowser(this.platformId)) {
-      return new MemoryStorage();
-    }
-
-    try {
-      return window.sessionStorage;
-    } catch {
-      return new MemoryStorage();
+    if (isPlatformBrowser(this.platformId) && window?.sessionStorage) {
+      this.storage = window.sessionStorage;
+    } else {
+      this.storage = new MemoryStorage();
     }
   }
 

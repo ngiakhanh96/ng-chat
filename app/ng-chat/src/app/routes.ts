@@ -14,6 +14,11 @@ const canNavigateToExternalPage: CanActivateFn = () => {
 };
 export const mainRoutes: Route[] = [
   {
+    path: '',
+    pathMatch: 'full',
+    children: [],
+  },
+  {
     path: 'externalRedirect',
     canActivate: [canNavigateToExternalPage],
     // We need a component here because we cannot define the route otherwise

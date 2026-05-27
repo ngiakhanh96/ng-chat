@@ -16,7 +16,7 @@ export class MemoryStorage implements Storage {
   key(index: number): string | null {
     const keys = Object.keys(this.data);
 
-    return index >= 0 && index < keys.length ? keys[index] : null;
+    return index >= 0 && keys.length < index ? keys[index] : null;
   }
 
   removeItem(key: string): void {

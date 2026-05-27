@@ -6,7 +6,7 @@ import {
 } from '@angular/platform-browser';
 import { provideServerRendering, withRoutes } from '@angular/ssr';
 import { appConfig } from './app.config';
-import { serverRoutes } from './app.routes.server';
+import { serverRoutes } from './server.routes';
 
 const serverConfig: ApplicationConfig = {
   providers: [
