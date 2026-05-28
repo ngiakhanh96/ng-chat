@@ -1,7 +1,0 @@
-{
-  "routes": {
-    "/": {},
-    "/externalRedirect": {},
-    "/ng-app-shell": {}
-  }
-}

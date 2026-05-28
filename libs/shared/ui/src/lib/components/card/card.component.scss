@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@reference "#app.scss";
 
 :host {
   @apply block h-full w-full;
@@ -17,7 +17,9 @@
 }
 
 .mask {
-  @apply [mask-image:linear-gradient(to_top,transparent_0%,transparent_20px,rgb(0,0,0)_14px,rgb(0,0,0)_100%),linear-gradient(to_right,rgb(0,0,0)_0%,rgb(0,0,0)_160px,transparent_200px,transparent_100%)];
+  mask-image:
+    linear-gradient(to top, transparent 0%, transparent 20px, rgb(0, 0, 0) 14px, rgb(0, 0, 0) 100%),
+    linear-gradient(to right, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 160px, transparent 200px, transparent 100%);
 }
 
 .expanded {

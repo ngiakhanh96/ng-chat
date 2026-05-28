@@ -1,8 +1,9 @@
-@reference "tailwindcss";
+@reference "#app.scss";
 
 :host {
   @apply flex items-center w-full h-full select-none;
 }
+
 .skeleton-loader {
   box-sizing: border-box;
 
@@ -50,10 +51,12 @@
   */
   &.progress,
   &.progress-dark {
+
     &:after,
     &:before {
       box-sizing: border-box;
     }
+
     // position: relative;
     // this adds GPU acceleration
     transform: translate3d(0, 0, 0);
@@ -73,23 +76,19 @@
 
   &.progress {
     &:before {
-      background-image: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0),
-        rgba(255, 255, 255, 0.6),
-        rgba(255, 255, 255, 0)
-      );
+      background-image: linear-gradient(90deg,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.6),
+          rgba(255, 255, 255, 0));
     }
   }
 
   &.progress-dark {
     &:before {
-      background-image: linear-gradient(
-        90deg,
-        transparent,
-        rgba(0, 0, 0, 0.2),
-        transparent
-      );
+      background-image: linear-gradient(90deg,
+          transparent,
+          rgba(0, 0, 0, 0.2),
+          transparent);
     }
   }
 
@@ -113,6 +112,7 @@
   // via operational system and/or browser
   // More details about `prefers-reduced-motion` in https://web.dev/prefers-reduced-motion/
   @media (prefers-reduced-motion: reduce) {
+
     &.pulse,
     &.progress-dark,
     &.custom-content,
@@ -133,6 +133,7 @@
   0% {
     transform: translate3d(-200px, 0, 0);
   }
+
   100% {
     transform: translate3d(calc(200px + 100vw), 0, 0);
   }
@@ -142,9 +143,11 @@
   0% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.4;
   }
+
   100% {
     opacity: 1;
   }

@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@reference "#app.scss";
 
 .menu_section_header {
   @apply flex flex-row font-medium;
@@ -9,6 +9,7 @@
 
   .menu_section_icon {
     @apply flex items-center;
+
     mat-icon {
       @apply w-[16px] h-[16px];
     }

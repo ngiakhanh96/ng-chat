@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@reference "#app.scss";
 
 :host {
   @apply block;
@@ -7,7 +7,7 @@
 .logo_menu {
   @apply flex items-center h-full;
 
-  > * {
+  >* {
     @apply h-full;
   }
 
