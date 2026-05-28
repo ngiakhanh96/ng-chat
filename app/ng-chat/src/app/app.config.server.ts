@@ -4,13 +4,17 @@ import {
   withEventReplay,
   withIncrementalHydration,
 } from '@angular/platform-browser';
-import { provideServerRendering, withRoutes } from '@angular/ssr';
+import { provideServerRendering, withAppShell, withRoutes } from '@angular/ssr';
+import { AppComponent } from './app.component';
 import { appConfig } from './app.config';
 import { serverRoutes } from './server.routes';
 
 const serverConfig: ApplicationConfig = {
   providers: [
-    provideServerRendering(withRoutes(serverRoutes)),
+    provideServerRendering(
+      withRoutes(serverRoutes),
+      withAppShell(AppComponent),
+    ),
     provideClientHydration(withEventReplay(), withIncrementalHydration()),
   ],
 };

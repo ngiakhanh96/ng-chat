@@ -1,0 +1,31 @@
+:host {
+  @apply flex-row w-full h-full relative block min-h-full;
+}
+mat-sidenav-container {
+  @apply flex;
+  > * {
+    background-color: var(--white-color);
+  }
+  mat-sidenav {
+    @apply rounded-none w-[var(--sidebar-width)] h-screen;
+  }
+
+  mat-sidenav-content {
+    @apply pb-[16px];
+    overflow: unset;
+    ::ng-deep {
+      .layout_body {
+        @apply flex flex-row;
+        ay-sidebar-mini {
+          @apply w-[var(--sidebar-mini-width)] shrink-0 grow-0;
+        }
+
+        .layout_body_content {
+          @apply w-[var(--sidenav-content-width)];
+          /* Smooth transition for sidebar content width change */
+          @apply transition-[width] duration-400 delay-200;
+        }
+      }
+    }
+  }
+}

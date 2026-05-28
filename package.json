@@ -2,7 +2,14 @@
   "name": "@org/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "npx nx serve",
+    "start-csr": "npx nx serve-csr",
+    "build": "npx nx build",
+    "build-csr": "npx nx build-csr",
+    "build-ghp": "npx nx build-csr --baseHref /angular-youtube/",
+    "test": "npx nx test"
+  },
   "private": true,
   "dependencies": {
     "@angular-devkit/build-angular": "21.2.7",
@@ -69,7 +76,6 @@
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "22.7.3",
     "prettier": "^3.8.1",
-    "sass": "^1.100.0",
     "supertest": "^7.1.4",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",

@@ -10,7 +10,10 @@
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/app/ng-chat",
+        "outputPath": {
+          "base": "docs",
+          "browser": "angular-youtube"
+        },
         "browser": "app/ng-chat/src/main.ts",
         "tsConfig": "app/ng-chat/tsconfig.app.json",
         "assets": [
@@ -51,6 +54,50 @@
       },
       "defaultConfiguration": "production"
     },
+    "build-csr": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": {
+          "base": "docs",
+          "browser": ""
+        },
+        "browser": "app/ng-chat/src/main.ts",
+        "tsConfig": "app/ng-chat/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "app/ng-chat/public"
+          }
+        ],
+        "inlineStyleLanguage": "scss",
+        "styles": ["app/ng-chat/src/styles.scss"],
+        "outputMode": "static"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
@@ -60,6 +107,19 @@
         },
         "development": {
           "buildTarget": "ng-chat:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "serve-csr": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "ng-chat:build-csr:production"
+        },
+        "development": {
+          "buildTarget": "ng-chat:build-csr:development"
         }
       },
       "defaultConfiguration": "development"

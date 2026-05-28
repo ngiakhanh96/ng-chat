@@ -15,8 +15,8 @@ const canNavigateToExternalPage: CanActivateFn = () => {
 export const mainRoutes: Route[] = [
   {
     path: '',
-    pathMatch: 'full',
-    children: [],
+    loadChildren: () =>
+      import('@ng-chat/shell-feature').then((m) => m.SHELL_ROUTES),
   },
   {
     path: 'externalRedirect',

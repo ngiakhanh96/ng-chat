@@ -25,8 +25,15 @@ export default [
               onlyDependOnLibsWithTags: [],
             },
             {
-              sourceTag: 'scope:shared-ui',
+              sourceTag: '*',
               onlyDependOnLibsWithTags: ['scope:shared-data-access'],
+            },
+            {
+              sourceTag: 'scope:shell-feature',
+              onlyDependOnLibsWithTags: [
+                'scope:shared-data-access',
+                'scope:shared-ui',
+              ],
             },
             {
               sourceTag: 'scope:app-ng-chat',

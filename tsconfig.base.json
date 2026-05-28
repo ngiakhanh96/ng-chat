@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@ng-chat/shared-data-access": ["./libs/shared/data-access/src/index.ts"],
-      "@ng-chat/shared-ui": ["./libs/shared/ui/src/index.ts"]
+      "@ng-chat/shared-ui": ["./libs/shared/ui/src/index.ts"],
+      "@ng-chat/shell-feature": ["./libs/shell/feature/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
