@@ -25,7 +25,7 @@ export default [
               onlyDependOnLibsWithTags: [],
             },
             {
-              sourceTag: '*',
+              sourceTag: 'scope:shared-ui',
               onlyDependOnLibsWithTags: ['scope:shared-data-access'],
             },
             {
@@ -33,11 +33,23 @@ export default [
               onlyDependOnLibsWithTags: [
                 'scope:shared-data-access',
                 'scope:shared-ui',
+                'scope:*-feature',
               ],
             },
             {
+              sourceTag: 'scope:sidebar-feature',
+              onlyDependOnLibsWithTags: [
+                'scope:shared-data-access',
+                'scope:shared-ui',
+              ],
+            },
+            {
+              sourceTag: 'scope:sidebar-ui',
+              onlyDependOnLibsWithTags: ['scope:shared-ui'],
+            },
+            {
               sourceTag: 'scope:app-ng-chat',
-              onlyDependOnLibsWithTags: ['*'],
+              onlyDependOnLibsWithTags: ['scope:*-feature'],
             },
           ],
         },

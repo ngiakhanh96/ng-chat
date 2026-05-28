@@ -1,0 +1,7 @@
+:host {
+  @apply w-full h-full;
+}
+
+.spinner-container {
+  @apply h-full w-full flex justify-center items-center top-0 left-0 bg-black/30;
+}

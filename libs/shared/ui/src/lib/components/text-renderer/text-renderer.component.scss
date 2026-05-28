@@ -1,0 +1,22 @@
+:host {
+  @apply block h-full w-full;
+}
+
+.one-line {
+  @apply overflow-hidden text-ellipsis whitespace-nowrap leading-[var(--line-height)] font-[var(--font-weight)];
+}
+
+.multi-line {
+  @apply overflow-hidden text-ellipsis leading-[var(--line-height)] font-[var(--font-weight)];
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: var(--line-clamp);
+  -webkit-line-clamp: var(--line-clamp);
+}
+
+.video-title-overview {
+}
+
+.video-title-details {
+  @apply flex items-center h-full;
+}

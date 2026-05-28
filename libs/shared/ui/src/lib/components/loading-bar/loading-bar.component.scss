@@ -1,0 +1,7 @@
+:host {
+  @apply w-full h-[2px] z-[var(--layer-2)];
+}
+
+.loading-bar {
+  @apply h-full bg-red-500;
+}

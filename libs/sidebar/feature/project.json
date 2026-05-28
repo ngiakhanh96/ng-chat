@@ -1,10 +1,10 @@
 {
-  "name": "shared-data-access",
+  "name": "sidebar-feature",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/data-access/src",
+  "sourceRoot": "libs/sidebar/feature/src",
   "prefix": "chat",
   "projectType": "library",
-  "tags": ["scope:shared-data-access"],
+  "tags": ["scope:sidebar-feature"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"

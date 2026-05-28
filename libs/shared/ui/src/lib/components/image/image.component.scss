@@ -1,0 +1,11 @@
+:host {
+  @apply flex h-full justify-center cursor-pointer;
+}
+
+#button {
+  @apply w-full flex justify-center items-center;
+
+  svg {
+    @apply pointer-events-none block w-full h-full;
+  }
+}

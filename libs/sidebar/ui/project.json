@@ -1,10 +1,10 @@
 {
-  "name": "shared-data-access",
+  "name": "sidebar-ui",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/data-access/src",
+  "sourceRoot": "libs/sidebar/ui/src",
   "prefix": "chat",
   "projectType": "library",
-  "tags": ["scope:shared-data-access"],
+  "tags": ["scope:sidebar-ui"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"

@@ -1,0 +1,15 @@
+<div class="menu_sections">
+  @for (sectionItems of items(); track sectionItems.header) {
+    <div class="menu_section">
+      <ay-menu-section
+        [sectionItems]="sectionItems"
+        [(selectedIconName)]="selectedIconName"
+        [(selectedText)]="selectedText"
+        [marginRight]="sectionItemMarginRight()"
+        [marginLeft]="sectionItemMarginLeft()"
+        [paddingLeft]="sectionItemPaddingLeft()"
+        [borderRadius]="sectionItemBorderRadius()"
+      ></ay-menu-section>
+    </div>
+  }
+</div>
