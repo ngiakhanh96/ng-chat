@@ -4,7 +4,7 @@ import { ImageDirective } from '../../directives/image/image.directive';
 import { RippleOnHoverDirective } from '../../directives/ripple-on-hover/ripple-on-hover.directive';
 
 @Component({
-  selector: 'ay-img',
+  selector: 'chat-img',
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.scss'],
   imports: [MatRippleModule, RippleOnHoverDirective, ImageDirective],

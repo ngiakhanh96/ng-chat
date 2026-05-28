@@ -21,7 +21,7 @@ import {
  * animation, and theme.
  */
 @Component({
-  selector: 'ay-skeleton-loader',
+  selector: 'chat-skeleton-loader',
   templateUrl: './skeleton-loader.component.html',
   styleUrls: ['./skeleton-loader.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

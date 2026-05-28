@@ -1,4 +1,3 @@
-import { AppSettingsService } from '@angular-youtube/shared-data-access';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,11 +8,12 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppSettingsService } from '@ng-chat/shared-data-access';
 import { ImageDirective } from '../../directives/image/image.directive';
-import { ExternalNavigationService } from '../services/external-navigation.service';
+import { ExternalNavigationService } from '../../services/external-navigation.service';
 
 @Component({
-  selector: 'ay-link',
+  selector: 'chat-link',
   templateUrl: './link.component.html',
   styleUrls: ['./link.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,12 +28,11 @@ export class LinkComponent {
   externalNavigationService = inject(ExternalNavigationService);
   appSettingsService = inject(AppSettingsService);
   currentHostName = this.document.defaultView?.location.hostname ?? 'localhost';
-  supportedSocialMedias = new Map(
-    Object.entries({
-      ...(this.appSettingsService.appConfig()?.supportedSocialMedias ?? {}),
-      [this.currentHostName]: 'yt_favicon_ringo2.png',
-    }),
-  );
+  supportedSocialMedias = new Map();
+  // Object.entries({
+  //   ...(this.appSettingsService.appConfig()?.supportedSocialMedias ?? {}),
+  //   [this.currentHostName]: 'yt_favicon_ringo2.png',
+  // }),
   router = inject(Router);
   href = input.required<string>();
   attributeHref = input.required<string>();

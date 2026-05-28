@@ -13,7 +13,7 @@ export interface CombinedTextIcon {
 }
 
 @Component({
-  selector: 'ay-combined-text-icon-button',
+  selector: 'chat-combined-text-icon-button',
   templateUrl: './combined-text-icon-button.component.html',
   styleUrls: ['./combined-text-icon-button.component.scss'],
   imports: [TextIconButtonComponent],

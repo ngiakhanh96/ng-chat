@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'ay-text-renderer',
+  selector: 'chat-text-renderer',
   templateUrl: './text-renderer.component.html',
   styleUrls: ['./text-renderer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,4 +1,3 @@
-import { SpinnerService } from '@angular-youtube/shared-data-access';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,10 +13,11 @@ import {
   Router,
   RouterModule,
 } from '@angular/router';
+import { SpinnerService } from '@ng-chat/shared-data-access';
 import { filter, tap } from 'rxjs';
 
 @Component({
-  selector: 'ay-spinner',
+  selector: 'chat-spinner',
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.scss'],
   imports: [MatProgressSpinnerModule, RouterModule],

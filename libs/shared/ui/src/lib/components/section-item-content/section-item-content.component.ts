@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SectionItemDirective } from '../../directives/section-item/section-item.directive';
 
 @Component({
-  selector: 'ay-section-item-content',
+  selector: 'chat-section-item-content',
   imports: [MatListModule],
   templateUrl: './section-item-content.component.html',
   styleUrl: './section-item-content.component.scss',

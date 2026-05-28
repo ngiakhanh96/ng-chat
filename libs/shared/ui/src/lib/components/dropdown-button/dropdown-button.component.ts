@@ -13,7 +13,7 @@ import { TextIconButtonComponent } from '../text-icon-button/text-icon-button.co
 export type DropdownMode = 'horizontal' | 'vertical';
 
 @Component({
-  selector: 'ay-dropdown-button',
+  selector: 'chat-dropdown-button',
   templateUrl: './dropdown-button.component.html',
   styleUrls: ['./dropdown-button.component.scss'],
   imports: [

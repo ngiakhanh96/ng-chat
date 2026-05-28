@@ -1,4 +1,4 @@
-<ay-text-icon-button
+<chat-text-icon-button
   [svgIcon]="dropDownButtonIcon()"
   color="var(--black-color)"
   backgroundColor="transparent"
@@ -17,11 +17,11 @@
   [connectedOverlayWidth]="dropDownWidth()"
   [panelClass]="panelClass()"
 >
-  <ay-menu
+  <chat-menu
     [items]="items()"
     [(selectedIconName)]="selectedIconName"
     [sectionItemMarginRight]="'0px'"
     class="w-full"
     [sectionItemBorderRadius]="'0px'"
-  ></ay-menu>
+  ></chat-menu>
 </ng-template>

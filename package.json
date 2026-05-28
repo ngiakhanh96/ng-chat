@@ -7,8 +7,11 @@
     "start-csr": "npx nx serve-csr",
     "build": "npx nx build",
     "build-csr": "npx nx build-csr",
-    "build-ghp": "npx nx build-csr --baseHref /angular-youtube/",
+    "build-ghp": "npx nx build-csr --baseHref /ng-chat/",
     "test": "npx nx test"
+  },
+  "imports": {
+    "#app.scss": "./app/ng-chat/src/styles.scss"
   },
   "private": true,
   "dependencies": {

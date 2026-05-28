@@ -14,11 +14,11 @@ import {
   viewChild,
 } from '@angular/core';
 import { MatRippleModule } from '@angular/material/core';
-import { DynamicComponentService } from '../services/dynamic-component.service';
+import { DynamicComponentService } from '../../services/dynamic-component.service';
 import { TextIconButtonComponent } from '../text-icon-button/text-icon-button.component';
 
 @Component({
-  selector: 'ay-card',
+  selector: 'chat-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -4,7 +4,7 @@ import { HamburgerButtonComponent } from '../hamburger-button/hamburger-button.c
 import { LogoRendererComponent } from '../logo-renderer/logo-renderer.component';
 
 @Component({
-  selector: 'ay-logo-menu',
+  selector: 'chat-logo-menu',
   templateUrl: './logo-menu.component.html',
   styleUrls: ['./logo-menu.component.scss'],
   imports: [HamburgerButtonComponent, LogoRendererComponent],

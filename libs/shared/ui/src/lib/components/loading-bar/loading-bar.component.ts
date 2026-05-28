@@ -1,4 +1,3 @@
-import { RouteData } from '@angular-youtube/shared-data-access';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,11 +16,12 @@ import {
   NavigationEnd,
   Router,
 } from '@angular/router';
+import { RouteData } from '@ng-chat/shared-data-access';
 import { distinctUntilChanged, filter } from 'rxjs';
-import { LoadingBarService } from '../services/loading-bar.service';
+import { LoadingBarService } from '../../services/loading-bar.service';
 
 @Component({
-  selector: 'ay-loading-bar',
+  selector: 'chat-loading-bar',
   templateUrl: './loading-bar.component.html',
   styleUrls: ['./loading-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,7 +1,7 @@
 <div class="menu_sections">
   @for (sectionItems of items(); track sectionItems.header) {
     <div class="menu_section">
-      <ay-menu-section
+      <chat-menu-section
         [sectionItems]="sectionItems"
         [(selectedIconName)]="selectedIconName"
         [(selectedText)]="selectedText"
@@ -9,7 +9,7 @@
         [marginLeft]="sectionItemMarginLeft()"
         [paddingLeft]="sectionItemPaddingLeft()"
         [borderRadius]="sectionItemBorderRadius()"
-      ></ay-menu-section>
+      ></chat-menu-section>
     </div>
   }
 </div>

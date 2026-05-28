@@ -2,10 +2,10 @@
   <mat-list>
     @if (sectionItemsHeader()) {
       <mat-list-item [aySectionItem]="false" class="menu_header_item">
-        <ay-menu-section-header
+        <chat-menu-section-header
           [displayText]="sectionItemsHeader()!"
           fontIcon="chevron-right"
-        ></ay-menu-section-header>
+        ></chat-menu-section-header>
       </mat-list-item>
     }
     @for (menuItem of sectionItemsList(); track menuItem.iconName) {
@@ -15,9 +15,9 @@
         (click)="onClick(menuItem)"
       >
         <mat-icon [svgIcon]="menuItem.iconName" matListItemIcon></mat-icon>
-        <ay-section-item-content
+        <chat-section-item-content
           [displayHtml]="menuItem.displayHtml"
-        ></ay-section-item-content>
+        ></chat-section-item-content>
       </mat-list-item>
     }
   </mat-list>

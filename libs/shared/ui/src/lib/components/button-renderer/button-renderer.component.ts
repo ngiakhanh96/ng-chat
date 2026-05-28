@@ -20,7 +20,7 @@ export class ButtonIconTemplateDirective {
 }
 
 @Component({
-  selector: 'ay-button-renderer',
+  selector: 'chat-button-renderer',
   templateUrl: './button-renderer.component.html',
   styleUrls: ['./button-renderer.component.scss'],
   imports: [NgTemplateOutlet],

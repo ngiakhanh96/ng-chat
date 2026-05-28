@@ -15,7 +15,7 @@
     <ng-content></ng-content>
   </div>
   <div>
-    <ay-text-icon-button
+    <chat-text-icon-button
       class="card-show"
       [class]="expanded() ? 'card-show__less' : 'card-show__more'"
       [displayText]="expanded() ? 'Show less' : '...more'"
@@ -27,6 +27,6 @@
       [iconPaddingRight]="'0px'"
       [widthHeight]="'auto'"
       (click)="onClickCardShowButton($event)"
-    ></ay-text-icon-button>
+    ></chat-text-icon-button>
   </div>
 </div>

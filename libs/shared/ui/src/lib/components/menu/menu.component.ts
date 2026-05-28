@@ -15,7 +15,7 @@ export interface ISection {
 }
 
 @Component({
-  selector: 'ay-menu',
+  selector: 'chat-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
   imports: [MenuSectionComponent],

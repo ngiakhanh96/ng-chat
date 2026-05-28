@@ -18,7 +18,7 @@ export interface AySkeletonLoaderConfig {
 }
 
 export const AY_SKELETON_LOADER_CONFIG =
-  new InjectionToken<AySkeletonLoaderConfig>('ay-skeleton-loader.config');
+  new InjectionToken<AySkeletonLoaderConfig>('chat-skeleton-loader.config');
 
 export function provideAySkeletonLoader(
   config?: Partial<AySkeletonLoaderConfig>,

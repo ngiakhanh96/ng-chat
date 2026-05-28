@@ -1,5 +1,3 @@
-import { IVideoPlayerCardInfo } from '../video-player-card/video-player-card.component';
-
 export class Utilities {
   static secondsInOneMinute = 60;
   static secondsInOneHour = Utilities.secondsInOneMinute * 60;
@@ -161,34 +159,5 @@ export class Utilities {
     if (remainingSeconds > 0) duration += `${remainingSeconds}S`;
 
     return duration;
-  }
-
-  static convertToPlayerSkeletonItem(
-    video: IVideoPlayerCardInfo,
-  ): IVideoPlayerCardInfo {
-    return {
-      ...video,
-      isSkeleton: true,
-    };
-  }
-
-  static createPlayerSkeletonItems(count: number, videoIdPrefix?: string) {
-    const playerSkeletonItems: IVideoPlayerCardInfo[] = [];
-    for (let i = 0; i < count; i++) {
-      playerSkeletonItems.push({
-        isSkeleton: true,
-        videoId: `${videoIdPrefix ?? ''}${i}`,
-        title: '',
-        channelName: '',
-        viewCount: 0,
-        publishedDate: new Date(),
-        duration: '',
-        lengthSeconds: 0,
-        channelLogoUrl: '',
-        videoUrl: '',
-        isVerified: false,
-      });
-    }
-    return playerSkeletonItems;
   }
 }

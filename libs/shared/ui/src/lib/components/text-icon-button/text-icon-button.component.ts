@@ -11,7 +11,7 @@ import { IconDirective } from '../../directives/icon/icon.directive';
 import { RippleOnHoverDirective } from '../../directives/ripple-on-hover/ripple-on-hover.directive';
 
 @Component({
-  selector: 'ay-text-icon-button',
+  selector: 'chat-text-icon-button',
   templateUrl: './text-icon-button.component.html',
   styleUrls: ['./text-icon-button.component.scss'],
   imports: [

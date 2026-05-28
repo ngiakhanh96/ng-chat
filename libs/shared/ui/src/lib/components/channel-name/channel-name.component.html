@@ -1,11 +1,11 @@
 <div class="channel-name-container">
   <div class="channel-name">
-    <ay-text-renderer
+    <chat-text-renderer
       [title]="channelName()"
       [fontWeight]="fontWeight()"
       [lineClamp]="'1'"
       [overview]="false"
-    ></ay-text-renderer>
+    ></chat-text-renderer>
   </div>
   @if (isVerified()) {
     <div class="channel-name-verified">

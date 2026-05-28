@@ -19,7 +19,7 @@ export interface ISectionItem {
 }
 
 @Component({
-  selector: 'ay-menu-section',
+  selector: 'chat-menu-section',
   templateUrl: './menu-section.component.html',
   styleUrls: ['./menu-section.component.scss'],
   imports: [
