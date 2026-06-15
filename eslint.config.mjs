@@ -37,19 +37,12 @@ export default [
               ],
             },
             {
-              sourceTag: 'scope:sidebar-feature',
+              sourceTag: 'scope:app-ng-chat',
               onlyDependOnLibsWithTags: [
+                'scope:*-feature',
                 'scope:shared-data-access',
                 'scope:shared-ui',
               ],
-            },
-            {
-              sourceTag: 'scope:sidebar-ui',
-              onlyDependOnLibsWithTags: ['scope:shared-ui'],
-            },
-            {
-              sourceTag: 'scope:app-ng-chat',
-              onlyDependOnLibsWithTags: ['scope:*-feature'],
             },
           ],
         },

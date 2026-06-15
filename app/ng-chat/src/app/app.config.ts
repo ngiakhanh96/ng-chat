@@ -47,7 +47,6 @@ export const appConfig: ApplicationConfig = {
       },
     },
     {
-      //TODO Rewrite the sidebar manually
       provide: MATERIAL_ANIMATIONS,
       useValue: {
         animationsDisabled: false,

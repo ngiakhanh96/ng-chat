@@ -1,0 +1,8 @@
+{
+  "css.customData": [".vscode/tailwind.json"],
+  "nxConsole.generateAiAgentRules": true,
+  "cSpell.words": [],
+  "files.associations": {
+    "*.scss": "tailwindcss"
+  }
+}
