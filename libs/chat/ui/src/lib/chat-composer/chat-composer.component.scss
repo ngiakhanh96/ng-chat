@@ -1,0 +1,38 @@
+@reference "tailwindcss";
+
+:host {
+  @apply block;
+}
+
+.composer {
+  @apply flex items-end gap-2 rounded-3xl border px-2 py-2 shadow-sm transition;
+  background: var(--chat-surface);
+  border-color: var(--chat-border);
+  box-shadow: var(--chat-shadow);
+}
+
+.composer:focus-within {
+  border-color: color-mix(in srgb, var(--chat-accent) 58%, var(--chat-border));
+}
+
+.composer__textarea {
+  @apply min-h-10 flex-1 resize-none border-0 bg-transparent px-2 py-2 leading-6 outline-none shadow-none;
+  color: var(--chat-text);
+}
+
+.composer__textarea:focus {
+  box-shadow: none;
+}
+
+.composer__icon-button,
+.composer__send {
+  @apply grid h-10 w-10 shrink-0 place-items-center rounded-full;
+}
+
+.composer__send {
+  background: var(--chat-accent);
+}
+
+.composer__send:not(:disabled):hover {
+  background: var(--chat-accent-strong);
+}

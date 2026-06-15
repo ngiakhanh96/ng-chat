@@ -1,0 +1,12 @@
+<chat-chat-layout
+  [sidebarSections]="sidebarSections()"
+  [selectedConversationId]="selectedConversationId()"
+  [activeConversation]="activeConversationSummary()"
+  [messages]="activeMessages()"
+  [mobileSidebarOpen]="mobileSidebarOpen()"
+  (newConversation)="onNewConversation()"
+  (conversationSelected)="onConversationSelected($event)"
+  (mobileSidebarOpened)="openMobileSidebar()"
+  (mobileSidebarClosed)="closeMobileSidebar()"
+  (messageSubmitted)="onMessageSubmitted($event)"
+/>

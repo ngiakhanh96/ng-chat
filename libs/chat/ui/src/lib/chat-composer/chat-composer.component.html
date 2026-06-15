@@ -1,0 +1,39 @@
+<form class="composer" (submit)="$event.preventDefault(); onSubmit()">
+  <button
+    class="composer__icon-button"
+    nz-button
+    nzType="text"
+    type="button"
+    nz-tooltip
+    nzTooltipTitle="Attach file"
+    aria-label="Attach file"
+  >
+    <nz-icon nzType="paper-clip" />
+  </button>
+
+  <textarea
+    class="composer__textarea"
+    nz-input
+    cdkTextareaAutosize
+    cdkAutosizeMinRows="1"
+    cdkAutosizeMaxRows="8"
+    name="message"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    [ngModel]="draft()"
+    (ngModelChange)="draft.set($event)"
+    (keydown)="onKeydown($event)"
+    aria-label="Message"
+  ></textarea>
+
+  <button
+    class="composer__send"
+    nz-button
+    nzType="primary"
+    type="submit"
+    [disabled]="!canSend"
+    aria-label="Send message"
+  >
+    <nz-icon nzType="send" />
+  </button>
+</form>

@@ -29,6 +29,27 @@ export default [
               onlyDependOnLibsWithTags: ['scope:shared-data-access'],
             },
             {
+              sourceTag: 'scope:chat-data-access',
+              onlyDependOnLibsWithTags: ['scope:shared-data-access'],
+            },
+            {
+              sourceTag: 'scope:chat-ui',
+              onlyDependOnLibsWithTags: [
+                'scope:chat-data-access',
+                'scope:shared-data-access',
+                'scope:shared-ui',
+              ],
+            },
+            {
+              sourceTag: 'scope:chat-feature',
+              onlyDependOnLibsWithTags: [
+                'scope:chat-data-access',
+                'scope:chat-ui',
+                'scope:shared-data-access',
+                'scope:shared-ui',
+              ],
+            },
+            {
               sourceTag: 'scope:shell-feature',
               onlyDependOnLibsWithTags: [
                 'scope:shared-data-access',

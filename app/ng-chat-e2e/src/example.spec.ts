@@ -1,8 +1,14 @@
 import { test, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
+test('renders the chat shell and sends a mock message', async ({ page }) => {
   await page.goto('/');
 
-  // Expect h1 to contain a substring.
-  expect(await page.locator('h1').innerText()).toContain('Welcome');
+  await expect(page.getByRole('button', { name: 'New chat' })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'Message' })).toBeVisible();
+
+  await page.getByRole('textbox', { name: 'Message' }).fill('Hello ng-chat');
+  await page.getByRole('button', { name: 'Send message' }).click();
+
+  await expect(page.getByText('Hello ng-chat')).toBeVisible();
+  await expect(page.getByText('Mock response:')).toBeVisible();
 });

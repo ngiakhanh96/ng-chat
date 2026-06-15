@@ -6,6 +6,12 @@ export const SHELL_ROUTES: Routes = [
     path: '',
     component: LayoutComponent,
     providers: [],
-    children: [],
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('@ng-chat/chat-feature').then((m) => m.CHAT_ROUTES),
+      },
+    ],
   },
 ];

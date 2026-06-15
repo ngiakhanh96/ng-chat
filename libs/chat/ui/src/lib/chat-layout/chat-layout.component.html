@@ -1,0 +1,58 @@
+<div class="chat-shell">
+  <div class="chat-shell__sidebar">
+    <chat-conversation-sidebar
+      [sections]="sidebarSections()"
+      [selectedConversationId]="selectedConversationId()"
+      (newConversation)="newConversation.emit()"
+      (conversationSelected)="conversationSelected.emit($event)"
+    />
+  </div>
+
+  <main class="chat-shell__main">
+    <header class="chat-shell__topbar">
+      <button
+        class="chat-shell__menu"
+        nz-button
+        nzType="text"
+        type="button"
+        aria-label="Open conversations"
+        (click)="mobileSidebarOpened.emit()"
+      >
+        <nz-icon nzType="menu" />
+      </button>
+      <div>
+        <strong>{{ activeConversation()?.title ?? 'New chat' }}</strong>
+        <span>Light theme · local mock mode</span>
+      </div>
+    </header>
+
+    <chat-thread
+      [conversation]="activeConversation()"
+      [messages]="messages()"
+    />
+
+    <footer class="chat-shell__composer">
+      <chat-composer (submitted)="messageSubmitted.emit($event)" />
+      <p>ng-chat can make mistakes. Check protocol outputs before shipping.</p>
+    </footer>
+  </main>
+</div>
+
+<nz-drawer
+  nzPlacement="left"
+  [nzClosable]="false"
+  [nzWidth]="320"
+  [nzVisible]="mobileSidebarOpen()"
+  (nzOnClose)="mobileSidebarClosed.emit()"
+>
+  <ng-container *nzDrawerContent>
+    <chat-conversation-sidebar
+      [sections]="sidebarSections()"
+      [selectedConversationId]="selectedConversationId()"
+      (newConversation)="newConversation.emit(); mobileSidebarClosed.emit()"
+      (conversationSelected)="
+        conversationSelected.emit($event); mobileSidebarClosed.emit()
+      "
+    />
+  </ng-container>
+</nz-drawer>

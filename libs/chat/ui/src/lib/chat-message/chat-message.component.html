@@ -1,0 +1,41 @@
+<article class="message" [class.message--user]="isUser">
+  <nz-avatar
+    class="message__avatar"
+    [nzIcon]="isUser ? 'user' : 'robot'"
+    [nzText]="isUser ? 'U' : 'AI'"
+  ></nz-avatar>
+
+  <div class="message__body">
+    <div class="message__meta">
+      <span>{{ isUser ? 'You' : 'ng-chat' }}</span>
+      <time>{{ message().createdAt }}</time>
+    </div>
+
+    <p class="message__content">{{ message().content }}</p>
+
+    @if (!isUser) {
+      <div class="message__actions" aria-label="Message actions">
+        <button
+          nz-button
+          nzType="text"
+          type="button"
+          nz-tooltip
+          nzTooltipTitle="Copy"
+          aria-label="Copy response"
+        >
+          <nz-icon nzType="copy" />
+        </button>
+        <button
+          nz-button
+          nzType="text"
+          type="button"
+          nz-tooltip
+          nzTooltipTitle="Retry"
+          aria-label="Retry response"
+        >
+          <nz-icon nzType="reload" />
+        </button>
+      </div>
+    }
+  </div>
+</article>

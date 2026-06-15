@@ -1,0 +1,13 @@
+{
+  "name": "chat-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/chat/ui/src",
+  "prefix": "chat",
+  "projectType": "library",
+  "tags": ["scope:chat-ui"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

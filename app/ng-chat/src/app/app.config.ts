@@ -10,10 +10,6 @@ import {
   provideZonelessChangeDetection,
 } from '@angular/core';
 import {
-  MAT_RIPPLE_GLOBAL_OPTIONS,
-  MATERIAL_ANIMATIONS,
-} from '@angular/material/core';
-import {
   PreloadAllModules,
   provideRouter,
   withExperimentalAutoCleanupInjectors,
@@ -22,10 +18,27 @@ import {
   withViewTransitions,
 } from '@angular/router';
 import {
+  CloseOutline,
+  CopyOutline,
+  DeleteOutline,
+  EditOutline,
+  MenuOutline,
+  MessageOutline,
+  MoreOutline,
+  PaperClipOutline,
+  PlusOutline,
+  ReloadOutline,
+  RobotOutline,
+  SearchOutline,
+  SendOutline,
+  UserOutline,
+} from '@ant-design/icons-angular/icons';
+import {
   GoogleLoginProvider,
   provideSocialAuth,
   SharedStore,
 } from '@ng-chat/shared-data-access';
+import { provideNzIcons } from 'ng-zorro-antd/icon';
 import { GlobalErrorHandler } from './global-error-handler';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { globalHttpErrorInterceptor } from './interceptors/global-http-error.interceptor';
@@ -37,21 +50,22 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
-    {
-      provide: MAT_RIPPLE_GLOBAL_OPTIONS,
-      useValue: {
-        animation: {
-          enterDuration: 200,
-          exitDuration: 200,
-        },
-      },
-    },
-    {
-      provide: MATERIAL_ANIMATIONS,
-      useValue: {
-        animationsDisabled: false,
-      },
-    },
+    provideNzIcons([
+      CloseOutline,
+      CopyOutline,
+      DeleteOutline,
+      EditOutline,
+      MenuOutline,
+      MessageOutline,
+      MoreOutline,
+      PaperClipOutline,
+      PlusOutline,
+      ReloadOutline,
+      RobotOutline,
+      SearchOutline,
+      SendOutline,
+      UserOutline,
+    ]),
     provideRouter(
       mainRoutes,
       withPreloading(PreloadAllModules),
@@ -83,19 +97,5 @@ export const appConfig: ApplicationConfig = {
         console.error(err);
       },
     }),
-    // provideAppInitializer(async () => {
-    //   const iconRegistry = inject(MatIconRegistry);
-    //   const domSanitizer = inject(DomSanitizer);
-    //   const appSettingsService = inject(AppSettingsService);
-    //   const defaultFontSetClasses = iconRegistry.getDefaultFontSetClass();
-    //   const outlinedFontSetClasses = defaultFontSetClasses
-    //     .filter((fontSetClass) => fontSetClass !== 'material-icons')
-    //     .concat(['material-symbols-outlined']);
-    //   iconRegistry.setDefaultFontSetClass(...outlinedFontSetClasses);
-    //   iconRegistry.addSvgIconSet(
-    //     domSanitizer.bypassSecurityTrustResourceUrl('assets/icons.svg'),
-    //   );
-    //   return await appSettingsService.getAppConfig();
-    // }),
   ],
 };

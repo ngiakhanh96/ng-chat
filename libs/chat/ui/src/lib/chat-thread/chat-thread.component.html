@@ -1,0 +1,25 @@
+<section class="thread" aria-label="Conversation thread">
+  <div class="thread__inner">
+    @if (conversation(); as activeConversation) {
+      <header class="thread__header">
+        <p>Active chat</p>
+        <h1>{{ activeConversation.title }}</h1>
+      </header>
+    }
+
+    @if (messages().length > 0) {
+      <div class="thread__messages">
+        @for (message of messages(); track message.id) {
+          <chat-message [message]="message" />
+        }
+      </div>
+    } @else {
+      <div class="thread__empty">
+        <nz-empty
+          nzNotFoundImage="simple"
+          nzNotFoundContent="Start with a question, a task, or a protocol design note."
+        ></nz-empty>
+      </div>
+    }
+  </div>
+</section>

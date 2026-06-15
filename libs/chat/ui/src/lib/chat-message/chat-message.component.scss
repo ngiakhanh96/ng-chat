@@ -1,0 +1,51 @@
+@reference "tailwindcss";
+
+:host {
+  @apply block;
+}
+
+.message {
+  @apply grid gap-2.5 py-3;
+  grid-template-columns: 32px minmax(0, 1fr);
+}
+
+.message--user {
+  @apply ml-auto max-w-3xl;
+  grid-template-columns: minmax(0, 1fr) 32px;
+}
+
+.message--user .message__avatar {
+  @apply order-2;
+}
+
+.message__avatar {
+  @apply mt-0.5;
+  background: var(--chat-accent);
+}
+
+.message__body {
+  @apply min-w-0;
+}
+
+.message--user .message__body {
+  @apply rounded-2xl px-4 py-2.5;
+  background: var(--chat-user-message);
+}
+
+.message__meta {
+  @apply mb-1 flex items-center gap-2 text-xs font-medium leading-4;
+  color: var(--chat-text-muted);
+}
+
+.message--user .message__meta {
+  @apply justify-end;
+}
+
+.message__content {
+  @apply m-0 whitespace-pre-wrap break-words text-sm leading-6;
+  color: var(--chat-text);
+}
+
+.message__actions {
+  @apply mt-2 flex items-center gap-1;
+}

@@ -1,0 +1,79 @@
+<aside class="sidebar" aria-label="Conversation sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__mark">ng</div>
+    <div>
+      <strong>ng-chat</strong>
+      <span>Agent workspace</span>
+    </div>
+  </div>
+
+  <button
+    class="sidebar__new"
+    nz-button
+    nzType="primary"
+    type="button"
+    (click)="newConversation.emit()"
+  >
+    <nz-icon nzType="plus" />
+    New chat
+  </button>
+
+  <label class="sidebar__search">
+    <nz-icon nzType="search" />
+    <input
+      nz-input
+      type="search"
+      placeholder="Search chats"
+      aria-label="Search chats"
+    />
+  </label>
+
+  <nav class="sidebar__nav" aria-label="Conversations">
+    @for (section of sections(); track section.id) {
+      <section class="sidebar__section">
+        <h2>{{ section.title }}</h2>
+        <div class="sidebar__items">
+          @for (conversation of section.conversations; track conversation.id) {
+            <button
+              class="sidebar__item"
+              type="button"
+              [class.sidebar__item--active]="
+                conversation.id === selectedConversationId()
+              "
+              (click)="conversationSelected.emit(conversation.id)"
+            >
+              <span class="sidebar__item-icon"
+                ><nz-icon nzType="message"
+              /></span>
+              <span class="sidebar__item-text">
+                <strong>{{ conversation.title }}</strong>
+                <small>{{ conversation.preview }}</small>
+              </span>
+              <span class="sidebar__item-time">{{
+                conversation.updatedAt
+              }}</span>
+            </button>
+          }
+        </div>
+      </section>
+    }
+  </nav>
+
+  <div class="sidebar__footer">
+    <nz-avatar nzIcon="user"></nz-avatar>
+    <div>
+      <strong>Khanh</strong>
+      <span>Local mock mode</span>
+    </div>
+    <button
+      nz-button
+      nzType="text"
+      type="button"
+      nz-tooltip
+      nzTooltipTitle="More"
+      aria-label="More options"
+    >
+      <nz-icon nzType="more" />
+    </button>
+  </div>
+</aside>

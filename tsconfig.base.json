@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ng-chat/chat-data-access": ["./libs/chat/data-access/src/index.ts"],
+      "@ng-chat/chat-feature": ["./libs/chat/feature/src/index.ts"],
+      "@ng-chat/chat-ui": ["./libs/chat/ui/src/index.ts"],
       "@ng-chat/shared-data-access": ["./libs/shared/data-access/src/index.ts"],
       "@ng-chat/shared-ui": ["./libs/shared/ui/src/index.ts"],
       "@ng-chat/shell-feature": ["./libs/shell/feature/src/index.ts"]

@@ -1,0 +1,78 @@
+@reference "tailwindcss";
+
+:host {
+  @apply block h-full min-h-0;
+}
+
+.chat-shell {
+  @apply grid h-full min-h-0;
+  grid-template-columns: 320px minmax(0, 1fr);
+  background: var(--chat-bg);
+}
+
+.chat-shell__sidebar {
+  @apply min-h-0 border-r;
+  border-color: var(--chat-border);
+}
+
+.chat-shell__main {
+  @apply flex min-h-0 flex-col;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgb(16 163 127 / 7%),
+      transparent 32rem
+    ),
+    var(--chat-bg);
+}
+
+.chat-shell__topbar {
+  @apply flex h-16 shrink-0 items-center gap-3 border-b px-4;
+  border-color: var(--chat-border-soft);
+  background: color-mix(in srgb, var(--chat-bg) 88%, white);
+}
+
+.chat-shell__topbar strong,
+.chat-shell__topbar span {
+  @apply block;
+}
+
+.chat-shell__topbar strong {
+  @apply text-sm font-semibold;
+}
+
+.chat-shell__topbar span {
+  @apply text-xs;
+  color: var(--chat-text-muted);
+}
+
+.chat-shell__menu {
+  @apply hidden h-10 w-10 rounded-xl;
+}
+
+.chat-shell__composer {
+  @apply mx-auto w-full max-w-4xl shrink-0 px-4 pb-4;
+}
+
+.chat-shell__composer p {
+  @apply m-0 mt-2 text-center text-xs;
+  color: var(--chat-text-muted);
+}
+
+::ng-deep .ant-drawer-body {
+  padding: 0;
+}
+
+@media (max-width: 900px) {
+  .chat-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chat-shell__sidebar {
+    @apply hidden;
+  }
+
+  .chat-shell__menu {
+    @apply grid place-items-center;
+  }
+}

@@ -1,0 +1,116 @@
+@reference "tailwindcss";
+
+:host {
+  @apply block h-full;
+}
+
+.sidebar {
+  @apply flex h-full flex-col gap-4 p-3;
+  background: var(--chat-sidebar);
+}
+
+.sidebar__brand,
+.sidebar__footer {
+  @apply flex items-center gap-3 rounded-2xl px-2 py-2;
+}
+
+.sidebar__mark {
+  @apply grid h-9 w-9 place-items-center rounded-xl text-sm font-bold text-white;
+  background: var(--chat-accent);
+}
+
+.sidebar__brand strong,
+.sidebar__footer strong {
+  @apply block text-sm;
+}
+
+.sidebar__brand span,
+.sidebar__footer span {
+  @apply block text-xs;
+  color: var(--chat-text-muted);
+}
+
+.sidebar__new {
+  @apply flex h-11 items-center justify-center gap-2 rounded-xl font-medium;
+  background: var(--chat-accent);
+}
+
+.sidebar__new:hover {
+  background: var(--chat-accent-strong);
+}
+
+.sidebar__search {
+  @apply flex h-10 items-center gap-2 rounded-xl border px-3;
+  background: var(--chat-surface);
+  border-color: var(--chat-border-soft);
+}
+
+.sidebar__search input {
+  @apply border-0 bg-transparent p-0 text-sm shadow-none outline-none;
+}
+
+.sidebar__search input:focus {
+  box-shadow: none;
+}
+
+.sidebar__nav {
+  @apply min-h-0 flex-1 overflow-y-auto;
+}
+
+.sidebar__section {
+  @apply mb-5;
+}
+
+.sidebar__section h2 {
+  @apply mb-2 px-2 text-xs font-semibold uppercase tracking-wide;
+  color: var(--chat-text-muted);
+}
+
+.sidebar__items {
+  @apply flex flex-col gap-1;
+}
+
+.sidebar__item {
+  @apply grid w-full items-center gap-2 rounded-xl px-2 py-2 text-left transition;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  color: var(--chat-text);
+}
+
+.sidebar__item:hover,
+.sidebar__item--active {
+  background: var(--chat-surface);
+}
+
+.sidebar__item-icon {
+  @apply grid h-6 w-6 place-items-center rounded-lg;
+  background: var(--chat-surface-muted);
+  color: var(--chat-text-muted);
+}
+
+.sidebar__item-text {
+  @apply min-w-0;
+}
+
+.sidebar__item-text strong,
+.sidebar__item-text small {
+  @apply block truncate;
+}
+
+.sidebar__item-text strong {
+  @apply text-sm font-medium;
+}
+
+.sidebar__item-text small,
+.sidebar__item-time {
+  @apply text-xs;
+  color: var(--chat-text-muted);
+}
+
+.sidebar__footer {
+  @apply border-t pt-3;
+  border-color: var(--chat-border-soft);
+}
+
+.sidebar__footer div {
+  @apply min-w-0 flex-1;
+}
