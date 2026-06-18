@@ -2,6 +2,7 @@ import { TextFieldModule } from '@angular/cdk/text-field';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   input,
   output,
   signal,
@@ -32,9 +33,9 @@ export class ChatComposerComponent {
   submitted = output<string>();
   draft = signal('');
 
-  get canSend() {
+  canSend = computed(() => {
     return this.draft().trim().length > 0 && !this.disabled();
-  }
+  });
 
   onSubmit(event?: SubmitEvent) {
     event?.preventDefault();

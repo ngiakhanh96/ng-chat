@@ -17,9 +17,8 @@
 }
 
 .thread__header p {
-  @apply mb-1 text-xs font-semibold uppercase;
+  @apply mb-1 text-xs font-semibold uppercase tracking-normal;
   color: var(--chat-text-muted);
-  letter-spacing: 0;
 }
 
 .thread__header h1 {

@@ -22,7 +22,7 @@ describe('ChatComposerComponent', () => {
     component.draft.set('   ');
     fixture.detectChanges();
 
-    expect(component.canSend).toBe(false);
+    expect(component.canSend()).toBe(false);
   });
 
   it('emits trimmed messages and clears the draft', () => {

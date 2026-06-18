@@ -37,12 +37,11 @@
 }
 
 .message--user .message__body {
-  @apply justify-self-end rounded-2xl px-4 py-2.5;
-  max-width: min(34rem, 100%);
+  @apply max-w-[min(34rem,100%)] justify-self-end rounded-2xl border px-4 py-2.5;
   background:
     linear-gradient(180deg, rgb(255 255 255 / 5%), transparent),
     var(--chat-user-message);
-  border: 1px solid rgb(185 144 92 / 18%);
+  border-color: rgb(185 144 92 / 18%);
   box-shadow: 0 16px 34px rgb(0 0 0 / 24%);
 }
 
@@ -69,7 +68,7 @@
 }
 
 .message__actions button:hover {
-  background: rgb(255 255 255 / 5%);
+  @apply bg-white/5;
   color: var(--chat-text);
 }
 

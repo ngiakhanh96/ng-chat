@@ -62,8 +62,7 @@
 }
 
 .chat-shell__composer {
-  @apply mx-auto w-full max-w-4xl shrink-0 px-4 pb-4;
-  position: relative;
+  @apply relative mx-auto w-full max-w-4xl shrink-0 px-4 pb-4;
 }
 
 .chat-shell__composer p {
@@ -72,7 +71,7 @@
 }
 
 ::ng-deep .ant-drawer-body {
-  padding: 0;
+  @apply p-0;
   background: var(--chat-sidebar);
 }
 

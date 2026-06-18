@@ -65,7 +65,7 @@
 }
 
 .sidebar__search input:focus {
-  box-shadow: none;
+  @apply shadow-none;
 }
 
 .sidebar__nav {
@@ -77,9 +77,8 @@
 }
 
 .sidebar__section h2 {
-  @apply mb-2 px-2 text-xs font-semibold uppercase;
+  @apply mb-2 px-2 text-xs font-semibold uppercase tracking-normal;
   color: var(--chat-text-muted);
-  letter-spacing: 0;
 }
 
 .sidebar__items {
@@ -94,7 +93,7 @@
 
 .sidebar__item:hover,
 .sidebar__item--active {
-  background: rgb(255 255 255 / 5%);
+  @apply bg-white/5;
 }
 
 .sidebar__item--active {
