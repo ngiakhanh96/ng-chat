@@ -27,7 +27,7 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComposerComponent {
-  placeholder = input('Message ng-chat');
+  placeholder = input('Ask ng-chat');
   disabled = input(false);
   submitted = output<string>();
   draft = signal('');
@@ -36,7 +36,8 @@ export class ChatComposerComponent {
     return this.draft().trim().length > 0 && !this.disabled();
   }
 
-  onSubmit() {
+  onSubmit(event?: SubmitEvent) {
+    event?.preventDefault();
     const content = this.draft().trim();
     if (!content || this.disabled()) {
       return;

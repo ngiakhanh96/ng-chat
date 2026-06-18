@@ -35,4 +35,10 @@ describe('ChatComposerComponent', () => {
     expect(submitted).toHaveBeenCalledWith('Hello chat');
     expect(component.draft()).toBe('');
   });
+
+  it('renders the compact composer hub visual', () => {
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.composer__hub')).toBeTruthy();
+  });
 });

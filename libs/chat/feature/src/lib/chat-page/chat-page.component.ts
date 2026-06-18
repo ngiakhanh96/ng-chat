@@ -1,5 +1,4 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { toSignal } from '@angular/core/rxjs-interop';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,7 +6,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { ChatLayoutComponent } from '@ng-chat/chat-ui';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   ChatConversation,
   ChatConversationSummary,
@@ -15,6 +14,7 @@ import {
   ChatSidebarSection,
   MOCK_CHAT_CONVERSATIONS,
 } from '@ng-chat/chat-data-access';
+import { ChatLayoutComponent } from '@ng-chat/chat-ui';
 import { BaseWithSandBoxComponent } from '@ng-chat/shared-data-access';
 import { map } from 'rxjs';
 
@@ -92,10 +92,6 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   }
 
   onMessageSubmitted(content: string) {
-    const activeConversation = this.activeConversation();
-    if (!activeConversation) {
-      this.onNewConversation();
-    }
     const conversationId = this.selectedConversationId();
     if (!conversationId) {
       return;

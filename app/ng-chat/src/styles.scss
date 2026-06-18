@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@use 'tailwindcss';
 @import '../../../node_modules/ng-zorro-antd/style/index.min.css';
 @import 'ng-zorro-antd/avatar/style/index.min.css';
 @import 'ng-zorro-antd/button/style/index.min.css';
@@ -9,19 +9,19 @@
 @import 'ng-zorro-antd/tooltip/style/index.min.css';
 
 :root {
-  color-scheme: light;
-  --chat-bg: #f7f7f4;
-  --chat-surface: #ffffff;
-  --chat-surface-muted: #f1f2ee;
-  --chat-sidebar: #f4f4ef;
-  --chat-border: #deded6;
-  --chat-border-soft: #ecece5;
-  --chat-text: #1f2328;
-  --chat-text-muted: #6b7280;
-  --chat-accent: #10a37f;
-  --chat-accent-strong: #0e8f70;
-  --chat-user-message: #e8f5ef;
-  --chat-shadow: 0 20px 60px rgb(15 23 42 / 10%);
+  color-scheme: dark;
+  --chat-bg: #10110e;
+  --chat-surface: #1d1f19;
+  --chat-surface-muted: #27291f;
+  --chat-sidebar: #161711;
+  --chat-border: #38362d;
+  --chat-border-soft: #292820;
+  --chat-text: #f0eadf;
+  --chat-text-muted: #a6a092;
+  --chat-accent: #b9905c;
+  --chat-accent-strong: #d7b178;
+  --chat-user-message: #302b20;
+  --chat-shadow: 0 24px 70px rgb(0 0 0 / 45%);
 }
 
 html,

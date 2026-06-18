@@ -5,33 +5,48 @@
 }
 
 .thread {
-  @apply h-full overflow-y-auto px-4;
+  @apply h-full overflow-y-auto px-5;
 }
 
 .thread__inner {
-  @apply mx-auto flex min-h-full max-w-4xl flex-col pb-8 pt-8;
+  @apply mx-auto flex min-h-full max-w-4xl flex-col pb-10 pt-6;
 }
 
 .thread__header {
-  @apply mb-6;
+  @apply mb-7;
 }
 
 .thread__header p {
-  @apply mb-2 text-xs font-semibold uppercase tracking-wide;
+  @apply mb-1 text-xs font-semibold uppercase;
   color: var(--chat-text-muted);
+  letter-spacing: 0;
 }
 
 .thread__header h1 {
-  @apply m-0 text-3xl font-semibold;
+  @apply m-0 text-3xl font-medium;
   color: var(--chat-text);
 }
 
 .thread__messages {
-  @apply flex flex-col;
+  @apply flex flex-col gap-1;
 }
 
 .thread__empty {
-  @apply grid flex-1 place-items-center rounded-2xl border border-dashed p-8;
+  @apply grid flex-1 place-items-center rounded-xl border border-dashed p-8;
   border-color: var(--chat-border);
-  background: var(--chat-surface);
+  background: rgb(255 255 255 / 3%);
+}
+
+@media (max-width: 640px) {
+  .thread {
+    @apply px-3;
+  }
+
+  .thread__inner {
+    @apply pt-4;
+  }
+
+  .thread__header h1 {
+    @apply text-2xl;
+  }
 }

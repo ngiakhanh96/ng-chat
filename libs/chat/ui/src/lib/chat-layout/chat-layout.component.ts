@@ -4,6 +4,7 @@ import {
   input,
   output,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChatConversationSummary,
   ChatMessage,
@@ -22,6 +23,7 @@ import { ConversationSidebarComponent } from '../conversation-sidebar/conversati
     ChatComposerComponent,
     ChatThreadComponent,
     ConversationSidebarComponent,
+    NgTemplateOutlet,
     NzButtonModule,
     NzDrawerModule,
     NzIconModule,

@@ -1,30 +1,34 @@
-<form class="composer" (submit)="$event.preventDefault(); onSubmit()">
-  <button
-    class="composer__icon-button"
-    nz-button
-    nzType="text"
-    type="button"
-    nz-tooltip
-    nzTooltipTitle="Attach file"
-    aria-label="Attach file"
-  >
-    <nz-icon nzType="paper-clip" />
-  </button>
+<form class="composer" (submit)="onSubmit($event)">
+  <span class="composer__hub" aria-hidden="true"></span>
 
-  <textarea
-    class="composer__textarea"
-    nz-input
-    cdkTextareaAutosize
-    cdkAutosizeMinRows="1"
-    cdkAutosizeMaxRows="8"
-    name="message"
-    [placeholder]="placeholder()"
-    [disabled]="disabled()"
-    [ngModel]="draft()"
-    (ngModelChange)="draft.set($event)"
-    (keydown)="onKeydown($event)"
-    aria-label="Message"
-  ></textarea>
+  <div class="composer__field">
+    <button
+      class="composer__icon-button"
+      nz-button
+      nzType="text"
+      type="button"
+      nz-tooltip
+      nzTooltipTitle="Attach file"
+      aria-label="Attach file"
+    >
+      <nz-icon nzType="paper-clip" />
+    </button>
+
+    <textarea
+      class="composer__textarea"
+      nz-input
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="1"
+      cdkAutosizeMaxRows="5"
+      name="message"
+      [placeholder]="placeholder()"
+      [disabled]="disabled()"
+      [ngModel]="draft()"
+      (ngModelChange)="draft.set($event)"
+      (keydown)="onKeydown($event)"
+      aria-label="Message"
+    ></textarea>
+  </div>
 
   <button
     class="composer__send"
