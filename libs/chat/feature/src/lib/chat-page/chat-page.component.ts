@@ -14,9 +14,9 @@ import {
   ChatSidebarSection,
   MOCK_CHAT_CONVERSATIONS,
 } from '@ng-chat/chat-data-access';
-import { ChatLayoutComponent } from '@ng-chat/chat-ui';
 import { BaseWithSandBoxComponent } from '@ng-chat/shared-data-access';
 import { map } from 'rxjs';
+import { ChatLayoutComponent } from '../chat-layout/chat-layout.component';
 
 @Component({
   selector: 'chat-page',

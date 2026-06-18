@@ -21,6 +21,14 @@ export default [
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
           depConstraints: [
             {
+              sourceTag: 'scope:app-ng-chat',
+              onlyDependOnLibsWithTags: [
+                'scope:*-feature',
+                'scope:shared-data-access',
+                'scope:shared-ui',
+              ],
+            },
+            {
               sourceTag: 'scope:shared-data-access',
               onlyDependOnLibsWithTags: [],
             },
@@ -33,11 +41,11 @@ export default [
               onlyDependOnLibsWithTags: ['scope:shared-data-access'],
             },
             {
-              sourceTag: 'scope:chat-ui',
+              sourceTag: 'scope:shell-feature',
               onlyDependOnLibsWithTags: [
-                'scope:chat-data-access',
                 'scope:shared-data-access',
                 'scope:shared-ui',
+                'scope:*-feature',
               ],
             },
             {
@@ -47,20 +55,22 @@ export default [
                 'scope:chat-ui',
                 'scope:shared-data-access',
                 'scope:shared-ui',
+                'scope:*-feature',
               ],
             },
             {
-              sourceTag: 'scope:shell-feature',
+              sourceTag: 'scope:chat-ui',
               onlyDependOnLibsWithTags: [
+                'scope:chat-data-access',
                 'scope:shared-data-access',
                 'scope:shared-ui',
-                'scope:*-feature',
               ],
             },
             {
-              sourceTag: 'scope:app-ng-chat',
+              sourceTag: 'scope:sidebar-feature',
               onlyDependOnLibsWithTags: [
-                'scope:*-feature',
+                'scope:sidebar-data-access',
+                'scope:sidebar-ui',
                 'scope:shared-data-access',
                 'scope:shared-ui',
               ],

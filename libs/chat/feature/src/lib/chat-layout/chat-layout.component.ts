@@ -1,21 +1,20 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   input,
   output,
 } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
 import {
   ChatConversationSummary,
   ChatMessage,
   ChatSidebarSection,
 } from '@ng-chat/chat-data-access';
+import { ChatComposerComponent, ChatThreadComponent } from '@ng-chat/chat-ui';
+import { ConversationSidebarComponent } from '@ng-chat/sidebar-feature';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { ChatComposerComponent } from '../chat-composer/chat-composer.component';
-import { ChatThreadComponent } from '../chat-thread/chat-thread.component';
-import { ConversationSidebarComponent } from '../conversation-sidebar/conversation-sidebar.component';
 
 @Component({
   selector: 'chat-chat-layout',
