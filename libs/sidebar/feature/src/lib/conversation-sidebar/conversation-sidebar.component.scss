@@ -126,8 +126,7 @@
   @apply min-w-0;
 }
 
-.sidebar__item-text strong,
-.sidebar__item-text small {
+.sidebar__item-text strong {
   @apply block truncate;
 }
 
@@ -135,7 +134,6 @@
   @apply text-sm font-medium;
 }
 
-.sidebar__item-text small,
 .sidebar__item-time {
   @apply text-xs;
   color: var(--chat-text-muted);

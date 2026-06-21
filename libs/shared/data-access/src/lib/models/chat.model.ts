@@ -14,7 +14,6 @@ export interface ChatMessage {
 export interface ChatConversationSummary {
   id: string;
   title: string;
-  preview: string;
   updatedAt: string;
   pinned?: boolean;
 }

@@ -1,13 +1,67 @@
-<chat-chat-layout
-  [sidebarSections]="sidebarSections()"
-  [selectedConversationId]="selectedConversationId()"
-  [activeConversation]="activeConversationSummary()"
-  [messages]="activeMessages()"
-  [mobileSidebarOpen]="mobileSidebarOpen()"
-  (newConversation)="onNewConversation()"
-  (conversationSelected)="onConversationSelected($event)"
-  (searchQueryChanged)="onSearchQueryChanged($event)"
-  (mobileSidebarOpened)="openMobileSidebar()"
-  (mobileSidebarClosed)="closeMobileSidebar()"
-  (messageSubmitted)="onMessageSubmitted($event)"
-/>
+<div class="chat-shell">
+  <div class="chat-shell__sidebar">
+    <ng-container
+      [ngTemplateOutlet]="conversationSidebar"
+      [ngTemplateOutletContext]="{ closeAfterAction: false }"
+    />
+  </div>
+
+  <main class="chat-shell__main">
+    <header class="chat-shell__topbar">
+      <button
+        class="chat-shell__menu"
+        nz-button
+        nzType="text"
+        type="button"
+        aria-label="Open conversations"
+        (click)="openMobileSidebar()"
+      >
+        <nz-icon nzType="menu" />
+      </button>
+      <div>
+        <strong>{{ activeConversationSummary()?.title ?? 'New chat' }}</strong>
+        <span>ChatGPT 5.5 · Medium</span>
+      </div>
+    </header>
+
+    <chat-thread
+      [conversation]="activeConversationSummary()"
+      [messages]="activeMessages()"
+    />
+
+    <footer class="chat-shell__composer">
+      <chat-composer (submitted)="onMessageSubmitted($event)" />
+      <p>ng-chat can make mistakes. Check protocol outputs before shipping.</p>
+    </footer>
+  </main>
+</div>
+
+<nz-drawer
+  nzPlacement="left"
+  [nzClosable]="false"
+  [nzWidth]="320"
+  [nzVisible]="mobileSidebarOpen()"
+  (nzOnClose)="closeMobileSidebar()"
+>
+  <ng-container *nzDrawerContent>
+    <ng-container
+      [ngTemplateOutlet]="conversationSidebar"
+      [ngTemplateOutletContext]="{ closeAfterAction: true }"
+    />
+  </ng-container>
+</nz-drawer>
+
+<ng-template #conversationSidebar let-closeAfterAction="closeAfterAction">
+  <chat-conversation-sidebar
+    [sections]="sidebarSections()"
+    [selectedConversationId]="selectedConversationId()"
+    (newConversation)="
+      onNewConversation(); closeAfterAction ? closeMobileSidebar() : undefined
+    "
+    (conversationSelected)="
+      onConversationSelected($event);
+      closeAfterAction ? closeMobileSidebar() : undefined
+    "
+    (searchQueryChanged)="onSearchQueryChanged($event)"
+  />
+</ng-template>

@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,6 +6,7 @@ import {
   signal,
 } from '@angular/core';
 import { MOCK_CHAT_CONVERSATIONS } from '@ng-chat/chat-data-access';
+import { ChatComposerComponent, ChatThreadComponent } from '@ng-chat/chat-ui';
 import {
   BaseWithSandBoxComponent,
   ChatConversation,
@@ -12,11 +14,22 @@ import {
   ChatMessage,
   ChatSidebarSection,
 } from '@ng-chat/shared-data-access';
-import { ChatLayoutComponent } from '../chat-layout/chat-layout.component';
+import { ConversationSidebarComponent } from '@ng-chat/sidebar-feature';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'chat-page',
-  imports: [ChatLayoutComponent],
+  imports: [
+    ChatComposerComponent,
+    ChatThreadComponent,
+    ConversationSidebarComponent,
+    NgTemplateOutlet,
+    NzButtonModule,
+    NzDrawerModule,
+    NzIconModule,
+  ],
   templateUrl: './chat-page.component.html',
   styleUrl: './chat-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -70,7 +83,6 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
     const conversation: ChatConversation = {
       id,
       title: 'New chat',
-      preview: 'Start a fresh conversation.',
       updatedAt: 'Now',
       messages: [],
     };
@@ -123,7 +135,6 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
                 conversation.messages.length === 0
                   ? this.createTitle(content)
                   : conversation.title,
-              preview: content,
               updatedAt: 'Now',
               messages: [
                 ...conversation.messages,
@@ -161,7 +172,6 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
     return {
       id: conversation.id,
       title: conversation.title,
-      preview: conversation.preview,
       updatedAt: conversation.updatedAt,
       pinned: conversation.pinned,
     };

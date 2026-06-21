@@ -4,7 +4,6 @@ export const MOCK_CHAT_CONVERSATIONS: ChatConversation[] = [
   {
     id: 'conversation-architecture',
     title: 'Architecture for AGUI adapters',
-    preview: 'Separate protocol DTOs from canonical chat state.',
     updatedAt: 'Today',
     pinned: true,
     messages: [
@@ -31,7 +30,6 @@ export const MOCK_CHAT_CONVERSATIONS: ChatConversation[] = [
   {
     id: 'conversation-ui',
     title: 'Polished chat shell',
-    preview: 'A light-first layout with a flexible dark mode path.',
     updatedAt: 'Yesterday',
     pinned: true,
     messages: [
@@ -57,7 +55,6 @@ export const MOCK_CHAT_CONVERSATIONS: ChatConversation[] = [
   {
     id: 'conversation-testing',
     title: 'Testing checklist',
-    preview: 'Cover sidebar selection, composer submit, and message variants.',
     updatedAt: 'May 29',
     messages: [
       {
