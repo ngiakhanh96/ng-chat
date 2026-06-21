@@ -39,6 +39,7 @@ export class ChatLayoutComponent {
   mobileSidebarOpen = input(false);
   newConversation = output<void>();
   conversationSelected = output<string>();
+  searchQueryChanged = output<string>();
   mobileSidebarOpened = output<void>();
   mobileSidebarClosed = output<void>();
   messageSubmitted = output<string>();

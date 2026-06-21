@@ -25,6 +25,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   conversations = signal<ChatConversation[]>(MOCK_CHAT_CONVERSATIONS);
   selectedConversationId = signal(MOCK_CHAT_CONVERSATIONS[0]?.id ?? null);
   mobileSidebarOpen = signal(false);
+  searchQuery = signal('');
 
   activeConversation = computed(() =>
     this.conversations().find(
@@ -43,9 +44,13 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   activeMessages = computed(() => this.activeConversation()?.messages ?? []);
 
   sidebarSections = computed<ChatSidebarSection[]>(() => {
-    const summaries = this.conversations().map((conversation) =>
-      this.toConversationSummary(conversation),
-    );
+    const query = this.searchQuery().trim().toLowerCase();
+    const summaries = this.conversations()
+      .filter(
+        (conversation) =>
+          !query || conversation.title.toLowerCase().includes(query),
+      )
+      .map((conversation) => this.toConversationSummary(conversation));
     return [
       {
         id: 'pinned',
@@ -78,6 +83,10 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
 
   onConversationSelected(conversationId: string) {
     this.selectedConversationId.set(conversationId);
+  }
+
+  onSearchQueryChanged(query: string) {
+    this.searchQuery.set(query);
   }
 
   onMessageSubmitted(content: string) {

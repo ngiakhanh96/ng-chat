@@ -63,5 +63,6 @@
       conversationSelected.emit($event);
       closeAfterAction ? mobileSidebarClosed.emit() : undefined
     "
+    (searchQueryChanged)="searchQueryChanged.emit($event)"
   />
 </ng-template>

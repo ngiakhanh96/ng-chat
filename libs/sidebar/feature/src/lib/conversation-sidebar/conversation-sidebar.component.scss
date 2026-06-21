@@ -17,9 +17,12 @@
 }
 
 .sidebar__mark {
-  @apply grid h-8 w-8 place-items-center rounded-lg text-xs font-bold;
-  background:
-    linear-gradient(145deg, var(--chat-accent-strong), var(--chat-accent));
+  @apply grid h-8 w-8 place-items-center rounded-lg text-sm font-bold;
+  background: linear-gradient(
+    145deg,
+    var(--chat-accent-strong),
+    var(--chat-accent)
+  );
   color: #17130d;
   box-shadow: 0 10px 24px rgb(185 144 92 / 28%);
 }
@@ -83,6 +86,12 @@
 
 .sidebar__items {
   @apply flex flex-col gap-1;
+}
+
+.sidebar__empty {
+  @apply m-0 rounded-lg px-3 py-4 text-sm;
+  background: rgb(255 255 255 / 3%);
+  color: var(--chat-text-muted);
 }
 
 .sidebar__item {
