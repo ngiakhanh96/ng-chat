@@ -12,6 +12,7 @@
         @for (message of messages(); track message.id) {
           <chat-message [message]="message" />
         }
+        <div #endOfMessages class="thread__end" aria-hidden="true"></div>
       </div>
     } @else {
       <div class="thread__empty">

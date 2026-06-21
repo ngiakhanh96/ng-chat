@@ -30,6 +30,10 @@
   @apply flex flex-col gap-1;
 }
 
+.thread__end {
+  @apply h-px;
+}
+
 .thread__empty {
   @apply grid flex-1 place-items-center rounded-xl border border-dashed p-8;
   border-color: var(--chat-border);
