@@ -4,7 +4,7 @@ import {
   input,
   output,
 } from '@angular/core';
-import { ChatSidebarSection } from '@ng-chat/chat-data-access';
+import { ChatSidebarSection } from '@ng-chat/shared-data-access';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';

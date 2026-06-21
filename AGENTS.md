@@ -124,8 +124,7 @@ This repo builds an Angular chat UI in the spirit of ChatGPT: fast, accessible, 
   - `npm exec nx run ng-chat:typecheck`
   - `npm exec nx run ng-chat-e2e:e2e`
   - `npm exec nx affected -t lint,test,typecheck,build`
-- Add or update Vitest tests for adapters, stores, services, and non-trivial utilities.
-- Add Playwright coverage for user-facing chat workflows: send, stream, cancel, retry, navigate, auth-gated behavior, and protocol-specific rendering when it reaches the UI.
+- Ignore unit tests for now.
 - Before finishing broad changes, run the smallest relevant Nx verification target and report anything not run.
 
 ## Code Style

@@ -5,12 +5,12 @@ import {
   input,
   output,
 } from '@angular/core';
+import { ChatComposerComponent, ChatThreadComponent } from '@ng-chat/chat-ui';
 import {
   ChatConversationSummary,
   ChatMessage,
   ChatSidebarSection,
-} from '@ng-chat/chat-data-access';
-import { ChatComposerComponent, ChatThreadComponent } from '@ng-chat/chat-ui';
+} from '@ng-chat/shared-data-access';
 import { ConversationSidebarComponent } from '@ng-chat/sidebar-feature';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';

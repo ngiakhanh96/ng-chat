@@ -1,5 +1,6 @@
 export * from './lib/components/base-with-sandbox.component';
 export * from './lib/http-context-tokens/authorized.http-context-token';
+export * from './lib/models/chat.model';
 export * from './lib/models/route-data';
 export * from './lib/services/app-settings.service';
 export * from './lib/services/auth.service';

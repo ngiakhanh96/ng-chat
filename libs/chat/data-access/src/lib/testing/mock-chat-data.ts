@@ -1,4 +1,4 @@
-import { ChatConversation } from '../models/chat.models';
+import { ChatConversation } from '@ng-chat/shared-data-access';
 
 export const MOCK_CHAT_CONVERSATIONS: ChatConversation[] = [
   {

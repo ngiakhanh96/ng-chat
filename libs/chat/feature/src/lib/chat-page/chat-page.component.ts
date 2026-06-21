@@ -1,21 +1,17 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  inject,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { MOCK_CHAT_CONVERSATIONS } from '@ng-chat/chat-data-access';
 import {
+  BaseWithSandBoxComponent,
   ChatConversation,
   ChatConversationSummary,
   ChatMessage,
   ChatSidebarSection,
-  MOCK_CHAT_CONVERSATIONS,
-} from '@ng-chat/chat-data-access';
-import { BaseWithSandBoxComponent } from '@ng-chat/shared-data-access';
-import { map } from 'rxjs';
+} from '@ng-chat/shared-data-access';
 import { ChatLayoutComponent } from '../chat-layout/chat-layout.component';
 
 @Component({
@@ -26,16 +22,9 @@ import { ChatLayoutComponent } from '../chat-layout/chat-layout.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatPageComponent extends BaseWithSandBoxComponent {
-  private breakpointObserver = inject(BreakpointObserver);
   conversations = signal<ChatConversation[]>(MOCK_CHAT_CONVERSATIONS);
   selectedConversationId = signal(MOCK_CHAT_CONVERSATIONS[0]?.id ?? null);
   mobileSidebarOpen = signal(false);
-  isMobile = toSignal(
-    this.breakpointObserver
-      .observe('(max-width: 900px)')
-      .pipe(map((result) => result.matches)),
-    { initialValue: false },
-  );
 
   activeConversation = computed(() =>
     this.conversations().find(

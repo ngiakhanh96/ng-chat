@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import {
   ChatConversationSummary,
   ChatMessage,
-} from '@ng-chat/chat-data-access';
+} from '@ng-chat/shared-data-access';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { ChatMessageComponent } from '../chat-message/chat-message.component';
 

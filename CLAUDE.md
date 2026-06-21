@@ -21,3 +21,130 @@
 - The `nx-generate` skill handles generator discovery internally - don't call nx_docs just to look up generator syntax
 
 <!-- nx configuration end-->
+
+# Repo Standards
+
+## Product Direction
+
+This repo builds an Angular chat UI in the spirit of ChatGPT: fast, accessible, streaming-friendly, and ready to integrate multiple agent/UI protocols such as AGUI, A2UI, and future protocol variants. Keep the UI protocol-agnostic. Protocol details belong in adapters and data-access services; components should consume a stable internal chat model.
+
+## Workspace Shape
+
+- Package manager: npm. Run Nx through `npm exec nx ...`.
+- Default app: `ng-chat`.
+- Main app: `app/ng-chat`.
+- E2E app: `app/ng-chat-e2e`.
+- Keep feature domains under `libs/`, mirroring the architecture from `C:\Users\khanh\Desktop\angular-youtube` while using this repo's physical layout.
+- New domains should be split into sibling Nx libraries:
+  - `libs/<domain>/feature`: smart/container components, routes, orchestration, and sandbox interaction.
+  - `libs/<domain>/ui`: dumb/presentational components that receive data through inputs and emit events through outputs.
+  - `libs/<domain>/data-access`: domain event groups, effects, reducers, selectors, stores, models, HTTP/protocol clients, and adapters.
+- Existing shared libraries:
+  - `libs/shared/data-access`: `BaseWithSandBoxComponent`, shared sandbox/store primitives, shared auth/storage/HTTP context utilities, and cross-domain models.
+  - `libs/shared/ui`: reusable presentational UI, directives, pipes, utilities, and UI-only services.
+- Build output currently lands in `docs/`. Treat `docs/`, `dist/`, `.angular/`, `.nx/`, and `tmp/` as generated/cache output unless the task is explicitly about deployment artifacts.
+
+## Architecture Boundaries
+
+- Preserve Nx module boundaries in `eslint.config.mjs`. Do not bypass them with relative deep imports.
+- Import libraries through their public entry points. Current examples:
+  - `@ng-chat/shared-data-access`
+  - `@ng-chat/shared-ui`
+  - `@ng-chat/shell-feature`
+- `app/ng-chat` composes providers, routing, SSR/CSR entry points, global interceptors, and app-level configuration. Keep product features in domain feature libraries.
+- Feature libraries are smart. Components in `libs/<domain>/feature` may inject domain stores/services, read sandbox/shared store state, dispatch events, coordinate routing, and map store/protocol/domain data into UI view models.
+- Feature components should extend `BaseWithSandBoxComponent` when they dispatch sandbox events or read sandbox/shared store state.
+- UI libraries are dumb/presentational. Components in `libs/<domain>/ui` should take data with Angular `input()` and report user intent with `output()`.
+- UI components should not dispatch sandbox events and should not inject domain stores or data-access services.
+- Data-access libraries own domain state and side effects. Put domain actions/event groups, effects, reducers, selectors, signal stores, models, HTTP clients, protocol clients, and adapters in `libs/<domain>/data-access`.
+- Dependency rules should mirror the angular-youtube layering:
+  - `<domain>-feature` may depend on same-domain `ui`, same-domain `data-access`, `shared-ui`, and `shared-data-access`.
+  - `<domain>-ui` may depend on `shared-ui`, `shared-data-access` for shared types only when needed, and same-domain `data-access` only for stable domain view-model types.
+  - `<domain>-data-access` may depend on `shared-data-access`.
+  - `shared-data-access` should not depend on local feature or UI libraries.
+- `libs/shared/data-access` owns shared primitives only; do not put every domain store or protocol adapter there.
+- `libs/shared/ui` owns reusable UI building blocks only; keep domain protocol parsing out of UI components.
+- For new large areas, prefer focused Nx libraries with tags that extend the existing `scope:*` pattern instead of growing one catch-all library.
+
+## Chat And Protocol Modeling
+
+- Define one canonical internal chat model for conversations, turns, messages, parts, attachments, tool calls, citations, status, and streaming deltas.
+- Keep AGUI, A2UI, OpenAI-style, or other wire formats as external protocol models. Map them into and out of the canonical model with named adapters in the relevant domain `data-access` library.
+- Smart feature components consume canonical state/view models and pass protocol-agnostic inputs to dumb UI components.
+- Do not let Angular templates, layout components, or shared UI utilities depend directly on protocol-specific payload shapes.
+- Model streaming as typed incremental events or deltas. Avoid pushing raw text chunks through unrelated UI state.
+- Keep transport concerns separate from state concerns:
+  - protocol DTOs and adapters in domain data-access protocol folders,
+  - HTTP/WebSocket/SSE clients in domain data-access services,
+  - normalized chat state in domain signal stores,
+  - rendering in domain feature/UI libraries.
+- Treat protocol adapters as compatibility boundaries. Add focused tests with representative fixtures whenever adding or changing a protocol mapping.
+- Avoid storing secrets or provider credentials in source. New protocol endpoints, client IDs, and feature flags should come from app settings or deployment configuration.
+
+## Angular Standards
+
+- Prefer standalone components and provider functions. Keep module-era patterns out of new code unless required by a dependency.
+- Use `ChangeDetectionStrategy.OnPush` for components. This app uses zoneless change detection, so keep state changes explicit and signal-friendly.
+- Prefer `inject()` for dependencies to match the current codebase.
+- Prefer Angular signals, `computed`, and NgRx Signals stores for UI/domain state. Use RxJS for async boundaries, HTTP, event streams, cancellation, and interop.
+- Use `takeUntilDestroyed`, `DestroyRef`, or signal-store lifecycles for subscriptions. Do not leave manual subscriptions unmanaged.
+- Prefer functional guards and functional HTTP interceptors.
+- Be SSR-aware. Do not access `window`, `document`, `localStorage`, or browser-only APIs directly from shared code; hide them behind services or platform checks.
+- Keep components thin: inputs, outputs, view state, and rendering. Move auth, protocol, persistence, and network behavior into services/stores.
+- Avoid `any` in new code. If a protocol payload is unknown, use `unknown` at the edge, validate/narrow it, then map it to typed models.
+
+## State, HTTP, And Auth
+
+- Continue the existing NgRx Signals event/effect/reducer/selector style for shared request state.
+- Keep event names grouped by domain source. Use explicit success/error/cancel events for request flows.
+- Use the existing `AUTHORIZED` `HttpContextToken` pattern when adding authenticated requests.
+- Keep retry behavior intentional. The global HTTP retry interceptor is broad; new non-idempotent calls should opt out or be handled carefully if retry semantics matter.
+- Do not add new hard-coded OAuth IDs, API keys, model deployment names, or protocol server URLs. Prefer `app-settings.json` or injected configuration.
+
+## UI And UX Standards
+
+- Build the actual chat surface, not a marketing page, when adding product UI.
+- Use Angular Material/CDK and existing SCSS/Tailwind setup consistently.
+- Prefer Tailwind syntax in component styles wherever a direct utility exists. Use `@apply` for layout, spacing, sizing, typography, borders, display, flex/grid alignment, overflow, positioning, and common states before writing normal CSS declarations.
+- Keep normal CSS for values Tailwind does not express cleanly, such as CSS custom properties, theme-token assignments, complex gradients, `color-mix()`, custom `box-shadow` recipes, pseudo-element artwork, and exact grid templates.
+- Chat interactions should support keyboard-first use, visible focus states, loading/streaming states, cancellation, retry, copy actions, and error recovery.
+- Message rendering should be resilient to long words, code blocks, tables, streamed partial content, attachments, and tool-call/status rows.
+- Keep shared UI components reusable and visually quiet. Product-specific copy and protocol semantics belong in feature components.
+- Accessibility is required for new controls: semantic buttons/inputs, labels, ARIA only when needed, focus management for dialogs/menus, and no color-only status indicators.
+
+## Testing And Verification
+
+- Use Nx targets instead of invoking underlying tools directly.
+- Useful commands:
+  - `npm exec nx run ng-chat:serve`
+  - `npm exec nx run ng-chat:build`
+  - `npm exec nx run ng-chat:build-csr`
+  - `npm exec nx run ng-chat:lint`
+  - `npm exec nx run ng-chat:test`
+  - `npm exec nx run ng-chat:typecheck`
+  - `npm exec nx run ng-chat-e2e:e2e`
+  - `npm exec nx affected -t lint,test,typecheck,build`
+- Ignore unit tests for now.
+- Before finishing broad changes, run the smallest relevant Nx verification target and report anything not run.
+
+## Code Style
+
+- Follow `.editorconfig`: UTF-8, 2-space indentation, final newline, trim trailing whitespace.
+- Follow Prettier config: single quotes.
+- Keep files focused and public exports intentional. Update `src/index.ts` only when a symbol should be part of a library API.
+- Prefer clear names over comments. Add comments only for non-obvious protocol behavior, SSR constraints, or complex state transitions.
+- Keep generated or mechanical churn out of unrelated files.
+
+## Recommended Agent Skills
+
+- `nx-workspace`: use first when exploring projects, targets, dependencies, or workspace architecture.
+- `nx-generate`: use first for scaffolding apps, libraries, components, or project structure.
+- `nx-run-tasks`: use when running build, test, lint, e2e, serve, or affected targets.
+- `link-workspace-packages`: use when adding imports between workspace packages or fixing local package resolution.
+- `nx-plugins`: use before adding framework/tooling support through Nx plugins.
+- `monitor-ci`: use when watching Nx Cloud CI or handling self-healing CI fixes.
+- `openai-docs`: use for current OpenAI API, model, and ChatGPT/Codex product guidance if this chat UI integrates OpenAI features.
+- Suggested future custom skills, if this repo repeats the work often:
+  - `chat-protocol-adapter`: standards and test fixtures for AGUI/A2UI/canonical chat model mapping.
+  - `angular-chat-ui`: UX checklist for streaming messages, composer behavior, keyboard interaction, and accessibility.
+  - `agent-transport-debugging`: SSE/WebSocket/tool-call tracing patterns for protocol integrations.
