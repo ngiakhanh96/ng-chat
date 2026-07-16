@@ -34,14 +34,17 @@
       <section class="sidebar__section">
         <h2>{{ section.title }}</h2>
         <div class="sidebar__items">
-          @for (conversation of section.conversations; track conversation.id) {
+          @for (
+            conversation of section.conversationSummaries;
+            track conversation.id
+          ) {
             <button
               class="sidebar__item"
               type="button"
               [class.sidebar__item--active]="
                 conversation.id === selectedConversationId()
               "
-              (click)="conversationSelected.emit(conversation.id)"
+              (click)="conversationIdSelected.emit(conversation.id)"
             >
               <span class="sidebar__item-icon"
                 ><nz-icon nzType="message"

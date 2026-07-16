@@ -3,18 +3,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   signal,
 } from '@angular/core';
-import { MOCK_CHAT_CONVERSATIONS } from '@ng-chat/chat-data-access';
-import { ChatComposerComponent, ChatThreadComponent } from '@ng-chat/chat-ui';
+import { ChatStore, chatEventGroup } from '@ng-chat/chat-data-access';
 import {
-  BaseWithSandBoxComponent,
-  ChatConversation,
-  ChatConversationSummary,
-  ChatMessage,
-  ChatSidebarSection,
-} from '@ng-chat/shared-data-access';
-import { ConversationSidebarComponent } from '@ng-chat/sidebar-feature';
+  ChatComposerComponent,
+  ChatConversationComponent,
+} from '@ng-chat/chat-ui';
+import { BaseWithSandBoxComponent } from '@ng-chat/shared-data-access';
+import {
+  ConversationSidebarComponent,
+  IChatSidebarSection,
+} from '@ng-chat/sidebar-feature';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -23,7 +24,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   selector: 'chat-page',
   imports: [
     ChatComposerComponent,
-    ChatThreadComponent,
+    ChatConversationComponent,
     ConversationSidebarComponent,
     NgTemplateOutlet,
     NzButtonModule,
@@ -35,115 +36,67 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatPageComponent extends BaseWithSandBoxComponent {
-  conversations = signal<ChatConversation[]>(MOCK_CHAT_CONVERSATIONS);
-  selectedConversationId = signal(MOCK_CHAT_CONVERSATIONS[0]?.id ?? null);
+  private readonly chatStore = inject(ChatStore);
+  conversations = this.chatStore.conversations;
+  selectedConversationId = this.chatStore.selectedConversationId;
   mobileSidebarOpen = signal(false);
-  searchQuery = signal('');
-
-  activeConversation = computed(() =>
-    this.conversations().find(
-      (conversation) => conversation.id === this.selectedConversationId(),
-    ),
-  );
-
-  activeConversationSummary = computed(() => {
-    const activeConversation = this.activeConversation();
-    if (!activeConversation) {
-      return undefined;
-    }
-    return this.toConversationSummary(activeConversation);
-  });
+  searchQuery = this.chatStore.searchQuery;
+  activeConversation = this.chatStore.activeConversation;
 
   activeMessages = computed(() => this.activeConversation()?.messages ?? []);
 
-  sidebarSections = computed<ChatSidebarSection[]>(() => {
+  sidebarSections = computed<IChatSidebarSection[]>(() => {
     const query = this.searchQuery().trim().toLowerCase();
-    const summaries = this.conversations()
-      .filter(
-        (conversation) =>
-          !query || conversation.title.toLowerCase().includes(query),
-      )
-      .map((conversation) => this.toConversationSummary(conversation));
+    const summaries = this.conversations().filter(
+      (conversation) =>
+        !query || conversation.title.toLowerCase().includes(query),
+    );
     return [
       {
         id: 'pinned',
         title: 'Pinned',
-        conversations: summaries.filter((conversation) => conversation.pinned),
+        conversationSummaries: summaries.filter(
+          (conversation) => conversation.pinned,
+        ),
       },
       {
         id: 'recent',
         title: 'Recent',
-        conversations: summaries.filter((conversation) => !conversation.pinned),
+        conversationSummaries: summaries.filter(
+          (conversation) => !conversation.pinned,
+        ),
       },
-    ].filter((section) => section.conversations.length > 0);
+    ].filter((section) => section.conversationSummaries.length > 0);
   });
 
   onNewConversation() {
-    const id = `conversation-${Date.now()}`;
-    const conversation: ChatConversation = {
-      id,
-      title: 'New chat',
-      updatedAt: 'Now',
-      messages: [],
-    };
-    this.conversations.update((conversations) => [
-      conversation,
-      ...conversations,
-    ]);
-    this.selectedConversationId.set(id);
+    this.dispatchEvent(chatEventGroup.newConversation());
   }
 
-  onConversationSelected(conversationId: string) {
-    this.selectedConversationId.set(conversationId);
+  onConversationIdSelected(conversationId: string | undefined) {
+    if (
+      conversationId == null ||
+      conversationId === this.selectedConversationId()
+    ) {
+      return;
+    }
+    this.dispatchEvent(
+      chatEventGroup.conversationIdSelected({ conversationId }),
+    );
   }
 
   onSearchQueryChanged(query: string) {
-    this.searchQuery.set(query);
+    this.dispatchEvent(chatEventGroup.searchQueryChanged({ query }));
   }
 
   onMessageSubmitted(content: string) {
     const conversationId = this.selectedConversationId();
-    if (!conversationId) {
-      return;
-    }
-
-    const now = this.formatNow();
-    const userMessage: ChatMessage = {
-      id: `message-user-${Date.now()}`,
-      conversationId,
-      role: 'user',
-      content,
-      createdAt: now,
-      status: 'complete',
-    };
-    const assistantMessage: ChatMessage = {
-      id: `message-assistant-${Date.now()}`,
-      conversationId,
-      role: 'assistant',
-      content:
-        'Mock response: the UI shell is wired. Next we can connect this flow to a chat data-access store and protocol adapters.',
-      createdAt: now,
-      status: 'complete',
-    };
-
-    this.conversations.update((conversations) =>
-      conversations.map((conversation) =>
-        conversation.id === conversationId
-          ? {
-              ...conversation,
-              title:
-                conversation.messages.length === 0
-                  ? this.createTitle(content)
-                  : conversation.title,
-              updatedAt: 'Now',
-              messages: [
-                ...conversation.messages,
-                userMessage,
-                assistantMessage,
-              ],
-            }
-          : conversation,
-      ),
+    this.dispatchEvent(
+      chatEventGroup.messageSubmitted({
+        conversationId,
+        messageId: this.createId(),
+        content,
+      }),
     );
   }
 
@@ -155,25 +108,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
     this.mobileSidebarOpen.set(false);
   }
 
-  private createTitle(content: string) {
-    return content.length > 48 ? `${content.slice(0, 45)}...` : content;
-  }
-
-  private formatNow() {
-    return new Intl.DateTimeFormat('en', {
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(new Date());
-  }
-
-  private toConversationSummary(
-    conversation: ChatConversation,
-  ): ChatConversationSummary {
-    return {
-      id: conversation.id,
-      title: conversation.title,
-      updatedAt: conversation.updatedAt,
-      pinned: conversation.pinned,
-    };
+  private createId(): string {
+    return globalThis.crypto.randomUUID();
   }
 }

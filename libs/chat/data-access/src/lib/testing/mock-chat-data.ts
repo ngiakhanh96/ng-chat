@@ -1,6 +1,4 @@
-import { ChatConversation } from '@ng-chat/shared-data-access';
-
-export const MOCK_CHAT_CONVERSATIONS: ChatConversation[] = [
+export const MOCK_CHAT_CONVERSATIONS = [
   {
     id: 'conversation-architecture',
     title: 'Architecture for AGUI adapters',

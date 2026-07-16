@@ -1,3 +1,7 @@
 export interface IAppSettings {
-  googleAuthApiBaseUrl: string;
+  googleAuthApiBaseUrl?: string;
+  interactiveStory?: {
+    apiBaseUrl: string;
+    developmentTestUserId: string;
+  };
 }

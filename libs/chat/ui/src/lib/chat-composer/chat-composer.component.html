@@ -20,11 +20,8 @@
       cdkTextareaAutosize
       cdkAutosizeMinRows="1"
       cdkAutosizeMaxRows="5"
-      name="message"
       [placeholder]="placeholder()"
-      [disabled]="disabled()"
-      [ngModel]="draft()"
-      (ngModelChange)="draft.set($event)"
+      [formField]="composerForm.message"
       (keydown)="onKeydown($event)"
       aria-label="Message"
     ></textarea>

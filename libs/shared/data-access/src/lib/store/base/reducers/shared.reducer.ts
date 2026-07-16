@@ -1,3 +1,4 @@
+import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import {
   signalStore,
   signalStoreFeature,
@@ -38,6 +39,7 @@ export const SharedStore = signalStore(
   withSharedEffects(),
   withSharedSelector(),
   withSharedReducer(),
+  withDevtools('shared'),
 );
 
 export function withSharedReducer<_>() {

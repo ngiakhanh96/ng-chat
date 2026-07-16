@@ -10,7 +10,10 @@
     @if (messages().length > 0) {
       <div class="thread__messages">
         @for (message of messages(); track message.id) {
-          <chat-message [message]="message" />
+          <chat-message
+            [message]="message"
+            (suggestedActionSelected)="suggestedActionSelected.emit($event)"
+          />
         }
         <div #endOfMessages class="thread__end" aria-hidden="true"></div>
       </div>

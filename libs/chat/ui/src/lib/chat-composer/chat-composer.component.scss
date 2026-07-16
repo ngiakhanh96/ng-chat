@@ -108,6 +108,15 @@
   box-shadow: none;
 }
 
+.composer__send--stop {
+  background: rgb(92 48 39 / 92%) !important;
+  border-color: rgb(239 154 132 / 38%) !important;
+  color: #ffe4dc !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    0 10px 24px rgb(0 0 0 / 32%);
+}
+
 @media (max-width: 640px) {
   .composer {
     @apply max-w-none gap-1.5 rounded-3xl px-2 py-1.5;

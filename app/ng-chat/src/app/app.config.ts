@@ -6,6 +6,8 @@ import {
 import {
   ApplicationConfig,
   ErrorHandler,
+  inject,
+  provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
@@ -34,6 +36,7 @@ import {
   UserOutline,
 } from '@ant-design/icons-angular/icons';
 import {
+  AppSettingsService,
   GoogleLoginProvider,
   provideSocialAuth,
   SharedStore,
@@ -96,6 +99,10 @@ export const appConfig: ApplicationConfig = {
       onError: (err) => {
         console.error(err);
       },
+    }),
+    provideAppInitializer(async () => {
+      const appSettingsService = inject(AppSettingsService);
+      return await appSettingsService.getAppConfig();
     }),
   ],
 };

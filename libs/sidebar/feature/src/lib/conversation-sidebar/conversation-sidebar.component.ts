@@ -7,12 +7,18 @@ import {
   signal,
 } from '@angular/core';
 import { FormField, form } from '@angular/forms/signals';
-import { ChatSidebarSection } from '@ng-chat/shared-data-access';
+import { IChatConversationSummary } from '@ng-chat/shared-data-access';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+
+export interface IChatSidebarSection {
+  id: string;
+  title: string;
+  conversationSummaries: IChatConversationSummary[];
+}
 
 @Component({
   selector: 'chat-conversation-sidebar',
@@ -29,10 +35,10 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConversationSidebarComponent {
-  sections = input<ChatSidebarSection[]>([]);
-  selectedConversationId = input<string | null>(null);
+  sections = input<IChatSidebarSection[]>([]);
+  selectedConversationId = input<string | undefined>(undefined);
   newConversation = output<void>();
-  conversationSelected = output<string>();
+  conversationIdSelected = output<string | undefined>();
   searchQueryChanged = output<string>();
   private readonly searchModel = signal({ query: '' });
   protected readonly searchForm = form(this.searchModel);

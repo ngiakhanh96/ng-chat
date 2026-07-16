@@ -7,7 +7,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormField, disabled, form } from '@angular/forms/signals';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -16,7 +16,7 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 @Component({
   selector: 'chat-composer',
   imports: [
-    FormsModule,
+    FormField,
     NzButtonModule,
     NzIconModule,
     NzInputModule,
@@ -31,20 +31,24 @@ export class ChatComposerComponent {
   placeholder = input('Ask ng-chat');
   disabled = input(false);
   submitted = output<string>();
-  draft = signal('');
+  private readonly composerModel = signal({ message: '' });
+  protected readonly composerForm = form(this.composerModel, (schemaPath) => {
+    disabled(schemaPath.message, () => this.disabled());
+  });
+  trimmedDraft = computed(() => this.composerForm.message().value().trim());
 
   canSend = computed(() => {
-    return this.draft().trim().length > 0 && !this.disabled();
+    return this.trimmedDraft().length > 0 && !this.disabled();
   });
 
   onSubmit(event?: SubmitEvent) {
     event?.preventDefault();
-    const content = this.draft().trim();
-    if (!content || this.disabled()) {
+    if (!this.canSend()) {
       return;
     }
+    const content = this.trimmedDraft();
     this.submitted.emit(content);
-    this.draft.set('');
+    this.composerForm.message().reset('');
   }
 
   onKeydown(event: KeyboardEvent) {

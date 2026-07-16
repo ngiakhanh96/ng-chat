@@ -2,28 +2,26 @@ export type ChatMessageRole = 'user' | 'assistant' | 'system';
 
 export type ChatMessageStatus = 'complete' | 'streaming' | 'error';
 
-export interface ChatMessage {
+export interface IChatUserChoice {
+  choiceType: string;
+  choiceContent: string;
+}
+
+export interface IChatMessage<T> {
   id: string;
-  conversationId: string;
   role: ChatMessageRole;
-  content: string;
+  content?: T;
   createdAt: string;
   status: ChatMessageStatus;
 }
 
-export interface ChatConversationSummary {
-  id: string;
+export interface IChatConversationSummary {
+  id?: string;
   title: string;
   updatedAt: string;
   pinned?: boolean;
 }
 
-export interface ChatConversation extends ChatConversationSummary {
-  messages: ChatMessage[];
-}
-
-export interface ChatSidebarSection {
-  id: string;
-  title: string;
-  conversations: ChatConversationSummary[];
+export interface IChatConversation<T> extends IChatConversationSummary {
+  messages: IChatMessage<T>[];
 }

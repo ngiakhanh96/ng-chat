@@ -1,1 +1,6 @@
-{}
+{
+  "interactiveStory": {
+    "apiBaseUrl": "https://localhost:7034",
+    "developmentTestUserId": "e8a21508-5421-4008-9d73-1169ab989d55"
+  }
+}

@@ -1,19 +1,54 @@
-<article class="message" [class.message--user]="isUser">
+<article class="message" [class.message--user]="isUser()">
   <nz-avatar
     class="message__avatar"
-    [nzIcon]="isUser ? 'user' : 'robot'"
-    [nzText]="isUser ? 'U' : 'AI'"
+    [nzIcon]="isUser() ? 'user' : 'robot'"
+    [nzText]="isUser() ? 'U' : 'AI'"
   ></nz-avatar>
 
   <div class="message__body">
+    @let content = message().content;
+
     <div class="message__meta">
-      <span>{{ isUser ? 'You' : 'ng-chat' }}</span>
+      <span>{{ isUser() ? 'You' : 'ng-chat' }}</span>
       <time>{{ message().createdAt }}</time>
     </div>
 
-    <p class="message__content">{{ message().content }}</p>
+    @if (message().status === 'streaming') {
+      <div class="message__streaming" role="status" aria-live="polite">
+        <span></span>
+        <span></span>
+        <span></span>
+        <strong>Writing the next chapter</strong>
+      </div>
+    } @else {
+      @if (isChapterResponse(content)) {
+        <p class="message__content">{{ content.content }}</p>
 
-    @if (!isUser) {
+        @if (content.choices.length) {
+          <div class="message__choices" aria-label="Story choices">
+            @for (choice of content.choices; track $index; let index = $index) {
+              <button
+                class="message__choice"
+                type="button"
+                (click)="suggestedActionSelected.emit(choice.choiceContent)"
+              >
+                <span class="message__choice-index">{{ index + 1 }}</span>
+                <span>
+                  @if (choice.choiceType) {
+                    <small>{{ choice.choiceType }}</small>
+                  }
+                  <strong>{{ choice.choiceContent }}</strong>
+                </span>
+              </button>
+            }
+          </div>
+        }
+      } @else if (typeof content === 'string') {
+        <p class="message__content">{{ content }}</p>
+      }
+    }
+
+    @if (!isUser && message().status === 'complete' && message().content) {
       <div class="message__actions" aria-label="Message actions">
         <button
           nz-button
@@ -22,18 +57,9 @@
           nz-tooltip
           nzTooltipTitle="Copy"
           aria-label="Copy response"
+          (click)="copyResponse()"
         >
           <nz-icon nzType="copy" />
-        </button>
-        <button
-          nz-button
-          nzType="text"
-          type="button"
-          nz-tooltip
-          nzTooltipTitle="Retry"
-          aria-label="Retry response"
-        >
-          <nz-icon nzType="reload" />
         </button>
       </div>
     }
