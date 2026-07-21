@@ -7,10 +7,10 @@ export const chatEventGroup = eventGroup({
   source: 'Chat',
   events: {
     newConversation: type<void>(),
-    conversationIdSelected: type<{ conversationId: string }>(),
+    setActiveConversationId: type<{ conversationId: string }>(),
     searchQueryChanged: type<{ query: string }>(),
     messageSubmitted: type<{
-      conversationId?: string;
+      conversationId: string;
       content: string;
       messageId: string;
     }>(),

@@ -13,7 +13,7 @@ import { withChatSelectors } from '../selectors/chat.selectors';
 
 export interface IChatState {
   conversations: IChatConversation<IChapterResponse | string>[];
-  selectedConversationId: string | undefined;
+  activeConversationId: string | undefined;
   searchQuery: string;
 }
 
@@ -31,7 +31,7 @@ export interface IUserChoice {
 
 const initialState: IChatState = {
   conversations: [],
-  selectedConversationId: undefined,
+  activeConversationId: undefined,
   searchQuery: '',
 };
 
@@ -48,10 +48,10 @@ function withChatReducer() {
     { state: type<IChatState>() },
     withReducer(
       on(chatEventGroup.newConversation, (state) => ({
-        selectedConversationId: undefined,
+        activeConversationId: undefined,
       })),
-      on(chatEventGroup.conversationIdSelected, ({ payload }) => ({
-        selectedConversationId: payload.conversationId,
+      on(chatEventGroup.setActiveConversationId, ({ payload }) => ({
+        activeConversationId: payload.conversationId,
       })),
       on(chatEventGroup.searchQueryChanged, ({ payload }) => ({
         searchQuery: payload.query,
@@ -70,7 +70,6 @@ function withChatReducer() {
             state.conversations,
             [userMessage],
           ),
-          selectedConversationId: payload.conversationId,
         };
       }),
       on(chatEventGroup.responseCompleted, ({ payload }, state) => {
@@ -94,35 +93,52 @@ function withChatReducer() {
   );
 }
 
-function newConversation(): IChatConversation<IChapterResponse | string> {
+function newConversation(
+  conversationId: string,
+  messages: IChatMessage<IChapterResponse | string>[],
+): IChatConversation<IChapterResponse | string> {
+  const firstTextMessage = messages[0] as IChatMessage<string>;
+  const dateNow = new Date().toISOString();
   return {
-    id: undefined,
-    title: '',
-    updatedAt: new Date().toISOString(),
-    messages: [],
+    id: conversationId,
+    title: createConversationTitle(firstTextMessage.content ?? ''),
+    createdAt: dateNow,
+    updatedAt: dateNow,
+    messages: [...messages],
   };
 }
 
 function addMessagesToConversation(
-  conversationId: string | undefined,
+  conversationId: string,
   conversations: IChatConversation<IChapterResponse | string>[],
   messages: IChatMessage<IChapterResponse | string>[],
 ) {
-  const currentConversations = [...conversations];
-  let conversation = currentConversations.find(
+  conversations = [...conversations];
+  let conversation = conversations.find(
     (conversation) => conversation.id === conversationId,
   );
+
   if (!conversation) {
-    conversation = newConversation();
-    currentConversations.push(conversation);
+    conversation = newConversation(conversationId, messages);
+    conversations.push(conversation);
+  } else {
+    conversation = updateConversation(conversation, messages);
   }
-  if (conversation.id == null) {
-    conversation.title = createConversationTitle(
-      (messages[0].content as string) ?? '',
-    );
-  }
-  conversation.messages = [...conversation.messages, ...messages];
-  return currentConversations;
+
+  return conversations.map((c) =>
+    c.id === conversationId ? conversation! : c,
+  );
+}
+
+function updateConversation(
+  conversation: IChatConversation<IChapterResponse | string>,
+  messages: IChatMessage<IChapterResponse | string>[],
+): IChatConversation<IChapterResponse | string> {
+  return {
+    ...conversation,
+    updatedAt: new Date().toISOString(),
+    messages: [...conversation.messages, ...messages],
+  };
 }
 
 function createConversationTitle(content: string) {

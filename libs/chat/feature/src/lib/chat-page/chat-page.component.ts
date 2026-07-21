@@ -11,7 +11,10 @@ import {
   ChatComposerComponent,
   ChatConversationComponent,
 } from '@ng-chat/chat-ui';
-import { BaseWithSandBoxComponent } from '@ng-chat/shared-data-access';
+import {
+  BaseWithSandBoxComponent,
+  IChatConversationSummary,
+} from '@ng-chat/shared-data-access';
 import {
   ConversationSidebarComponent,
   IChatSidebarSection,
@@ -38,7 +41,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 export class ChatPageComponent extends BaseWithSandBoxComponent {
   private readonly chatStore = inject(ChatStore);
   conversations = this.chatStore.conversations;
-  selectedConversationId = this.chatStore.selectedConversationId;
+  activeConversationId = this.chatStore.activeConversationId;
   mobileSidebarOpen = signal(false);
   searchQuery = this.chatStore.searchQuery;
   activeConversation = this.chatStore.activeConversation;
@@ -51,20 +54,21 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
       (conversation) =>
         !query || conversation.title.toLowerCase().includes(query),
     );
+
     return [
       {
         id: 'pinned',
         title: 'Pinned',
-        conversationSummaries: summaries.filter(
-          (conversation) => conversation.pinned,
-        ),
+        conversationSummaries: summaries
+          .filter((conversation) => conversation.pinned)
+          .sort(this.sortByUpdatedAtDesc),
       },
       {
         id: 'recent',
         title: 'Recent',
-        conversationSummaries: summaries.filter(
-          (conversation) => !conversation.pinned,
-        ),
+        conversationSummaries: summaries
+          .filter((conversation) => !conversation.pinned)
+          .sort(this.sortByUpdatedAtDesc),
       },
     ].filter((section) => section.conversationSummaries.length > 0);
   });
@@ -73,16 +77,18 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
     this.dispatchEvent(chatEventGroup.newConversation());
   }
 
-  onConversationIdSelected(conversationId: string | undefined) {
-    if (
-      conversationId == null ||
-      conversationId === this.selectedConversationId()
-    ) {
-      return;
+  onConversationIdSelected(
+    conversationId: string | undefined,
+    closeAfterAction: boolean,
+  ) {
+    if (conversationId) {
+      this.dispatchEvent(
+        chatEventGroup.setActiveConversationId({ conversationId }),
+      );
     }
-    this.dispatchEvent(
-      chatEventGroup.conversationIdSelected({ conversationId }),
-    );
+    if (closeAfterAction) {
+      this.closeMobileSidebar();
+    }
   }
 
   onSearchQueryChanged(query: string) {
@@ -90,7 +96,14 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   }
 
   onMessageSubmitted(content: string) {
-    const conversationId = this.selectedConversationId();
+    let conversationId = this.activeConversationId();
+    if (conversationId == null) {
+      conversationId = this.createId();
+      this.dispatchEvent(
+        chatEventGroup.setActiveConversationId({ conversationId }),
+      );
+    }
+
     this.dispatchEvent(
       chatEventGroup.messageSubmitted({
         conversationId,
@@ -110,5 +123,12 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
 
   private createId(): string {
     return globalThis.crypto.randomUUID();
+  }
+
+  private sortByUpdatedAtDesc(
+    a: IChatConversationSummary,
+    b: IChatConversationSummary,
+  ) {
+    return b.updatedAt.localeCompare(a.updatedAt);
   }
 }

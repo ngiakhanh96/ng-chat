@@ -57,14 +57,13 @@
 <ng-template #conversationSidebar let-closeAfterAction="closeAfterAction">
   <chat-conversation-sidebar
     [sections]="sidebarSections()"
-    [selectedConversationId]="selectedConversationId()"
+    [activeConversationId]="activeConversationId()"
     (newConversation)="
       onNewConversation(); closeAfterAction ? closeMobileSidebar() : undefined
     "
-    (conversationIdSelected)="
-      onConversationIdSelected($event);
-      closeAfterAction ? closeMobileSidebar() : undefined
+    (activeConversationIdChange)="
+      onConversationIdSelected($event, closeAfterAction)
     "
-    (searchQueryChanged)="onSearchQueryChanged($event)"
+    (searchQueryChange)="onSearchQueryChanged($event)"
   />
 </ng-template>

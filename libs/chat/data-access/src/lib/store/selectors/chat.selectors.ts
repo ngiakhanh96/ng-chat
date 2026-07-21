@@ -11,8 +11,7 @@ export function withChatSelectors<_>() {
         store
           .conversations()
           .find(
-            (conversation) =>
-              conversation.id === store.selectedConversationId(),
+            (conversation) => conversation.id === store.activeConversationId(),
           ),
       ),
     })),

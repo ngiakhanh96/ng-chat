@@ -26,11 +26,7 @@
       rgb(215 177 120 / 10%),
       transparent 24rem
     ),
-    radial-gradient(
-      circle at 18% 72%,
-      rgb(77 109 93 / 11%),
-      transparent 26rem
-    ),
+    radial-gradient(circle at 18% 72%, rgb(77 109 93 / 11%), transparent 26rem),
     var(--chat-bg);
 }
 
@@ -62,7 +58,7 @@
 }
 
 .chat-shell__composer {
-  @apply relative mx-auto w-full max-w-4xl shrink-0 px-4 pb-4;
+  @apply relative mx-auto w-full shrink-0 px-4 pb-4;
 }
 
 .chat-shell__composer p {

@@ -42,9 +42,9 @@
               class="sidebar__item"
               type="button"
               [class.sidebar__item--active]="
-                conversation.id === selectedConversationId()
+                conversation.id === activeConversationId()
               "
-              (click)="conversationIdSelected.emit(conversation.id)"
+              (click)="activeConversationId.set(conversation.id)"
             >
               <span class="sidebar__item-icon"
                 ><nz-icon nzType="message"

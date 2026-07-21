@@ -16,8 +16,9 @@ export interface IChatMessage<T> {
 }
 
 export interface IChatConversationSummary {
-  id?: string;
+  id: string;
   title: string;
+  createdAt: string;
   updatedAt: string;
   pinned?: boolean;
 }

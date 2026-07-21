@@ -3,6 +3,7 @@ import {
   Component,
   effect,
   input,
+  model,
   output,
   signal,
 } from '@angular/core';
@@ -36,16 +37,15 @@ export interface IChatSidebarSection {
 })
 export class ConversationSidebarComponent {
   sections = input<IChatSidebarSection[]>([]);
-  selectedConversationId = input<string | undefined>(undefined);
+  activeConversationId = model<string | undefined>(undefined);
   newConversation = output<void>();
-  conversationIdSelected = output<string | undefined>();
-  searchQueryChanged = output<string>();
+  searchQueryChange = output<string>();
   private readonly searchModel = signal({ query: '' });
   protected readonly searchForm = form(this.searchModel);
 
   constructor() {
     effect(() => {
-      this.searchQueryChanged.emit(this.searchForm.query().value());
+      this.searchQueryChange.emit(this.searchForm.query().value());
     });
   }
 }
