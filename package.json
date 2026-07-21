@@ -8,7 +8,8 @@
     "build": "npx nx build",
     "build-csr": "npx nx build-csr",
     "build-ghp": "npx nx build-csr --baseHref /ng-chat/",
-    "test": "npx nx test"
+    "test": "npx nx test",
+    "preinstall": "git config core.hooksPath .githooks"
   },
   "imports": {
     "#app.scss": "./app/ng-chat/src/styles.scss"
