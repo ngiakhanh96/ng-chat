@@ -16,6 +16,37 @@ export function withChatEffects() {
         events = inject(Events),
         chatHttpClient = inject(ChatHttpClientService),
       ) => ({
+        loadConversations$: createHttpEffectAndUpdateResponse(
+          events,
+          chatEventGroup.loadConversations,
+          () => {
+            return chatHttpClient
+              .getConversations()
+              .pipe(
+                map((sessions) =>
+                  chatEventGroup.conversationsLoaded({ sessions }),
+                ),
+              );
+          },
+          false,
+        ),
+        loadConversationHistory$: createHttpEffectAndUpdateResponse(
+          events,
+          chatEventGroup.setActiveConversationId,
+          ({ payload }) => {
+            return chatHttpClient
+              .getConversationHistory(payload.conversationId)
+              .pipe(
+                map((messages) =>
+                  chatEventGroup.conversationHistoryLoaded({
+                    conversationId: payload.conversationId,
+                    messages,
+                  }),
+                ),
+              );
+          },
+          false,
+        ),
         submitMessage$: createHttpEffectAndUpdateResponse(
           events,
           chatEventGroup.messageSubmitted,
@@ -25,6 +56,7 @@ export function withChatEffects() {
                 threadId: payload.conversationId,
                 messageId: payload.messageId,
                 content: payload.content,
+                storyTitle: payload.storyTitle,
               })
               .pipe(
                 map((response) => {

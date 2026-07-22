@@ -1,6 +1,9 @@
 import { HttpAgent, HttpAgentConfig } from '@ag-ui/client';
 import { inject, Injectable } from '@angular/core';
-import { AppSettingsService } from '@ng-chat/shared-data-access';
+import {
+  AppSettingsService,
+  TestUserHeaderService,
+} from '@ng-chat/shared-data-access';
 import { Observable } from 'rxjs';
 import { IChatHttpRequest } from '../models/http-requests/chat-http-request.model';
 import { IChatHttpResponse } from '../models/http-responses/chat-http-response.model';
@@ -9,6 +12,7 @@ import { IChatHttpResponse } from '../models/http-responses/chat-http-response.m
 export class AgUiHttpAgentService {
   private readonly interactiveStoryConfig =
     inject(AppSettingsService).appConfig()!.interactiveStory!;
+  private readonly testUserHeaderService = inject(TestUserHeaderService);
 
   streamTurn(
     request: IChatHttpRequest,
@@ -21,10 +25,7 @@ export class AgUiHttpAgentService {
       const agent = this.create({
         url: url,
         threadId: request.threadId,
-        headers: {
-          'X-InteractiveStory-Test-UserId':
-            this.interactiveStoryConfig.developmentTestUserId,
-        },
+        headers: this.testUserHeaderService.getHeaders(),
         initialMessages: [
           {
             id: request.messageId,
@@ -35,22 +36,29 @@ export class AgUiHttpAgentService {
       });
 
       agent
-        .runAgent(undefined, {
-          onTextMessageContentEvent: ({ event }) => {
-            observer.next({
-              conversationId: agent.threadId,
-              messageId: event.messageId,
-              event: { type: 'text-delta', delta: event.delta },
-            });
+        .runAgent(
+          {
+            forwardedProps: {
+              storyTitle: request.storyTitle,
+            },
           },
-          onTextMessageEndEvent: ({ event, textMessageBuffer }) => {
-            completedMessage = textMessageBuffer;
-            completedMessageId = event.messageId;
+          {
+            onTextMessageContentEvent: ({ event }) => {
+              observer.next({
+                conversationId: agent.threadId,
+                messageId: event.messageId,
+                event: { type: 'text-delta', delta: event.delta },
+              });
+            },
+            onTextMessageEndEvent: ({ event, textMessageBuffer }) => {
+              completedMessage = textMessageBuffer;
+              completedMessageId = event.messageId;
+            },
+            onRunErrorEvent: ({ event }) => {
+              observer.error(new Error(event.message));
+            },
           },
-          onRunErrorEvent: ({ event }) => {
-            observer.error(new Error(event.message));
-          },
-        })
+        )
         .then(() => {
           if (completedMessage === undefined) {
             observer.error(

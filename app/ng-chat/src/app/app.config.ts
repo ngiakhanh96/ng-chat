@@ -45,6 +45,7 @@ import { provideNzIcons } from 'ng-zorro-antd/icon';
 import { GlobalErrorHandler } from './global-error-handler';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { globalHttpErrorInterceptor } from './interceptors/global-http-error.interceptor';
+import { testUserInterceptor } from './interceptors/test-user.interceptor';
 import { mainRoutes } from './routes';
 
 export const appConfig: ApplicationConfig = {
@@ -80,7 +81,11 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(
       withFetch(),
-      withInterceptors([authInterceptor, globalHttpErrorInterceptor]),
+      withInterceptors([
+        authInterceptor,
+        testUserInterceptor,
+        globalHttpErrorInterceptor,
+      ]),
     ),
     provideSocialAuth({
       autoLogin: false,

@@ -48,6 +48,11 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
 
   activeMessages = computed(() => this.activeConversation()?.messages ?? []);
 
+  constructor() {
+    super();
+    this.dispatchEvent(chatEventGroup.loadConversations());
+  }
+
   sidebarSections = computed<IChatSidebarSection[]>(() => {
     const query = this.searchQuery().trim().toLowerCase();
     const summaries = this.conversations().filter(
@@ -97,8 +102,10 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
 
   onMessageSubmitted(content: string) {
     let conversationId = this.activeConversationId();
+    let storyTitle = this.activeConversation()?.title;
     if (conversationId == null) {
       conversationId = this.createId();
+      storyTitle = this.createConversationTitle(content);
       this.dispatchEvent(
         chatEventGroup.setActiveConversationId({ conversationId }),
       );
@@ -109,6 +116,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
         conversationId,
         messageId: this.createId(),
         content,
+        storyTitle: storyTitle as string,
       }),
     );
   }
@@ -123,6 +131,10 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
 
   private createId(): string {
     return globalThis.crypto.randomUUID();
+  }
+
+  private createConversationTitle(content: string): string {
+    return content.length > 46 ? `${content.slice(0, 45)}...` : content;
   }
 
   private sortByUpdatedAtDesc(

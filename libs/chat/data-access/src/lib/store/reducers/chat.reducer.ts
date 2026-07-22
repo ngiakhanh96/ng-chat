@@ -7,6 +7,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { on, withReducer } from '@ngrx/signals/events';
+import { IConversationHistoryMessageResponse } from '../../models/http-responses/conversation-history-message-response.model';
 import { chatEventGroup } from '../actions/chat.event-group';
 import { withChatEffects } from '../effects/chat.effects';
 import { withChatSelectors } from '../selectors/chat.selectors';
@@ -56,6 +57,37 @@ function withChatReducer() {
       on(chatEventGroup.searchQueryChanged, ({ payload }) => ({
         searchQuery: payload.query,
       })),
+      on(chatEventGroup.conversationsLoaded, ({ payload }, state) => {
+        const sessionConversations = payload.sessions.map((session) =>
+          newConversation(session.sessionDbKey, session.storyTitle, []),
+        );
+        return {
+          conversations: [...sessionConversations],
+        };
+      }),
+      on(chatEventGroup.conversationHistoryLoaded, ({ payload }, state) => {
+        const conversation = state.conversations.find(
+          (conversation) => conversation.id === payload.conversationId,
+        );
+        if (!conversation || conversation.messages.length > 0) {
+          return {};
+        }
+
+        const messages = payload.messages
+          .map((message) => mapHistoryMessage(message))
+          .filter(
+            (message): message is IChatMessage<IChapterResponse | string> =>
+              message !== undefined,
+          );
+
+        return {
+          conversations: state.conversations.map((conversation) =>
+            conversation.id === payload.conversationId
+              ? updateConversation(conversation, messages)
+              : conversation,
+          ),
+        };
+      }),
       on(chatEventGroup.messageSubmitted, ({ payload }, state) => {
         const userMessage: IChatMessage<string> = {
           id: payload.messageId,
@@ -69,6 +101,7 @@ function withChatReducer() {
             payload.conversationId,
             state.conversations,
             [userMessage],
+            payload.storyTitle,
           ),
         };
       }),
@@ -95,23 +128,49 @@ function withChatReducer() {
 
 function newConversation(
   conversationId: string,
+  title: string | undefined,
   messages: IChatMessage<IChapterResponse | string>[],
 ): IChatConversation<IChapterResponse | string> {
-  const firstTextMessage = messages[0] as IChatMessage<string>;
   const dateNow = new Date().toISOString();
   return {
     id: conversationId,
-    title: createConversationTitle(firstTextMessage.content ?? ''),
+    title: title ?? '',
     createdAt: dateNow,
     updatedAt: dateNow,
     messages: [...messages],
   };
 }
 
+function mapHistoryMessage(
+  messageResponse: IConversationHistoryMessageResponse,
+) {
+  const message: IChatMessage<IChapterResponse | string> = {
+    id: messageResponse.messageId,
+    role: messageResponse.role,
+    createdAt: messageResponse.createdAt,
+    content:
+      messageResponse.role === 'user'
+        ? messageResponse.messageText
+        : parseChapterResponse(messageResponse.messageText),
+    status: 'complete' as const,
+  };
+
+  return message;
+}
+
+function parseChapterResponse(content: string): IChapterResponse | string {
+  try {
+    return JSON.parse(content) as IChapterResponse;
+  } catch {
+    return content;
+  }
+}
+
 function addMessagesToConversation(
   conversationId: string,
   conversations: IChatConversation<IChapterResponse | string>[],
   messages: IChatMessage<IChapterResponse | string>[],
+  title?: string,
 ) {
   conversations = [...conversations];
   let conversation = conversations.find(
@@ -119,7 +178,7 @@ function addMessagesToConversation(
   );
 
   if (!conversation) {
-    conversation = newConversation(conversationId, messages);
+    conversation = newConversation(conversationId, title, messages);
     conversations.push(conversation);
   } else {
     conversation = updateConversation(conversation, messages);
@@ -139,8 +198,4 @@ function updateConversation(
     updatedAt: new Date().toISOString(),
     messages: [...conversation.messages, ...messages],
   };
-}
-
-function createConversationTitle(content: string) {
-  return content.length > 46 ? `${content.slice(0, 45)}...` : content;
 }

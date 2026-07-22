@@ -1,6 +1,8 @@
 import { type } from '@ngrx/signals';
 import { eventGroup } from '@ngrx/signals/events';
 import { IChatHttpResponseEvent } from '../../models/http-responses/chat-http-response.model';
+import { IConversationHistoryMessageResponse } from '../../models/http-responses/conversation-history-message-response.model';
+import { IConversationSummaryResponse } from '../../models/http-responses/conversation-summary-response.model';
 import { IChapterResponse } from '../reducers/chat.reducer';
 
 export const chatEventGroup = eventGroup({
@@ -9,10 +11,17 @@ export const chatEventGroup = eventGroup({
     newConversation: type<void>(),
     setActiveConversationId: type<{ conversationId: string }>(),
     searchQueryChanged: type<{ query: string }>(),
+    loadConversations: type<void>(),
+    conversationsLoaded: type<{ sessions: IConversationSummaryResponse[] }>(),
+    conversationHistoryLoaded: type<{
+      conversationId: string;
+      messages: IConversationHistoryMessageResponse[];
+    }>(),
     messageSubmitted: type<{
       conversationId: string;
       content: string;
       messageId: string;
+      storyTitle: string;
     }>(),
     responseEventReceived: type<{
       conversationId: string;
