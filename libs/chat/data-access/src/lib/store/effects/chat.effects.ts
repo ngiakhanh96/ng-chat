@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { createHttpEffectAndUpdateResponse } from '@ng-chat/shared-data-access';
 import { signalStoreFeature, type } from '@ngrx/signals';
 import { Events, withEventHandlers } from '@ngrx/signals/events';
-import { map } from 'rxjs';
+import { EMPTY, map } from 'rxjs';
 import { ChatHttpClientService } from '../../services/http/chat-http.service';
 import { chatEventGroup } from '../actions/chat.event-group';
 import { IChapterResponse, IChatState } from '../reducers/chat.reducer';
@@ -34,6 +34,15 @@ export function withChatEffects() {
           events,
           chatEventGroup.setActiveConversationId,
           ({ payload }) => {
+            const conversation = store
+              .conversations()
+              .find(
+                (conversation) => conversation.id === payload.conversationId,
+              );
+            if ((conversation?.messages.length ?? 0) > 0) {
+              return EMPTY;
+            }
+
             return chatHttpClient
               .getConversationHistory(payload.conversationId)
               .pipe(

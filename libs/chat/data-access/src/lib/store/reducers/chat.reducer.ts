@@ -59,7 +59,13 @@ function withChatReducer() {
       })),
       on(chatEventGroup.conversationsLoaded, ({ payload }, state) => {
         const sessionConversations = payload.sessions.map((session) =>
-          newConversation(session.sessionDbKey, session.storyTitle, []),
+          newConversation(
+            session.sessionDbKey,
+            session.storyTitle,
+            [],
+            new Date(session.createdAt),
+            new Date(session.updatedAt),
+          ),
         );
         return {
           conversations: [...sessionConversations],
@@ -130,13 +136,15 @@ function newConversation(
   conversationId: string,
   title: string | undefined,
   messages: IChatMessage<IChapterResponse | string>[],
+  createdAt?: Date,
+  updatedAt?: Date,
 ): IChatConversation<IChapterResponse | string> {
   const dateNow = new Date().toISOString();
   return {
     id: conversationId,
     title: title ?? '',
-    createdAt: dateNow,
-    updatedAt: dateNow,
+    createdAt: createdAt == null ? dateNow : createdAt.toISOString(),
+    updatedAt: updatedAt == null ? dateNow : updatedAt.toISOString(),
     messages: [...messages],
   };
 }
@@ -181,7 +189,7 @@ function addMessagesToConversation(
     conversation = newConversation(conversationId, title, messages);
     conversations.push(conversation);
   } else {
-    conversation = updateConversation(conversation, messages);
+    conversation = updateConversation(conversation, messages, new Date());
   }
 
   return conversations.map((c) =>
@@ -192,10 +200,11 @@ function addMessagesToConversation(
 function updateConversation(
   conversation: IChatConversation<IChapterResponse | string>,
   messages: IChatMessage<IChapterResponse | string>[],
+  newUpdatedAt?: Date,
 ): IChatConversation<IChapterResponse | string> {
   return {
     ...conversation,
-    updatedAt: new Date().toISOString(),
+    updatedAt: newUpdatedAt?.toISOString() ?? conversation.updatedAt,
     messages: [...conversation.messages, ...messages],
   };
 }

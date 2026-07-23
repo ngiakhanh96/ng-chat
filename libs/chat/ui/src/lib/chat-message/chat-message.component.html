@@ -22,6 +22,9 @@
       </div>
     } @else {
       @if (isChapterResponse(content)) {
+        <p class="message__title">
+          Chapter {{ content.chapterNumber }}: {{ content.chapterName }}
+        </p>
         <p class="message__content">{{ content.content }}</p>
 
         @if (content.choices.length) {
