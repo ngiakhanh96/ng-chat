@@ -11,9 +11,6 @@
     "test": "npx nx test",
     "preinstall": "git config core.hooksPath .githooks"
   },
-  "imports": {
-    "#app.scss": "./app/ng-chat/src/styles.scss"
-  },
   "private": true,
   "dependencies": {
     "@ag-ui/client": "0.0.57",
