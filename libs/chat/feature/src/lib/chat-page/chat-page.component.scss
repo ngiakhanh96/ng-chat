@@ -31,7 +31,7 @@
 }
 
 .chat-shell__topbar {
-  @apply flex h-14 shrink-0 items-center gap-3 border-b px-5;
+  @apply flex h-16 shrink-0 items-center gap-3 border-b px-5;
   border-color: var(--chat-border-soft);
   background: rgb(16 17 14 / 76%);
   backdrop-filter: blur(18px);
@@ -42,13 +42,17 @@
   @apply block;
 }
 
-.chat-shell__topbar strong {
-  @apply text-sm font-semibold;
+.chat-shell__conversation-heading {
+  @apply min-w-0;
+}
+
+.chat-shell__conversation-heading strong {
+  @apply truncate text-lg font-semibold uppercase leading-6 tracking-[0.02em];
   color: var(--chat-text);
 }
 
-.chat-shell__topbar span {
-  @apply text-xs;
+.chat-shell__conversation-model {
+  @apply mt-0.5 text-xs leading-4;
   color: var(--chat-text-muted);
 }
 
