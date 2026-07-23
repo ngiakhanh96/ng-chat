@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormField, form } from '@angular/forms/signals';
 import { IChatConversationSummary } from '@ng-chat/shared-data-access';
+import { DisplayDatePipe } from '@ng-chat/shared-ui';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -30,6 +31,7 @@ export interface IChatSidebarSection {
     NzIconModule,
     NzInputModule,
     NzTooltipModule,
+    DisplayDatePipe,
   ],
   templateUrl: './conversation-sidebar.component.html',
   styleUrl: './conversation-sidebar.component.scss',

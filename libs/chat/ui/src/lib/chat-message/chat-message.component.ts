@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { IChapterResponse } from '@ng-chat/chat-data-access';
 import { IChatMessage } from '@ng-chat/shared-data-access';
+import { DisplayDatePipe } from '@ng-chat/shared-ui';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -14,7 +15,13 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 
 @Component({
   selector: 'chat-message',
-  imports: [NzAvatarModule, NzButtonModule, NzIconModule, NzTooltipModule],
+  imports: [
+    NzAvatarModule,
+    NzButtonModule,
+    NzIconModule,
+    NzTooltipModule,
+    DisplayDatePipe,
+  ],
   templateUrl: './chat-message.component.html',
   styleUrl: './chat-message.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

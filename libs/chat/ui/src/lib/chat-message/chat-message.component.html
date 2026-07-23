@@ -10,7 +10,7 @@
 
     <div class="message__meta">
       <span>{{ isUser() ? 'You' : 'ng-chat' }}</span>
-      <time>{{ message().createdAt }}</time>
+      <time>{{ message().createdAt | displayDate }}</time>
     </div>
 
     @if (message().status === 'streaming') {
@@ -29,13 +29,12 @@
 
         @if (content.choices.length) {
           <div class="message__choices" aria-label="Story choices">
-            @for (choice of content.choices; track $index; let index = $index) {
+            @for (choice of content.choices; track $index) {
               <button
                 class="message__choice"
                 type="button"
                 (click)="suggestedActionSelected.emit(choice.choiceContent)"
               >
-                <span class="message__choice-index">{{ index + 1 }}</span>
                 <span>
                   @if (choice.choiceType) {
                     <small>{{ choice.choiceType }}</small>
