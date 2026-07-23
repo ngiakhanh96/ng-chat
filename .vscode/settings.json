@@ -4,5 +4,6 @@
   "cSpell.words": [],
   "files.associations": {
     "*.scss": "tailwindcss"
-  }
+  },
+  "tailwindCSS.experimental.configFile": "app/ng-chat/src/styles.css"
 }

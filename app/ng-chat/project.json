@@ -23,7 +23,7 @@
           }
         ],
         "inlineStyleLanguage": "scss",
-        "styles": ["app/ng-chat/src/styles.scss"],
+        "styles": ["app/ng-chat/src/styles.css", "app/ng-chat/src/styles.scss"],
         "server": "app/ng-chat/src/main.server.ts",
         "ssr": {
           "entry": "app/ng-chat/src/server.ts"
@@ -71,7 +71,7 @@
           }
         ],
         "inlineStyleLanguage": "scss",
-        "styles": ["app/ng-chat/src/styles.scss"],
+        "styles": ["app/ng-chat/src/styles.css", "app/ng-chat/src/styles.scss"],
         "outputMode": "static"
       },
       "configurations": {
