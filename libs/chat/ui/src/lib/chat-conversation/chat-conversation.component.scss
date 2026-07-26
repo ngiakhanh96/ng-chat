@@ -9,7 +9,7 @@
 }
 
 .thread__inner {
-  @apply mx-auto flex min-h-full max-w-4xl flex-col pb-10 pt-6;
+  @apply mx-auto flex min-h-full max-w-4xl flex-col pb-5 pt-4;
 }
 
 .thread__header {
@@ -35,9 +35,16 @@
 }
 
 .thread__empty {
-  @apply grid flex-1 place-items-center rounded-xl border border-dashed p-8;
-  border-color: var(--chat-border);
-  background: rgb(255 255 255 / 3%);
+  @apply grid flex-1 place-items-center px-8 pb-24;
+}
+
+::ng-deep .thread__empty .ant-empty {
+  @apply m-0;
+}
+
+::ng-deep .thread__empty .ant-empty-description {
+  @apply text-sm;
+  color: var(--chat-text-muted);
 }
 
 @media (max-width: 640px) {

@@ -31,7 +31,7 @@
 }
 
 .chat-shell__topbar {
-  @apply flex h-16 shrink-0 items-center gap-3 border-b px-5;
+  @apply flex min-h-20 shrink-0 items-center gap-3 border-b px-5 py-2.5;
   border-color: var(--chat-border-soft);
   background: rgb(16 17 14 / 76%);
   backdrop-filter: blur(18px);
@@ -43,17 +43,66 @@
 }
 
 .chat-shell__conversation-heading {
-  @apply min-w-0;
+  @apply flex min-w-0 flex-1 flex-col items-start justify-center gap-1;
 }
 
 .chat-shell__conversation-heading strong {
-  @apply truncate text-lg font-semibold uppercase leading-6 tracking-[0.02em];
+  @apply block w-full min-w-0 truncate text-lg font-semibold leading-6 tracking-normal;
   color: var(--chat-text);
 }
 
 .chat-shell__conversation-model {
-  @apply mt-0.5 text-xs leading-4;
+  @apply relative inline-flex h-7 max-w-56 flex-none items-center;
   color: var(--chat-text-muted);
+}
+
+.chat-shell__conversation-model::before {
+  @apply pointer-events-none absolute left-2.5 top-1/2 z-10 h-1.5 w-1.5 -translate-y-1/2 rounded-full;
+  content: '';
+  background: #d7b178;
+  box-shadow: 0 0 0 3px rgb(215 177 120 / 8%);
+}
+
+.chat-shell__conversation-model::after {
+  @apply pointer-events-none absolute right-2.5 top-1/2 h-1.5 w-1.5;
+  content: '';
+  border-right: 1.5px solid var(--chat-text-muted);
+  border-bottom: 1.5px solid var(--chat-text-muted);
+  transform: translateY(-65%) rotate(45deg);
+}
+
+.chat-shell__conversation-model select {
+  @apply block h-7 max-w-full cursor-pointer appearance-none rounded-full border py-0.5 pl-5 pr-7 text-xs font-medium leading-none outline-none;
+  color: var(--chat-text);
+  color-scheme: dark;
+  border-color: rgb(215 177 120 / 38%);
+  background: rgb(255 255 255 / 3%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 5%),
+    0 0 0 1px rgb(215 177 120 / 5%);
+  letter-spacing: 0.015em;
+}
+
+.chat-shell__conversation-model:hover select {
+  border-color: rgb(215 177 120 / 62%);
+  background-color: rgb(255 255 255 / 5%);
+}
+
+.chat-shell__conversation-model:hover::after {
+  border-color: #d7b178;
+}
+
+.chat-shell__conversation-model select:focus-visible {
+  border-color: rgb(215 177 120 / 78%);
+  box-shadow:
+    0 0 0 3px rgb(215 177 120 / 12%),
+    inset 0 1px 0 rgb(255 255 255 / 5%);
+}
+
+.chat-shell__conversation-model option {
+  @apply text-xs font-medium;
+  color: var(--chat-text);
+  background: #171813;
 }
 
 .chat-shell__menu {
@@ -90,5 +139,17 @@
 
   .chat-shell__menu {
     @apply grid place-items-center;
+  }
+
+  .chat-shell__topbar {
+    @apply px-3;
+  }
+
+  .chat-shell__conversation-heading {
+    @apply gap-1;
+  }
+
+  .chat-shell__conversation-model {
+    @apply max-w-40;
   }
 }

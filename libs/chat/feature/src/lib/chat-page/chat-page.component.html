@@ -20,9 +20,14 @@
       </button>
       <div class="chat-shell__conversation-heading">
         <strong>{{ activeConversation()?.title ?? 'New chat' }}</strong>
-        <span class="chat-shell__conversation-model"
-          >ChatGPT 5.6 Sol · Medium</span
-        >
+
+        <div class="chat-shell__conversation-model">
+          <select aria-label="Model" [formField]="selectedModelForm.id">
+            @for (m of models(); track m.id) {
+              <option [value]="m.id">{{ m.label }} · {{ m.effort }}</option>
+            }
+          </select>
+        </div>
       </div>
     </header>
 

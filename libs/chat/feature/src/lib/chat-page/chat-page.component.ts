@@ -3,9 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
+  linkedSignal,
   signal,
 } from '@angular/core';
+import { FormField, form } from '@angular/forms/signals';
 import { ChatStore, chatEventGroup } from '@ng-chat/chat-data-access';
 import {
   ChatComposerComponent,
@@ -33,6 +36,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzButtonModule,
     NzDrawerModule,
     NzIconModule,
+    FormField,
   ],
   templateUrl: './chat-page.component.html',
   styleUrl: './chat-page.component.scss',
@@ -46,12 +50,36 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   searchQuery = this.chatStore.searchQuery;
   activeConversation = this.chatStore.activeConversation;
 
-  activeMessages = computed(() => this.activeConversation()?.messages ?? []);
+  // Hardcoded models list with associated default effort levels.
+  // Default model is ChatGPT 5.6 with effort Medium.
+  models = signal([
+    { id: 'gpt-5.6', label: 'ChatGPT 5.6', effort: 'Medium' },
+    { id: 'gpt-5.6-sol', label: 'ChatGPT 5.6 Sol', effort: 'Medium' },
+    { id: 'gpt-4o', label: 'ChatGPT 4o', effort: 'High' },
+    { id: 'gpt-4', label: 'ChatGPT 4', effort: 'Low' },
+  ]);
+  selectedModel = linkedSignal(() => this.models()[0]);
+  selectedEffort = computed(() => this.selectedModel()?.effort ?? 'Default');
+
+  protected readonly selectedModelForm = form(this.selectedModel);
 
   constructor() {
     super();
     this.dispatchEvent(chatEventGroup.loadConversations());
+
+    effect(() => {
+      const id = this.selectedModelForm.id().value();
+      const newSelectedModel = this.models().find((m) => m.id === id);
+      if (newSelectedModel) {
+        this.selectedModel.set(newSelectedModel);
+        console.log(
+          `Selected model changed to: ${newSelectedModel.label} with effort ${newSelectedModel.effort}`,
+        );
+      }
+    });
   }
+
+  activeMessages = computed(() => this.activeConversation()?.messages ?? []);
 
   sidebarSections = computed<IChatSidebarSection[]>(() => {
     const query = this.searchQuery().trim().toLowerCase();
