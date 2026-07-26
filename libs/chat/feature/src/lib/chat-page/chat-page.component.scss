@@ -72,7 +72,7 @@
 }
 
 .chat-shell__conversation-model select {
-  @apply block h-7 max-w-full cursor-pointer appearance-none rounded-full border py-0.5 pl-5 pr-7 text-xs font-medium leading-none outline-none;
+  @apply block h-7 max-w-full cursor-pointer appearance-none rounded-lg border py-0.5 pl-5 pr-7 text-xs font-medium leading-none outline-none;
   color: var(--chat-text);
   color-scheme: dark;
   border-color: rgb(215 177 120 / 38%);

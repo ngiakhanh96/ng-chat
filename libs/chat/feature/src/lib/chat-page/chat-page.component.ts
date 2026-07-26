@@ -53,10 +53,10 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   // Hardcoded models list with associated default effort levels.
   // Default model is ChatGPT 5.6 with effort Medium.
   models = signal([
-    { id: 'gpt-5.6', label: 'ChatGPT 5.6', effort: 'Medium' },
+    { id: 'gpt-5.6-terra', label: 'ChatGPT 5.6 Terra', effort: 'Medium' },
     { id: 'gpt-5.6-sol', label: 'ChatGPT 5.6 Sol', effort: 'Medium' },
-    { id: 'gpt-4o', label: 'ChatGPT 4o', effort: 'High' },
-    { id: 'gpt-4', label: 'ChatGPT 4', effort: 'Low' },
+    { id: 'opus-5', label: 'Opus 5', effort: 'High' },
+    { id: 'opus-4.8', label: 'Opus 4.8', effort: 'Medium' },
   ]);
   selectedModel = linkedSignal(() => this.models()[0]);
   selectedEffort = computed(() => this.selectedModel()?.effort ?? 'Default');
