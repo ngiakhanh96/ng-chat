@@ -50,8 +50,6 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   searchQuery = this.chatStore.searchQuery;
   activeConversation = this.chatStore.activeConversation;
 
-  // Hardcoded models list with associated default effort levels.
-  // Default model is ChatGPT 5.6 with effort Medium.
   models = signal([
     { id: 'gpt-5.6-terra', label: 'ChatGPT 5.6 Terra', effort: 'Medium' },
     { id: 'gpt-5.6-sol', label: 'ChatGPT 5.6 Sol', effort: 'Medium' },
