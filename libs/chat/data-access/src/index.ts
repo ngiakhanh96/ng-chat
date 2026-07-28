@@ -1,3 +1,4 @@
+export * from './lib/models/chat.model';
 export * from './lib/models/http-requests/chat-http-request.model';
 export * from './lib/models/http-responses/chat-http-response.model';
 export * from './lib/models/http-responses/conversation-history-message-response.model';

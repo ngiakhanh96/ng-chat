@@ -40,6 +40,8 @@ export class AgUiHttpAgentService {
           {
             forwardedProps: {
               storyTitle: request.storyTitle,
+              modelId: request.modelId,
+              modelEffort: request.modelEffort,
             },
           },
           {

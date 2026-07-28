@@ -3,4 +3,6 @@ export interface IChatHttpRequest {
   messageId: string;
   content: string;
   storyTitle: string;
+  modelId: string;
+  modelEffort: string;
 }

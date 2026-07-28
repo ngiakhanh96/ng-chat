@@ -7,6 +7,12 @@ import {
   withState,
 } from '@ngrx/signals';
 import { on, withReducer } from '@ngrx/signals/events';
+import {
+  CHAT_MODELS,
+  DEFAULT_CHAT_MODEL,
+  DEFAULT_CHAT_MODEL_EFFORT,
+  IChatModel,
+} from '../../models/chat.model';
 import { IConversationHistoryMessageResponse } from '../../models/http-responses/conversation-history-message-response.model';
 import { chatEventGroup } from '../actions/chat.event-group';
 import { withChatEffects } from '../effects/chat.effects';
@@ -16,6 +22,9 @@ export interface IChatState {
   conversations: IChatConversation<IChapterResponse | string>[];
   activeConversationId: string | undefined;
   searchQuery: string;
+  availableModels: IChatModel[];
+  selectedModelId: string;
+  selectedModelEffortId: string;
 }
 
 export interface IChapterResponse {
@@ -34,6 +43,9 @@ const initialState: IChatState = {
   conversations: [],
   activeConversationId: undefined,
   searchQuery: '',
+  availableModels: CHAT_MODELS,
+  selectedModelId: DEFAULT_CHAT_MODEL.id,
+  selectedModelEffortId: DEFAULT_CHAT_MODEL_EFFORT.id,
 };
 
 export const ChatStore = signalStore(
@@ -57,6 +69,31 @@ function withChatReducer() {
       on(chatEventGroup.searchQueryChanged, ({ payload }) => ({
         searchQuery: payload.query,
       })),
+      on(chatEventGroup.modelSelected, ({ payload }, state) => {
+        const selectedModel = state.availableModels.find(
+          (model) => model.id === payload.modelId,
+        );
+        const selectedEffort = selectedModel?.efforts[0];
+
+        return selectedModel && selectedEffort
+          ? {
+              selectedModelId: selectedModel.id,
+              selectedModelEffortId: selectedEffort.id,
+            }
+          : {};
+      }),
+      on(chatEventGroup.modelEffortSelected, ({ payload }, state) => {
+        const selectedModel = state.availableModels.find(
+          (model) => model.id === state.selectedModelId,
+        );
+        const selectedEffort = selectedModel?.efforts.find(
+          (effort) => effort.id === payload.effortId,
+        );
+
+        return selectedEffort
+          ? { selectedModelEffortId: selectedEffort.id }
+          : {};
+      }),
       on(chatEventGroup.conversationsLoaded, ({ payload }, state) => {
         const sessionConversations = payload.sessions.map((session) =>
           newConversation(

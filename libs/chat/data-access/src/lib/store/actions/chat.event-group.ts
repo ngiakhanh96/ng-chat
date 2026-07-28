@@ -11,6 +11,8 @@ export const chatEventGroup = eventGroup({
     newConversation: type<void>(),
     setActiveConversationId: type<{ conversationId: string }>(),
     searchQueryChanged: type<{ query: string }>(),
+    modelSelected: type<{ modelId: string }>(),
+    modelEffortSelected: type<{ effortId: string }>(),
     loadConversations: type<void>(),
     conversationsLoaded: type<{ sessions: IConversationSummaryResponse[] }>(),
     conversationHistoryLoaded: type<{
@@ -22,6 +24,8 @@ export const chatEventGroup = eventGroup({
       content: string;
       messageId: string;
       storyTitle: string;
+      modelId: string;
+      modelEffort: string;
     }>(),
     responseEventReceived: type<{
       conversationId: string;

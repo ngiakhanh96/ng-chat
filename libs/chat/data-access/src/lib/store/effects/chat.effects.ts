@@ -66,6 +66,8 @@ export function withChatEffects() {
                 messageId: payload.messageId,
                 content: payload.content,
                 storyTitle: payload.storyTitle,
+                modelId: payload.modelId,
+                modelEffort: payload.modelEffort,
               })
               .pipe(
                 map((response) => {

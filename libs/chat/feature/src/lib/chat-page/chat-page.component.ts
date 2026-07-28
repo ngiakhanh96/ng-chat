@@ -49,30 +49,36 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   mobileSidebarOpen = signal(false);
   searchQuery = this.chatStore.searchQuery;
   activeConversation = this.chatStore.activeConversation;
-
-  models = signal([
-    { id: 'gpt-5.6-terra', label: 'ChatGPT 5.6 Terra', effort: 'Medium' },
-    { id: 'gpt-5.6-sol', label: 'ChatGPT 5.6 Sol', effort: 'Medium' },
-    { id: 'opus-5', label: 'Opus 5', effort: 'High' },
-    { id: 'opus-4.8', label: 'Opus 4.8', effort: 'Medium' },
-  ]);
-  selectedModel = linkedSignal(() => this.models()[0]);
-  selectedEffort = computed(() => this.selectedModel()?.effort ?? 'Default');
-
-  protected readonly selectedModelForm = form(this.selectedModel);
+  models = this.chatStore.availableModels;
+  selectedModel = this.chatStore.selectedModel;
+  modelEfforts = this.chatStore.selectedModelEfforts;
+  selectedModelEffortId = this.chatStore.selectedModelEffortId;
+  private readonly selectedModelFormModel = linkedSignal(() => ({
+    id: this.selectedModel().id,
+  }));
+  private readonly selectedModelEffortFormModel = linkedSignal(() => ({
+    id: this.selectedModelEffortId(),
+  }));
+  protected readonly selectedModelForm = form(this.selectedModelFormModel);
+  protected readonly selectedModelEffortForm = form(
+    this.selectedModelEffortFormModel,
+  );
 
   constructor() {
     super();
     this.dispatchEvent(chatEventGroup.loadConversations());
 
     effect(() => {
-      const id = this.selectedModelForm.id().value();
-      const newSelectedModel = this.models().find((m) => m.id === id);
-      if (newSelectedModel) {
-        this.selectedModel.set(newSelectedModel);
-        console.log(
-          `Selected model changed to: ${newSelectedModel.label} with effort ${newSelectedModel.effort}`,
-        );
+      const modelId = this.selectedModelForm.id().value();
+      if (modelId !== this.chatStore.selectedModelId()) {
+        this.dispatchEvent(chatEventGroup.modelSelected({ modelId }));
+      }
+    });
+
+    effect(() => {
+      const effortId = this.selectedModelEffortForm.id().value();
+      if (effortId !== this.chatStore.selectedModelEffortId()) {
+        this.dispatchEvent(chatEventGroup.modelEffortSelected({ effortId }));
       }
     });
   }
@@ -129,6 +135,8 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   onMessageSubmitted(content: string) {
     let conversationId = this.activeConversationId();
     let storyTitle = this.activeConversation()?.title;
+    const selectedModel = this.selectedModel();
+    const selectedModelEffortId = this.selectedModelEffortId();
     if (conversationId == null) {
       conversationId = this.createId();
       storyTitle = this.createConversationTitle(content);
@@ -143,6 +151,8 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
         messageId: this.createId(),
         content,
         storyTitle: storyTitle as string,
+        modelId: selectedModel.id,
+        modelEffort: selectedModelEffortId,
       }),
     );
   }
