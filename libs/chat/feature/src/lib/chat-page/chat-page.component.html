@@ -22,24 +22,20 @@
         <strong>{{ activeConversation()?.title ?? 'New chat' }}</strong>
 
         <div class="chat-shell__conversation-controls">
-          <div class="chat-shell__conversation-model">
-            <select aria-label="Model" [formField]="selectedModelForm.id">
-              @for (model of models(); track model.id) {
-                <option [value]="model.id">{{ model.name }}</option>
-              }
-            </select>
-          </div>
+          <chat-select
+            class="chat-shell__conversation-model"
+            label="Model"
+            [options]="models()"
+            [indicator]="true"
+            [formField]="selectedModelForm.id"
+          />
 
-          <div class="chat-shell__conversation-effort">
-            <select
-              aria-label="Effort"
-              [formField]="selectedModelEffortForm.id"
-            >
-              @for (effort of modelEfforts(); track effort.id) {
-                <option [value]="effort.id">{{ effort.name }}</option>
-              }
-            </select>
-          </div>
+          <chat-select
+            class="chat-shell__conversation-effort"
+            label="Effort"
+            [options]="modelEfforts()"
+            [formField]="selectedModelEffortForm.id"
+          />
         </div>
       </div>
     </header>

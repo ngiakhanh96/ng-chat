@@ -55,81 +55,12 @@
   @apply flex max-w-full items-center gap-1.5;
 }
 
-.chat-shell__conversation-model,
-.chat-shell__conversation-effort {
-  @apply relative inline-flex h-7 min-w-0 flex-none items-center;
-  color: var(--chat-text-muted);
-}
-
 .chat-shell__conversation-model {
   @apply max-w-56;
 }
 
 .chat-shell__conversation-effort {
-  @apply max-w-28;
-}
-
-.chat-shell__conversation-model::before {
-  @apply pointer-events-none absolute left-2.5 top-1/2 z-10 h-1.5 w-1.5 -translate-y-1/2 rounded-full;
-  content: '';
-  background: #d7b178;
-  box-shadow: 0 0 0 3px rgb(215 177 120 / 8%);
-}
-
-.chat-shell__conversation-model::after,
-.chat-shell__conversation-effort::after {
-  @apply pointer-events-none absolute right-2.5 top-1/2 h-1.5 w-1.5;
-  content: '';
-  border-right: 1.5px solid var(--chat-text-muted);
-  border-bottom: 1.5px solid var(--chat-text-muted);
-  transform: translateY(-65%) rotate(45deg);
-}
-
-.chat-shell__conversation-model select,
-.chat-shell__conversation-effort select {
-  @apply block h-7 min-w-0 max-w-full cursor-pointer appearance-none rounded-lg border py-0.5 pr-7 text-xs font-medium leading-none outline-none;
-  color: var(--chat-text);
-  color-scheme: dark;
-  border-color: rgb(215 177 120 / 38%);
-  background: rgb(255 255 255 / 3%);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 5%),
-    0 0 0 1px rgb(215 177 120 / 5%);
-  letter-spacing: 0.015em;
-}
-
-.chat-shell__conversation-model select {
-  @apply pl-5;
-}
-
-.chat-shell__conversation-effort select {
-  @apply pl-2.5;
-}
-
-.chat-shell__conversation-model:hover select,
-.chat-shell__conversation-effort:hover select {
-  border-color: rgb(215 177 120 / 62%);
-  background-color: rgb(255 255 255 / 5%);
-}
-
-.chat-shell__conversation-model:hover::after,
-.chat-shell__conversation-effort:hover::after {
-  border-color: #d7b178;
-}
-
-.chat-shell__conversation-model select:focus-visible,
-.chat-shell__conversation-effort select:focus-visible {
-  border-color: rgb(215 177 120 / 78%);
-  box-shadow:
-    0 0 0 3px rgb(215 177 120 / 12%),
-    inset 0 1px 0 rgb(255 255 255 / 5%);
-}
-
-.chat-shell__conversation-model option,
-.chat-shell__conversation-effort option {
-  @apply text-xs font-medium;
-  color: var(--chat-text);
-  background: #171813;
+  @apply min-w-24 max-w-28;
 }
 
 .chat-shell__menu {

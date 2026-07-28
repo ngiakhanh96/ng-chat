@@ -13,6 +13,7 @@ import { ChatStore, chatEventGroup } from '@ng-chat/chat-data-access';
 import {
   ChatComposerComponent,
   ChatConversationComponent,
+  ChatSelectComponent,
 } from '@ng-chat/chat-ui';
 import {
   BaseWithSandBoxComponent,
@@ -31,6 +32,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   imports: [
     ChatComposerComponent,
     ChatConversationComponent,
+    ChatSelectComponent,
     ConversationSidebarComponent,
     NgTemplateOutlet,
     NzButtonModule,
