@@ -12,7 +12,7 @@ export class DisplayDatePipe implements PipeTransform {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private readonly destroyRef = inject(DestroyRef);
   private readonly refreshTimer = setInterval(
-    () => this.changeDetectorRef.markForCheck(),
+    () => this.changeDetectorRef.detectChanges(),
     Utilities.secondsInOneMinute * 1000,
   );
 
