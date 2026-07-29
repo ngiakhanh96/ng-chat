@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "npx nx serve",
-    "start-csr": "npx nx serve-csr",
-    "build": "npx nx build",
-    "build-csr": "npx nx build-csr",
-    "build-ghp": "npx nx build-csr --baseHref /ng-chat/",
-    "test": "npx nx test",
+    "start": "npm exec nx -- run ng-chat:serve",
+    "start-csr": "npm exec nx -- run ng-chat:serve-csr",
+    "build": "npm exec nx -- run ng-chat:build",
+    "build-csr": "npm exec nx -- run ng-chat:build-csr",
+    "build-ghp": "npm exec nx -- run ng-chat:build-csr --baseHref /ng-chat/",
+    "test": "npm exec nx -- run ng-chat:vite:test",
     "preinstall": "git config core.hooksPath .githooks"
   },
   "private": true,
