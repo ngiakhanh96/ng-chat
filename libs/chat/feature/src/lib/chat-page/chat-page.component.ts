@@ -56,16 +56,11 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   modelEfforts = this.chatStore.selectedModelEfforts;
   selectedModelEffortId = this.chatStore.selectedModelEffortId;
   selectedModelEffort = this.chatStore.selectedModelEffort;
-  private readonly selectedModelFormModel = linkedSignal(() => ({
-    id: this.selectedModel()?.id ?? '',
+  private readonly modelSelectionFormModel = linkedSignal(() => ({
+    modelId: this.selectedModel()?.id ?? '',
+    effortId: this.selectedModelEffortId() ?? '',
   }));
-  private readonly selectedModelEffortFormModel = linkedSignal(() => ({
-    id: this.selectedModelEffortId() ?? '',
-  }));
-  protected readonly selectedModelForm = form(this.selectedModelFormModel);
-  protected readonly selectedModelEffortForm = form(
-    this.selectedModelEffortFormModel,
-  );
+  protected readonly modelSelectionForm = form(this.modelSelectionFormModel);
 
   constructor() {
     super();
@@ -73,14 +68,14 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
     this.dispatchEvent(chatEventGroup.loadConversations());
 
     effect(() => {
-      const modelId = this.selectedModelForm.id().value();
+      const modelId = this.modelSelectionForm.modelId().value();
       if (modelId !== this.chatStore.selectedModelId()) {
         this.dispatchEvent(chatEventGroup.modelSelected({ modelId }));
       }
     });
 
     effect(() => {
-      const effortId = this.selectedModelEffortForm.id().value();
+      const effortId = this.modelSelectionForm.effortId().value();
       if (effortId !== this.chatStore.selectedModelEffortId()) {
         this.dispatchEvent(chatEventGroup.modelEffortSelected({ effortId }));
       }

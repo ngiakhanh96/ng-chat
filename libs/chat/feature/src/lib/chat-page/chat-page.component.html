@@ -27,14 +27,14 @@
             label="Model"
             [options]="models()"
             [indicator]="true"
-            [formField]="selectedModelForm.id"
+            [formField]="modelSelectionForm.modelId"
           />
 
           <chat-select
             class="chat-shell__conversation-effort"
             label="Effort"
             [options]="modelEfforts()"
-            [formField]="selectedModelEffortForm.id"
+            [formField]="modelSelectionForm.effortId"
           />
         </div>
       </div>
