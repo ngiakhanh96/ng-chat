@@ -16,6 +16,18 @@ export function withChatEffects() {
         events = inject(Events),
         chatHttpClient = inject(ChatHttpClientService),
       ) => ({
+        loadModels$: createHttpEffectAndUpdateResponse(
+          events,
+          chatEventGroup.loadModels,
+          () => {
+            return chatHttpClient
+              .getModels()
+              .pipe(
+                map((models) => chatEventGroup.modelsLoaded({ models })),
+              );
+          },
+          false,
+        ),
         loadConversations$: createHttpEffectAndUpdateResponse(
           events,
           chatEventGroup.loadConversations,

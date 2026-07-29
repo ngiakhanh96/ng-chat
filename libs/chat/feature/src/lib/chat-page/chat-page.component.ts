@@ -57,10 +57,10 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   selectedModelEffortId = this.chatStore.selectedModelEffortId;
   selectedModelEffort = this.chatStore.selectedModelEffort;
   private readonly selectedModelFormModel = linkedSignal(() => ({
-    id: this.selectedModel().id,
+    id: this.selectedModel()?.id ?? '',
   }));
   private readonly selectedModelEffortFormModel = linkedSignal(() => ({
-    id: this.selectedModelEffortId(),
+    id: this.selectedModelEffortId() ?? '',
   }));
   protected readonly selectedModelForm = form(this.selectedModelFormModel);
   protected readonly selectedModelEffortForm = form(
@@ -69,6 +69,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
 
   constructor() {
     super();
+    this.dispatchEvent(chatEventGroup.loadModels());
     this.dispatchEvent(chatEventGroup.loadConversations());
 
     effect(() => {
@@ -140,6 +141,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
     let storyTitle = this.activeConversation()?.title;
     const selectedModel = this.selectedModel();
     const selectedModelEffort = this.selectedModelEffort();
+
     if (conversationId == null) {
       conversationId = this.createId();
       storyTitle = this.createConversationTitle(content);

@@ -1,10 +1,6 @@
 import { computed } from '@angular/core';
 
 import { signalStoreFeature, type, withComputed } from '@ngrx/signals';
-import {
-  DEFAULT_CHAT_MODEL,
-  DEFAULT_CHAT_MODEL_EFFORT,
-} from '../../models/chat.model';
 import { IChatState } from '../reducers/chat.reducer';
 
 export function withChatSelectors<_>() {
@@ -12,18 +8,27 @@ export function withChatSelectors<_>() {
     { state: type<IChatState>() },
     withComputed((store) => {
       const selectedModel = computed(
-        () =>
-          store
-            .availableModels()
-            .find((model) => model.id === store.selectedModelId()) ??
-          DEFAULT_CHAT_MODEL,
+        () => {
+          const availableModels = store.availableModels();
+          return (
+            availableModels.find(
+              (model) => model.id === store.selectedModelId(),
+            ) ??
+            availableModels.find((model) => model.isDefault) ??
+            availableModels[0]
+          );
+        },
       );
-      const selectedModelEfforts = computed(() => selectedModel().efforts);
+      const selectedModelEfforts = computed(
+        () => selectedModel()?.efforts ?? [],
+      );
       const selectedModelEffort = computed(
         () =>
           selectedModelEfforts().find(
             (effort) => store.selectedModelEffortId() === effort.id,
-          ) ?? DEFAULT_CHAT_MODEL_EFFORT,
+          ) ??
+          selectedModelEfforts().find((effort) => effort.isDefault) ??
+          selectedModelEfforts()[0],
       );
       return {
         activeConversation: computed(() =>

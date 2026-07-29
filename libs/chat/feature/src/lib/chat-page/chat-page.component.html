@@ -47,7 +47,10 @@
     />
 
     <footer class="chat-shell__composer">
-      <chat-composer (submitted)="onMessageSubmitted($event)" />
+      <chat-composer
+        [disabled]="!selectedModel() || !selectedModelEffort()"
+        (submitted)="onMessageSubmitted($event)"
+      />
       <p>
         Interactive Story can make mistakes. Review each path before choosing.
       </p>

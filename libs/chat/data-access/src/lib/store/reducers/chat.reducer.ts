@@ -7,12 +7,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { on, withReducer } from '@ngrx/signals/events';
-import {
-  CHAT_MODELS,
-  DEFAULT_CHAT_MODEL,
-  DEFAULT_CHAT_MODEL_EFFORT,
-  IChatModel,
-} from '../../models/chat.model';
+import { IChatModel } from '../../models/chat.model';
 import { IConversationHistoryMessageResponse } from '../../models/http-responses/conversation-history-message-response.model';
 import { chatEventGroup } from '../actions/chat.event-group';
 import { withChatEffects } from '../effects/chat.effects';
@@ -23,8 +18,8 @@ export interface IChatState {
   activeConversationId: string | undefined;
   searchQuery: string;
   availableModels: IChatModel[];
-  selectedModelId: string;
-  selectedModelEffortId: string;
+  selectedModelId: string | undefined;
+  selectedModelEffortId: string | undefined;
 }
 
 export interface IChapterResponse {
@@ -43,9 +38,9 @@ const initialState: IChatState = {
   conversations: [],
   activeConversationId: undefined,
   searchQuery: '',
-  availableModels: CHAT_MODELS,
-  selectedModelId: DEFAULT_CHAT_MODEL.id,
-  selectedModelEffortId: DEFAULT_CHAT_MODEL_EFFORT.id,
+  availableModels: [],
+  selectedModelId: undefined,
+  selectedModelEffortId: undefined,
 };
 
 export const ChatStore = signalStore(
@@ -69,11 +64,26 @@ function withChatReducer() {
       on(chatEventGroup.searchQueryChanged, ({ payload }) => ({
         searchQuery: payload.query,
       })),
+      on(chatEventGroup.modelsLoaded, ({ payload }) => {
+        const selectedModel =
+          payload.models.find((model) => model.isDefault) ?? payload.models[0];
+        const selectedEffort =
+          selectedModel?.efforts.find((effort) => effort.isDefault) ??
+          selectedModel?.efforts[0];
+
+        return {
+          availableModels: payload.models,
+          selectedModelId: selectedModel?.id,
+          selectedModelEffortId: selectedEffort?.id,
+        };
+      }),
       on(chatEventGroup.modelSelected, ({ payload }, state) => {
         const selectedModel = state.availableModels.find(
           (model) => model.id === payload.modelId,
         );
-        const selectedEffort = selectedModel?.efforts[0];
+        const selectedEffort =
+          selectedModel?.efforts.find((effort) => effort.isDefault) ??
+          selectedModel?.efforts[0];
 
         return selectedModel && selectedEffort
           ? {

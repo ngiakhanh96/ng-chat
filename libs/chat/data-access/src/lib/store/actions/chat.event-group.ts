@@ -1,5 +1,6 @@
 import { type } from '@ngrx/signals';
 import { eventGroup } from '@ngrx/signals/events';
+import { IChatModel } from '../../models/chat.model';
 import { IChatHttpResponseEvent } from '../../models/http-responses/chat-http-response.model';
 import { IConversationHistoryMessageResponse } from '../../models/http-responses/conversation-history-message-response.model';
 import { IConversationSummaryResponse } from '../../models/http-responses/conversation-summary-response.model';
@@ -13,6 +14,8 @@ export const chatEventGroup = eventGroup({
     searchQueryChanged: type<{ query: string }>(),
     modelSelected: type<{ modelId: string }>(),
     modelEffortSelected: type<{ effortId: string }>(),
+    loadModels: type<void>(),
+    modelsLoaded: type<{ models: IChatModel[] }>(),
     loadConversations: type<void>(),
     conversationsLoaded: type<{ sessions: IConversationSummaryResponse[] }>(),
     conversationHistoryLoaded: type<{
