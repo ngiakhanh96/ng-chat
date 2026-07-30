@@ -1,12 +1,10 @@
 import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { AUTHORIZED } from '../../http-context-tokens/authorized.http-context-token';
 import { IAccessTokenInfo } from '../../models/http-response/auth.model';
 import { AppSettingsService } from '../app-settings.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class AuthHttpService {
   private httpClient = inject(HttpClient);
   private appSettingsService = inject(AppSettingsService);

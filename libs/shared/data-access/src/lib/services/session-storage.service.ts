@@ -1,10 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
-import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { inject, PLATFORM_ID, Service } from '@angular/core';
 import { MemoryStorage } from './memory-storage.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class SessionStorage implements Storage {
   private readonly storage: Storage;
   private platformId = inject(PLATFORM_ID);

@@ -1,5 +1,5 @@
 import { HttpAgent, HttpAgentConfig } from '@ag-ui/client';
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import {
   AppSettingsService,
   TestUserHeaderService,
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { IChatHttpRequest } from '../models/http-requests/chat-http-request.model';
 import { IChatHttpResponse } from '../models/http-responses/chat-http-response.model';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AgUiHttpAgentService {
   private readonly interactiveStoryConfig =
     inject(AppSettingsService).appConfig()!.interactiveStory!;

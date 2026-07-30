@@ -1,12 +1,10 @@
-import { effect, inject, Injectable, Injector, OnDestroy } from '@angular/core';
+import { effect, inject, Injector, OnDestroy, Service } from '@angular/core';
 import { Dispatcher, EventInstance } from '@ngrx/signals/events';
 import { Subscription } from 'rxjs';
 import { SharedStore } from '../store/base/reducers/shared.reducer';
 import { SpinnerService } from './spinner.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class SandboxService implements OnDestroy {
   public sharedStore = inject(SharedStore);
   protected injector = inject(Injector);

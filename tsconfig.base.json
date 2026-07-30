@@ -13,7 +13,6 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
     "paths": {
       "@ng-chat/chat-data-access": ["./libs/chat/data-access/src/index.ts"],
       "@ng-chat/chat-feature": ["./libs/chat/feature/src/index.ts"],

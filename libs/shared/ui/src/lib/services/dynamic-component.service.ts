@@ -5,16 +5,14 @@ import {
   createComponent,
   EnvironmentInjector,
   inject,
-  Injectable,
   Injector,
   inputBinding,
+  Service,
   Type,
   ViewContainerRef,
 } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class DynamicComponentService {
   appRef = inject(ApplicationRef);
   componentTypes = new Map<string, Type<any>>();

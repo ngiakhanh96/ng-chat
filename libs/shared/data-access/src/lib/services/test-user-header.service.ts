@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { AppSettingsService } from './app-settings.service';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class TestUserHeaderService {
   private readonly appSettingsService = inject(AppSettingsService);
 

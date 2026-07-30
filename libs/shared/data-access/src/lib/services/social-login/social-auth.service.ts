@@ -1,10 +1,10 @@
 import {
   inject,
-  Injectable,
   InjectionToken,
   Injector,
   makeEnvironmentProviders,
   NgZone,
+  Service,
   Type,
 } from '@angular/core';
 import { AsyncSubject, isObservable, Observable, ReplaySubject } from 'rxjs';
@@ -43,7 +43,7 @@ const SOCIAL_AUTH_SERVICE_CONFIG = new InjectionToken<
  *
  * @dynamic
  */
-@Injectable({ providedIn: 'root' })
+@Service()
 export class SocialAuthService {
   private static readonly ERR_LOGIN_PROVIDER_NOT_FOUND =
     'Login provider not found';

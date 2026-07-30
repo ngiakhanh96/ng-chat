@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { AppSettingsService } from '@ng-chat/shared-data-access';
 import { Observable } from 'rxjs';
 import { IChatModel } from '../../models/chat.model';
@@ -9,7 +9,7 @@ import { IConversationHistoryMessageResponse } from '../../models/http-responses
 import { IConversationSummaryResponse } from '../../models/http-responses/conversation-summary-response.model';
 import { AgUiHttpAgentService } from '../ag-ui-http-agent.service';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class ChatHttpClientService {
   private readonly interactiveStoryConfig =
     inject(AppSettingsService).appConfig()!.interactiveStory!;

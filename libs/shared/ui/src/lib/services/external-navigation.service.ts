@@ -1,10 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
-import { inject, Injectable, PLATFORM_ID, DOCUMENT } from '@angular/core';
+import { inject, Service, PLATFORM_ID, DOCUMENT } from '@angular/core';
 import { Router } from '@angular/router';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class ExternalNavigationService {
   private document = inject(DOCUMENT);
   private router = inject(Router);

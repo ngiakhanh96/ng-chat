@@ -1,9 +1,7 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, Service, signal } from '@angular/core';
 
 // TODO bring this to store
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class SpinnerService {
   private internalIsLoading = signal(false);
   isLoading = computed(() => this.internalIsLoading());
