@@ -1,4 +1,14 @@
 {
   "version": "0.2.0",
-  "configurations": []
+  "configurations": [
+    {
+      "name": "Launch CSR",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/start-csr.mjs",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "postDebugTask": "stop-csr"
+    }
+  ]
 }
