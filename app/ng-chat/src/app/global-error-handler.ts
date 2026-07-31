@@ -18,7 +18,6 @@ export class GlobalErrorHandler implements ErrorHandler {
     } else {
       // Handle other errors
       console.error('An error occurred:', error);
-      console.error('Stack trace:', error.stack);
     }
   }
 }

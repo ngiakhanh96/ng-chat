@@ -57,7 +57,7 @@ export class AgUiHttpAgentService {
               completedMessageId = event.messageId;
             },
             onRunErrorEvent: ({ event }) => {
-              observer.error(new Error(event.message));
+              observer.error(event);
             },
           },
         )

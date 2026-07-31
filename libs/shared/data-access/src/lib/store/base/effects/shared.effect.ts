@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { ErrorHandler, inject } from '@angular/core';
 import { signalStoreFeature, type } from '@ngrx/signals';
 import {
   EventCreator,
@@ -34,6 +34,7 @@ export function withSharedEffects<_>() {
         events = inject(Events),
         sessionStorageService = inject(SessionStorage),
         authHttpService = inject(AuthHttpService),
+        errorHandler = inject(ErrorHandler),
       ) => ({
         sendingRequest$: events.on(sharedEventGroup.sendingRequest).pipe(
           mergeMap((sendingRequestEvent) =>
@@ -58,6 +59,7 @@ export function withSharedEffects<_>() {
                 ];
               }),
               catchError((error: HttpErrorResponse) => {
+                errorHandler.handleError(error);
                 return of(
                   sharedEventGroup.updateResponse({
                     requestEventCreator:
