@@ -22,9 +22,7 @@ export function withChatEffects() {
           () => {
             return chatHttpClient
               .getModels()
-              .pipe(
-                map((models) => chatEventGroup.modelsLoaded({ models })),
-              );
+              .pipe(map((models) => chatEventGroup.modelsLoaded({ models })));
           },
           false,
         ),
@@ -87,9 +85,7 @@ export function withChatEffects() {
                     return chatEventGroup.responseCompleted({
                       conversationId: response.conversationId!,
                       messageId: response.messageId,
-                      response: JSON.parse(
-                        response.event.content,
-                      ) as IChapterResponse,
+                      response: parseChapterResponse(response.event.content),
                     });
                   }
 
@@ -106,4 +102,12 @@ export function withChatEffects() {
       }),
     ),
   );
+}
+
+function parseChapterResponse(content: string): IChapterResponse | string {
+  try {
+    return JSON.parse(content) as IChapterResponse;
+  } catch {
+    return content;
+  }
 }

@@ -38,7 +38,7 @@ export const chatEventGroup = eventGroup({
     responseCompleted: type<{
       conversationId: string;
       messageId: string;
-      response: IChapterResponse;
+      response: IChapterResponse | string;
     }>(),
   },
 });

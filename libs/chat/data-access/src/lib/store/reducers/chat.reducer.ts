@@ -159,7 +159,7 @@ function withChatReducer() {
         };
       }),
       on(chatEventGroup.responseCompleted, ({ payload }, state) => {
-        const assistantMessage: IChatMessage<IChapterResponse> = {
+        const assistantMessage: IChatMessage<IChapterResponse | string> = {
           id: payload.messageId,
           role: 'assistant',
           content: payload.response,
