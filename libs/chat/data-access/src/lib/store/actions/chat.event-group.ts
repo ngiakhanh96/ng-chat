@@ -4,7 +4,6 @@ import { IChatModel } from '../../models/chat.model';
 import { IChatHttpResponseEvent } from '../../models/http-responses/chat-http-response.model';
 import { IConversationHistoryMessageResponse } from '../../models/http-responses/conversation-history-message-response.model';
 import { IConversationSummaryResponse } from '../../models/http-responses/conversation-summary-response.model';
-import { IChapterResponse } from '../reducers/chat.reducer';
 
 export const chatEventGroup = eventGroup({
   source: 'Chat',
@@ -38,7 +37,7 @@ export const chatEventGroup = eventGroup({
     responseCompleted: type<{
       conversationId: string;
       messageId: string;
-      response: IChapterResponse | string;
+      textMessage: string;
     }>(),
   },
 });

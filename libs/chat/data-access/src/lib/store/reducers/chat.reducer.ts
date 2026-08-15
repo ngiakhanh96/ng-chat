@@ -162,7 +162,7 @@ function withChatReducer() {
         const assistantMessage: IChatMessage<IChapterResponse | string> = {
           id: payload.messageId,
           role: 'assistant',
-          content: payload.response,
+          content: parseChapterResponse(payload.textMessage),
           createdAt: new Date().toISOString(),
           status: 'complete',
         };
@@ -205,8 +205,8 @@ function mapHistoryMessage(
     createdAt: messageResponse.createdAt,
     content:
       messageResponse.role === 'user'
-        ? messageResponse.messageText
-        : parseChapterResponse(messageResponse.messageText),
+        ? messageResponse.textMessage
+        : parseChapterResponse(messageResponse.textMessage),
     status: 'complete' as const,
   };
 

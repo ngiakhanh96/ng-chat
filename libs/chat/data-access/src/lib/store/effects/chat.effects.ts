@@ -5,7 +5,7 @@ import { Events, withEventHandlers } from '@ngrx/signals/events';
 import { EMPTY, map } from 'rxjs';
 import { ChatHttpClientService } from '../../services/http/chat-http.service';
 import { chatEventGroup } from '../actions/chat.event-group';
-import { IChapterResponse, IChatState } from '../reducers/chat.reducer';
+import { IChatState } from '../reducers/chat.reducer';
 
 export function withChatEffects() {
   return signalStoreFeature(
@@ -85,7 +85,7 @@ export function withChatEffects() {
                     return chatEventGroup.responseCompleted({
                       conversationId: response.conversationId!,
                       messageId: response.messageId,
-                      response: parseChapterResponse(response.event.content),
+                      textMessage: response.event.content,
                     });
                   }
 
@@ -102,12 +102,4 @@ export function withChatEffects() {
       }),
     ),
   );
-}
-
-function parseChapterResponse(content: string): IChapterResponse | string {
-  try {
-    return JSON.parse(content) as IChapterResponse;
-  } catch {
-    return content;
-  }
 }

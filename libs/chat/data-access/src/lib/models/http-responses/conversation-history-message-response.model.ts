@@ -4,5 +4,5 @@ export interface IConversationHistoryMessageResponse {
   messageId: string;
   role: ChatMessageRole;
   createdAt: string;
-  messageText: string;
+  textMessage: string;
 }
