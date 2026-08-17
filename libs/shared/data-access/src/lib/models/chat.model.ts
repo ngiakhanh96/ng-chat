@@ -1,8 +1,8 @@
 export type ChatMessageRole = 'user' | 'assistant' | 'system';
 
-export type ChatMessageStatus = 'complete' | 'streaming' | 'error';
+export type ChatMessageStatus = 'completed' | 'streaming' | 'error';
 
-export type ChatMessageReasoningStatus = 'streaming' | 'complete';
+export type ChatMessageReasoningStatus = 'streaming' | 'completed';
 
 export interface IChatMessageReasoning {
   status: ChatMessageReasoningStatus;

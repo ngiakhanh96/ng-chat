@@ -152,7 +152,7 @@ function withChatReducer() {
           role: 'user',
           content: payload.content,
           createdAt: new Date(occurredAtMs).toISOString(),
-          status: 'complete',
+          status: 'completed',
         };
         return {
           conversations: addMessagesToConversation(
@@ -302,7 +302,15 @@ function mapHistoryMessage(
       messageResponse.role === 'user'
         ? messageResponse.textMessage
         : parseChapterResponse(messageResponse.textMessage),
-    status: 'complete' as const,
+    status: 'completed',
+    reasoning:
+      messageResponse.reasoningText || messageResponse.reasoningElapsedMs
+        ? {
+            status: 'completed',
+            content: messageResponse.reasoningText ?? '',
+            elapsedMs: messageResponse.reasoningElapsedMs ?? 0,
+          }
+        : undefined,
   };
 
   return message;
@@ -405,14 +413,14 @@ function completeAssistantMessage(
       role: 'assistant',
       content,
       createdAt: new Date(occurredAtMs).toISOString(),
-      status: 'complete',
+      status: 'completed',
     });
   } else {
     messages[messageIndex] = {
       ...messages[messageIndex],
       id: messageId,
       content,
-      status: 'complete',
+      status: 'completed',
     };
   }
 
@@ -549,7 +557,7 @@ function completeReasoning(
     : 0;
 
   return {
-    status: 'complete',
+    status: 'completed',
     content: currentReasoning.content,
     elapsedMs: currentReasoning.elapsedMs + activeElapsedMs,
   };

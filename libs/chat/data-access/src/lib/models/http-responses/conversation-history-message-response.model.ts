@@ -5,4 +5,6 @@ export interface IConversationHistoryMessageResponse {
   role: ChatMessageRole;
   createdAt: string;
   textMessage: string;
+  reasoningText?: string | null;
+  reasoningElapsedMs?: number | null;
 }
