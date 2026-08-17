@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { createHttpEffectAndUpdateResponse } from '@ng-chat/shared-data-access';
 import { signalStoreFeature, type } from '@ngrx/signals';
 import { Events, withEventHandlers } from '@ngrx/signals/events';
-import { EMPTY, map } from 'rxjs';
+import { catchError, concat, EMPTY, map, of, throwError } from 'rxjs';
 import { ChatHttpClientService } from '../../services/http/chat-http.service';
 import { chatEventGroup } from '../actions/chat.event-group';
 import { IChatState } from '../reducers/chat.reducer';
@@ -81,11 +81,12 @@ export function withChatEffects() {
               })
               .pipe(
                 map((response) => {
-                  if (response.event.type === 'message-complete') {
+                  if (response.event.type === 'response-complete') {
                     return chatEventGroup.responseCompleted({
                       conversationId: response.conversationId!,
                       messageId: response.messageId,
                       textMessage: response.event.content,
+                      occurredAtMs: response.event.occurredAtMs,
                     });
                   }
 
@@ -95,6 +96,17 @@ export function withChatEffects() {
                     event: response.event,
                   });
                 }),
+                catchError((error: unknown) =>
+                  concat(
+                    of(
+                      chatEventGroup.responseFailed({
+                        conversationId: payload.conversationId,
+                        occurredAtMs: Date.now(),
+                      }),
+                    ),
+                    throwError(() => error),
+                  ),
+                ),
               );
           },
           false,

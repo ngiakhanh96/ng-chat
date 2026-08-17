@@ -14,10 +14,6 @@
   grid-template-columns: minmax(0, 1fr) 34px;
 }
 
-.message--user .message__avatar {
-  @apply order-2;
-}
-
 .message__avatar {
   @apply mt-0.5;
   background: linear-gradient(
@@ -30,6 +26,7 @@
 }
 
 .message--user .message__avatar {
+  @apply order-2;
   background: var(--chat-surface-muted);
   color: var(--chat-text);
   box-shadow: none;
@@ -53,6 +50,37 @@
   color: var(--chat-text-muted);
 }
 
+.message__reasoning {
+  border-color: rgb(215 177 120 / 18%);
+  background: rgb(22 23 20 / 74%);
+  box-shadow: inset 3px 0 0 rgb(185 144 92 / 28%);
+}
+
+.message__reasoning-status,
+.message__reasoning-summary,
+.message__reasoning-toggle {
+  color: var(--chat-text-muted);
+}
+
+.message__reasoning-dot {
+  background: var(--chat-accent-strong);
+}
+
+.message__reasoning-toggle {
+  &:hover {
+    color: var(--chat-text);
+  }
+}
+
+.message__reasoning-content {
+  border-color: rgb(215 177 120 / 12%);
+  background: rgb(10 11 9 / 22%);
+}
+
+.message__reasoning-text {
+  color: var(--chat-text);
+}
+
 .message__title {
   @apply mb-2 mt-0 text-base font-semibold leading-6 tracking-[-0.01em];
   color: var(--chat-accent-strong);
@@ -61,6 +89,18 @@
 
 .message--user .message__meta {
   @apply justify-end;
+}
+
+.message__reasoning-toggle:focus-visible {
+  outline: 2px solid
+    color-mix(in srgb, var(--chat-accent-strong) 62%, transparent);
+  outline-offset: -2px;
+}
+
+.message__reasoning-chevron {
+  &--expanded {
+    transform: rotate(90deg);
+  }
 }
 
 .message__content {
@@ -91,15 +131,8 @@
   @apply ml-1 text-xs font-medium;
 }
 
-.message__notice,
 .message__error {
   @apply mb-0 mt-3 rounded-xl border px-3 py-2 text-xs leading-5;
-}
-
-.message__notice {
-  border-color: rgb(215 177 120 / 22%);
-  background: rgb(185 144 92 / 8%);
-  color: var(--chat-text-muted);
 }
 
 .message__error {

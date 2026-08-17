@@ -2,6 +2,15 @@ export type ChatMessageRole = 'user' | 'assistant' | 'system';
 
 export type ChatMessageStatus = 'complete' | 'streaming' | 'error';
 
+export type ChatMessageReasoningStatus = 'streaming' | 'complete';
+
+export interface IChatMessageReasoning {
+  status: ChatMessageReasoningStatus;
+  content: string;
+  elapsedMs: number;
+  startedAtMs?: number;
+}
+
 export interface IChatUserChoice {
   choiceType: string;
   choiceContent: string;
@@ -13,6 +22,7 @@ export interface IChatMessage<T> {
   content?: T;
   createdAt: string;
   status: ChatMessageStatus;
+  reasoning?: IChatMessageReasoning;
 }
 
 export interface IChatConversationSummary {

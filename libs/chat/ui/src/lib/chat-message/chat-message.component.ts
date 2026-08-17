@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   input,
+  linkedSignal,
   output,
 } from '@angular/core';
 import { IChapterResponse } from '@ng-chat/chat-data-access';
@@ -31,6 +32,15 @@ export class ChatMessageComponent {
   suggestedActionSelected = output<string>();
 
   isUser = computed(() => this.message().role === 'user');
+  reasoningExpanded = linkedSignal(() => this.message().status === 'streaming');
+  reasoningPanelId = computed(() => `reasoning-${this.message().id}`);
+  reasoningDuration = computed(() =>
+    this.formatReasoningDuration(this.message().reasoning?.elapsedMs ?? 0),
+  );
+
+  protected toggleReasoning() {
+    this.reasoningExpanded.update((expanded) => !expanded);
+  }
 
   protected isChapterResponse(
     content: string | IChapterResponse | undefined,
@@ -43,9 +53,24 @@ export class ChatMessageComponent {
     );
   }
 
-  async copyResponse() {
-    await globalThis.navigator?.clipboard?.writeText(
+  copyResponse() {
+    globalThis.navigator?.clipboard?.writeText(
       JSON.stringify(this.message().content),
     );
+  }
+
+  private formatReasoningDuration(elapsedMs: number): string {
+    if (elapsedMs < 1_000) {
+      return 'less than a second';
+    }
+
+    const totalSeconds = Math.round(elapsedMs / 1_000);
+    if (totalSeconds < 60) {
+      return `${totalSeconds} second${totalSeconds === 1 ? '' : 's'}`;
+    }
+
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return seconds === 0 ? `${minutes}m` : `${minutes}m ${seconds}s`;
   }
 }

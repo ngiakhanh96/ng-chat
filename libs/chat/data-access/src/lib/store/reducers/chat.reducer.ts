@@ -1,5 +1,9 @@
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
-import { IChatConversation, IChatMessage } from '@ng-chat/shared-data-access';
+import {
+  IChatConversation,
+  IChatMessage,
+  IChatMessageReasoning,
+} from '@ng-chat/shared-data-access';
 import {
   signalStore,
   signalStoreFeature,
@@ -142,39 +146,130 @@ function withChatReducer() {
         };
       }),
       on(chatEventGroup.messageSubmitted, ({ payload }, state) => {
+        const occurredAtMs = Date.now();
         const userMessage: IChatMessage<string> = {
           id: payload.messageId,
           role: 'user',
           content: payload.content,
-          createdAt: new Date().toISOString(),
+          createdAt: new Date(occurredAtMs).toISOString(),
           status: 'complete',
         };
         return {
           conversations: addMessagesToConversation(
             payload.conversationId,
-            state.conversations,
+            markStreamingAssistantMessagesFailed(
+              payload.conversationId,
+              state.conversations,
+              occurredAtMs,
+            ),
             [userMessage],
             payload.storyTitle,
           ),
         };
       }),
-      on(chatEventGroup.responseCompleted, ({ payload }, state) => {
-        const assistantMessage: IChatMessage<IChapterResponse | string> = {
-          id: payload.messageId,
-          role: 'assistant',
-          content: parseChapterResponse(payload.textMessage),
-          createdAt: new Date().toISOString(),
-          status: 'complete',
-        };
+      on(chatEventGroup.responseEventReceived, ({ payload }, state) => {
+        const { event } = payload;
 
+        switch (event.type) {
+          case 'reasoning-start':
+            return {
+              conversations: upsertStreamingAssistantMessage(
+                payload.conversationId,
+                payload.messageId,
+                state.conversations,
+                event.occurredAtMs,
+                (message) => ({
+                  ...message,
+                  reasoning: startReasoning(
+                    message.reasoning,
+                    event.occurredAtMs,
+                  ),
+                }),
+              ),
+            };
+          case 'reasoning-message-start': {
+            return {
+              conversations: upsertStreamingAssistantMessage(
+                payload.conversationId,
+                payload.messageId,
+                state.conversations,
+                event.occurredAtMs,
+                (message) => ({
+                  ...message,
+                  reasoning: startReasoningMessage(
+                    message.reasoning,
+                    event.occurredAtMs,
+                  ),
+                }),
+              ),
+            };
+          }
+          case 'reasoning-text-delta': {
+            return {
+              conversations: upsertStreamingAssistantMessage(
+                payload.conversationId,
+                payload.messageId,
+                state.conversations,
+                event.occurredAtMs,
+                (message) => ({
+                  ...message,
+                  reasoning: appendReasoningText(
+                    message.reasoning,
+                    event.delta,
+                    event.occurredAtMs,
+                  ),
+                }),
+              ),
+            };
+          }
+          case 'reasoning-end':
+            return {
+              conversations: upsertStreamingAssistantMessage(
+                payload.conversationId,
+                payload.messageId,
+                state.conversations,
+                event.occurredAtMs,
+                (message) => ({
+                  ...message,
+                  reasoning: completeReasoning(
+                    message.reasoning,
+                    event.occurredAtMs,
+                  ),
+                }),
+              ),
+            };
+          case 'text-delta':
+            return {
+              conversations: upsertStreamingAssistantMessage(
+                payload.conversationId,
+                payload.messageId,
+                state.conversations,
+                event.occurredAtMs,
+                (message) => message,
+              ),
+            };
+          default:
+            return {};
+        }
+      }),
+      on(chatEventGroup.responseCompleted, ({ payload }, state) => {
         return {
-          conversations: addMessagesToConversation(
+          conversations: completeAssistantMessage(
             payload.conversationId,
+            payload.messageId,
+            parseChapterResponse(payload.textMessage),
             state.conversations,
-            [assistantMessage],
+            payload.occurredAtMs,
           ),
         };
       }),
+      on(chatEventGroup.responseFailed, ({ payload }, state) => ({
+        conversations: markStreamingAssistantMessagesFailed(
+          payload.conversationId,
+          state.conversations,
+          payload.occurredAtMs,
+        ),
+      })),
     ),
   );
 }
@@ -242,6 +337,222 @@ function addMessagesToConversation(
   return conversations.map((c) =>
     c.id === conversationId ? conversation! : c,
   );
+}
+
+function upsertStreamingAssistantMessage(
+  conversationId: string,
+  messageId: string,
+  conversations: IChatConversation<IChapterResponse | string>[],
+  occurredAtMs: number,
+  updateFn: (
+    message: IChatMessage<IChapterResponse | string>,
+  ) => IChatMessage<IChapterResponse | string>,
+) {
+  const conversation = conversations.find(
+    (conversation) => conversation.id === conversationId,
+  );
+
+  const currentMessages = conversation!.messages;
+  const messageIndex = findLastStreamingAssistantMessageIndex(
+    currentMessages,
+    messageId,
+  );
+  let messages: IChatMessage<IChapterResponse | string>[];
+
+  if (messageIndex < 0) {
+    const newAssistantMessage: IChatMessage<IChapterResponse | string> = {
+      id: messageId,
+      role: 'assistant',
+      createdAt: new Date(occurredAtMs).toISOString(),
+      status: 'streaming',
+    };
+    messages = [...currentMessages, updateFn(newAssistantMessage)];
+  } else {
+    messages = updateStreamingAssistantMessages(
+      currentMessages,
+      updateFn,
+      messageIndex,
+    );
+  }
+
+  return conversations.map((currentConversation) =>
+    currentConversation.id === conversationId
+      ? {
+          ...currentConversation,
+          updatedAt: new Date(occurredAtMs).toISOString(),
+          messages,
+        }
+      : currentConversation,
+  );
+}
+
+function completeAssistantMessage(
+  conversationId: string,
+  messageId: string,
+  content: IChapterResponse | string,
+  conversations: IChatConversation<IChapterResponse | string>[],
+  occurredAtMs: number,
+) {
+  const conversation = conversations.find(
+    (conversation) => conversation.id === conversationId,
+  );
+  const messages = [...conversation!.messages];
+  const messageIndex = findLastStreamingAssistantMessageIndex(messages);
+
+  if (messageIndex < 0) {
+    messages.push({
+      id: messageId,
+      role: 'assistant',
+      content,
+      createdAt: new Date(occurredAtMs).toISOString(),
+      status: 'complete',
+    });
+  } else {
+    messages[messageIndex] = {
+      ...messages[messageIndex],
+      id: messageId,
+      content,
+      status: 'complete',
+    };
+  }
+
+  return conversations.map((currentConversation) =>
+    currentConversation.id === conversationId
+      ? {
+          ...currentConversation,
+          updatedAt: new Date(occurredAtMs).toISOString(),
+          messages,
+        }
+      : currentConversation,
+  );
+}
+
+function markStreamingAssistantMessagesFailed(
+  conversationId: string,
+  conversations: IChatConversation<IChapterResponse | string>[],
+  occurredAtMs: number,
+) {
+  return conversations.map((conversation) =>
+    conversation.id === conversationId
+      ? {
+          ...conversation,
+          messages: updateStreamingAssistantMessages(
+            conversation.messages,
+            (message) => ({
+              ...message,
+              status: 'error',
+              reasoning: message.reasoning
+                ? completeReasoning(message.reasoning, occurredAtMs)
+                : undefined,
+            }),
+          ),
+        }
+      : conversation,
+  );
+}
+
+function updateStreamingAssistantMessages(
+  messages: IChatMessage<IChapterResponse | string>[],
+  updateFn: (
+    message: IChatMessage<IChapterResponse | string>,
+  ) => IChatMessage<IChapterResponse | string>,
+  messageIndex?: number,
+) {
+  return messages.map((message, index) =>
+    message.role === 'assistant' &&
+    message.status === 'streaming' &&
+    (messageIndex === undefined || index === messageIndex)
+      ? updateFn(message)
+      : message,
+  );
+}
+
+function findLastStreamingAssistantMessageIndex(
+  messages: IChatMessage<IChapterResponse | string>[],
+  messageId?: string,
+) {
+  const matchingMessageIndex = messageId
+    ? messages.findIndex(
+        (message) =>
+          message.role === 'assistant' &&
+          message.status === 'streaming' &&
+          message.id === messageId,
+      )
+    : -1;
+  if (matchingMessageIndex >= 0) {
+    return matchingMessageIndex;
+  }
+
+  for (let index = messages.length - 1; index >= 0; index--) {
+    const message = messages[index];
+    if (message.role === 'assistant' && message.status === 'streaming') {
+      return index;
+    }
+  }
+
+  return -1;
+}
+
+function startReasoning(
+  reasoning: IChatMessageReasoning | undefined,
+  occurredAtMs: number,
+): IChatMessageReasoning {
+  return {
+    status: 'streaming',
+    content: reasoning?.content ?? '',
+    elapsedMs: reasoning?.elapsedMs ?? 0,
+    startedAtMs: reasoning?.startedAtMs ?? occurredAtMs,
+  };
+}
+
+function startReasoningMessage(
+  reasoning: IChatMessageReasoning | undefined,
+  occurredAtMs: number,
+): IChatMessageReasoning {
+  const currentReasoning = startReasoning(reasoning, occurredAtMs);
+  const separator =
+    currentReasoning.content.length > 0 &&
+    !currentReasoning.content.endsWith('\n\n')
+      ? '\n\n'
+      : '';
+
+  return {
+    ...currentReasoning,
+    content: `${currentReasoning.content}${separator}`,
+  };
+}
+
+function appendReasoningText(
+  reasoning: IChatMessageReasoning | undefined,
+  delta: string,
+  occurredAtMs: number,
+): IChatMessageReasoning {
+  const currentReasoning = startReasoning(reasoning, occurredAtMs);
+  return {
+    ...currentReasoning,
+    content: `${currentReasoning.content}${delta}`,
+  };
+}
+
+function completeReasoning(
+  reasoning: IChatMessageReasoning | undefined,
+  occurredAtMs: number,
+): IChatMessageReasoning {
+  const currentReasoning = reasoning ?? {
+    status: 'streaming',
+    content: '',
+    elapsedMs: 0,
+    startedAtMs: occurredAtMs,
+  };
+  const activeElapsedMs = currentReasoning.startedAtMs
+    ? Math.max(0, occurredAtMs - currentReasoning.startedAtMs)
+    : 0;
+
+  return {
+    status: 'complete',
+    content: currentReasoning.content,
+    elapsedMs: currentReasoning.elapsedMs + activeElapsedMs,
+  };
 }
 
 function updateConversation(

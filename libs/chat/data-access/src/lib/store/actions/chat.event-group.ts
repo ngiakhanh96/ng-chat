@@ -38,6 +38,11 @@ export const chatEventGroup = eventGroup({
       conversationId: string;
       messageId: string;
       textMessage: string;
+      occurredAtMs: number;
+    }>(),
+    responseFailed: type<{
+      conversationId: string;
+      occurredAtMs: number;
     }>(),
   },
 });

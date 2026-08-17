@@ -45,11 +45,66 @@ export class AgUiHttpAgentService {
             },
           },
           {
+            onReasoningStartEvent: ({ event }) => {
+              observer.next({
+                conversationId: agent.threadId,
+                messageId: event.messageId,
+                event: {
+                  type: 'reasoning-start',
+                  occurredAtMs: Date.now(),
+                },
+              });
+            },
+            onReasoningMessageStartEvent: ({ event }) => {
+              observer.next({
+                conversationId: agent.threadId,
+                messageId: event.messageId,
+                event: {
+                  type: 'reasoning-message-start',
+                  occurredAtMs: Date.now(),
+                },
+              });
+            },
+            onReasoningMessageContentEvent: ({ event }) => {
+              observer.next({
+                conversationId: agent.threadId,
+                messageId: event.messageId,
+                event: {
+                  type: 'reasoning-text-delta',
+                  delta: event.delta,
+                  occurredAtMs: Date.now(),
+                },
+              });
+            },
+            onReasoningMessageEndEvent: ({ event }) => {
+              observer.next({
+                conversationId: agent.threadId,
+                messageId: event.messageId,
+                event: {
+                  type: 'reasoning-message-end',
+                  occurredAtMs: Date.now(),
+                },
+              });
+            },
+            onReasoningEndEvent: ({ event }) => {
+              observer.next({
+                conversationId: agent.threadId,
+                messageId: event.messageId,
+                event: {
+                  type: 'reasoning-end',
+                  occurredAtMs: Date.now(),
+                },
+              });
+            },
             onTextMessageContentEvent: ({ event }) => {
               observer.next({
                 conversationId: agent.threadId,
                 messageId: event.messageId,
-                event: { type: 'text-delta', delta: event.delta },
+                event: {
+                  type: 'text-delta',
+                  delta: event.delta,
+                  occurredAtMs: Date.now(),
+                },
               });
             },
             onTextMessageEndEvent: ({ event, textMessageBuffer }) => {
@@ -72,8 +127,9 @@ export class AgUiHttpAgentService {
             conversationId: agent.threadId,
             messageId: completedMessageId as string,
             event: {
-              type: 'message-complete',
+              type: 'response-complete',
               content: completedMessage,
+              occurredAtMs: Date.now(),
             },
           });
           observer.complete();
