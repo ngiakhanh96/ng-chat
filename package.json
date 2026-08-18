@@ -6,8 +6,8 @@
     "start": "npm exec nx -- run ng-chat:serve",
     "start-csr": "npm exec nx -- run ng-chat:serve-csr",
     "build": "npm exec nx -- run ng-chat:build",
-    "build-csr": "npm exec nx -- run ng-chat:build-csr",
-    "build-ghp": "npm exec nx -- run ng-chat:build-csr --baseHref /ng-chat/",
+    "build-csr": "npm exec nx -- run ng-chat:build-csr && node tools/create-spa-fallback.mjs",
+    "build-ghp": "npm exec nx -- run ng-chat:build-csr --baseHref /ng-chat/ && node tools/create-spa-fallback.mjs",
     "test": "npm exec nx -- run ng-chat:vite:test",
     "preinstall": "git config core.hooksPath .githooks"
   },

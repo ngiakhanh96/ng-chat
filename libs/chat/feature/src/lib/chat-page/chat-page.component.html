@@ -42,13 +42,13 @@
 
     <chat-conversation
       [conversation]="activeConversation()"
-      [actionsDisabled]="false"
+      [actionsDisabled]="!conversationSummariesLoaded()"
       (suggestedActionSelected)="onMessageSubmitted($event)"
     />
 
     <footer class="chat-shell__composer">
       <chat-composer
-        [disabled]="!selectedModel() || !selectedModelEffort()"
+        [disabled]="shouldDisableMessageSubmission()"
         (submitted)="onMessageSubmitted($event)"
       />
       <p>

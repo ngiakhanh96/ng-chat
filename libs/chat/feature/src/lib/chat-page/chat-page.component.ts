@@ -5,10 +5,12 @@ import {
   computed,
   effect,
   inject,
+  input,
   linkedSignal,
   signal,
 } from '@angular/core';
 import { FormField, form } from '@angular/forms/signals';
+import { Router } from '@angular/router';
 import { ChatStore, chatEventGroup } from '@ng-chat/chat-data-access';
 import {
   ChatComposerComponent,
@@ -46,7 +48,10 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 })
 export class ChatPageComponent extends BaseWithSandBoxComponent {
   private readonly chatStore = inject(ChatStore);
+  private readonly router = inject(Router);
+  readonly conversationId = input<string | undefined>();
   conversations = this.chatStore.conversations;
+  conversationSummariesLoaded = this.chatStore.conversationSummariesLoaded;
   activeConversationId = this.chatStore.activeConversationId;
   mobileSidebarOpen = signal(false);
   searchQuery = this.chatStore.searchQuery;
@@ -56,6 +61,13 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   modelEfforts = this.chatStore.selectedModelEfforts;
   selectedModelEffortId = this.chatStore.selectedModelEffortId;
   selectedModelEffort = this.chatStore.selectedModelEffort;
+  shouldDisableMessageSubmission = computed(() => {
+    return (
+      !this.conversationSummariesLoaded() ||
+      !this.selectedModel() ||
+      !this.selectedModelEffort()
+    );
+  });
   private readonly modelSelectionFormModel = linkedSignal(() => ({
     modelId: this.selectedModel()?.id ?? '',
     effortId: this.selectedModelEffortId() ?? '',
@@ -64,8 +76,35 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
 
   constructor() {
     super();
-    this.dispatchEvent(chatEventGroup.loadModels());
-    this.dispatchEvent(chatEventGroup.loadConversations());
+
+    effect(() => {
+      const conversationId = this.conversationId();
+
+      if (!conversationId) {
+        if (this.activeConversationId() != null) {
+          this.dispatchEvent(chatEventGroup.newConversation());
+        }
+        return;
+      }
+
+      if (!this.chatStore.conversationSummariesLoaded()) {
+        return;
+      }
+
+      const conversationExists = this.conversations().some(
+        (conversation) => conversation.id === conversationId,
+      );
+      if (!conversationExists) {
+        this.router.navigate(['/'], { replaceUrl: true });
+        return;
+      }
+
+      if (conversationId !== this.activeConversationId()) {
+        this.dispatchEvent(
+          chatEventGroup.setActiveConversationId({ conversationId }),
+        );
+      }
+    });
 
     effect(() => {
       const modelId = this.modelSelectionForm.modelId().value();
@@ -111,6 +150,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
 
   onNewConversation() {
     this.dispatchEvent(chatEventGroup.newConversation());
+    this.router.navigate(['/']);
   }
 
   onConversationIdSelected(
@@ -118,9 +158,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
     closeAfterAction: boolean,
   ) {
     if (conversationId) {
-      this.dispatchEvent(
-        chatEventGroup.setActiveConversationId({ conversationId }),
-      );
+      this.router.navigate(['/c', conversationId]);
     }
     if (closeAfterAction) {
       this.closeMobileSidebar();
@@ -132,6 +170,10 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   }
 
   onMessageSubmitted(content: string) {
+    if (this.shouldDisableMessageSubmission()) {
+      return;
+    }
+
     let conversationId = this.activeConversationId();
     let storyTitle = this.activeConversation()?.title;
     const selectedModel = this.selectedModel();
@@ -143,6 +185,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
       this.dispatchEvent(
         chatEventGroup.setActiveConversationId({ conversationId }),
       );
+      this.router.navigate(['/c', conversationId]);
     }
 
     this.dispatchEvent(

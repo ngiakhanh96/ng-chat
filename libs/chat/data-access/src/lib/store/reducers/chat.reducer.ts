@@ -8,9 +8,10 @@ import {
   signalStore,
   signalStoreFeature,
   type,
+  withHooks,
   withState,
 } from '@ngrx/signals';
-import { on, withReducer } from '@ngrx/signals/events';
+import { injectDispatch, on, withReducer } from '@ngrx/signals/events';
 import { IChatModel } from '../../models/chat.model';
 import { IConversationHistoryMessageResponse } from '../../models/http-responses/conversation-history-message-response.model';
 import { chatEventGroup } from '../actions/chat.event-group';
@@ -19,6 +20,7 @@ import { withChatSelectors } from '../selectors/chat.selectors';
 
 export interface IChatState {
   conversations: IChatConversation<IChapterResponse | string>[];
+  conversationSummariesLoaded: boolean;
   activeConversationId: string | undefined;
   searchQuery: string;
   availableModels: IChatModel[];
@@ -40,6 +42,7 @@ export interface IUserChoice {
 
 const initialState: IChatState = {
   conversations: [],
+  conversationSummariesLoaded: false,
   activeConversationId: undefined,
   searchQuery: '',
   availableModels: [],
@@ -53,6 +56,16 @@ export const ChatStore = signalStore(
   withChatEffects(),
   withChatSelectors(),
   withDevtools('chat'),
+  withHooks(() => {
+    const dispatch = injectDispatch(chatEventGroup);
+
+    return {
+      onInit() {
+        dispatch.loadModels();
+        dispatch.loadConversations();
+      },
+    };
+  }),
 );
 
 function withChatReducer() {
@@ -108,20 +121,18 @@ function withChatReducer() {
           ? { selectedModelEffortId: selectedEffort.id }
           : {};
       }),
-      on(chatEventGroup.conversationsLoaded, ({ payload }, state) => {
-        const sessionConversations = payload.sessions.map((session) =>
+      on(chatEventGroup.conversationsLoaded, ({ payload }) => ({
+        conversations: payload.conversations.map((conversation) =>
           newConversation(
-            session.sessionDbKey,
-            session.storyTitle,
+            conversation.sessionDbKey,
+            conversation.storyTitle,
             [],
-            new Date(session.createdAt),
-            new Date(session.updatedAt),
+            new Date(conversation.createdAt),
+            new Date(conversation.updatedAt),
           ),
-        );
-        return {
-          conversations: [...sessionConversations],
-        };
-      }),
+        ),
+        conversationSummariesLoaded: true,
+      })),
       on(chatEventGroup.conversationHistoryLoaded, ({ payload }, state) => {
         const conversation = state.conversations.find(
           (conversation) => conversation.id === payload.conversationId,

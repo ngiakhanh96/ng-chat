@@ -16,7 +16,9 @@ export const chatEventGroup = eventGroup({
     loadModels: type<void>(),
     modelsLoaded: type<{ models: IChatModel[] }>(),
     loadConversations: type<void>(),
-    conversationsLoaded: type<{ sessions: IConversationSummaryResponse[] }>(),
+    conversationsLoaded: type<{
+      conversations: IConversationSummaryResponse[];
+    }>(),
     conversationHistoryLoaded: type<{
       conversationId: string;
       messages: IConversationHistoryMessageResponse[];

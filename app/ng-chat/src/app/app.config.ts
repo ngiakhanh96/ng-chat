@@ -14,6 +14,7 @@ import {
 import {
   PreloadAllModules,
   provideRouter,
+  withComponentInputBinding,
   withExperimentalAutoCleanupInjectors,
   withInMemoryScrolling,
   withPreloading,
@@ -72,6 +73,7 @@ export const appConfig: ApplicationConfig = {
     ]),
     provideRouter(
       mainRoutes,
+      withComponentInputBinding(),
       withPreloading(PreloadAllModules),
       withViewTransitions(),
       withInMemoryScrolling({

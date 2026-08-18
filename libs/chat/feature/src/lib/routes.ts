@@ -6,6 +6,16 @@ export const CHAT_ROUTES: Routes = [
   {
     path: '',
     providers: [ChatStore],
-    component: ChatPageComponent,
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: ChatPageComponent,
+      },
+      {
+        path: 'c/:conversationId',
+        component: ChatPageComponent,
+      },
+    ],
   },
 ];

@@ -33,8 +33,8 @@ export function withChatEffects() {
             return chatHttpClient
               .getConversations()
               .pipe(
-                map((sessions) =>
-                  chatEventGroup.conversationsLoaded({ sessions }),
+                map((conversations) =>
+                  chatEventGroup.conversationsLoaded({ conversations }),
                 ),
               );
           },
