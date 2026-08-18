@@ -7,7 +7,10 @@ import {
   output,
 } from '@angular/core';
 import { IChapterResponse } from '@ng-chat/chat-data-access';
-import { IChatMessage } from '@ng-chat/shared-data-access';
+import {
+  IChatMessage,
+  IChatMessageToolCall,
+} from '@ng-chat/shared-data-access';
 import { DisplayDatePipe } from '@ng-chat/shared-ui';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -37,9 +40,43 @@ export class ChatMessageComponent {
   reasoningDuration = computed(() =>
     this.formatReasoningDuration(this.message().reasoning?.elapsedMs ?? 0),
   );
-
+  reasoningToolCalls = computed(
+    () => this.message().reasoning?.toolCalls ?? [],
+  );
+  activeToolCall = computed(() =>
+    this.reasoningToolCalls().find((toolCall) => toolCall.status === 'running'),
+  );
   protected toggleReasoning() {
     this.reasoningExpanded.update((expanded) => !expanded);
+  }
+
+  readonly reasoningSummary = computed((): string => {
+    const activeToolCall = this.activeToolCall();
+    const reasoningText = this.message().reasoning?.content;
+    const toolCalls = this.reasoningToolCalls();
+    if (activeToolCall) {
+      return this.toolCallLabel(activeToolCall);
+    }
+
+    if (reasoningText) {
+      return `Thought for ${this.reasoningDuration()}`;
+    }
+
+    return toolCalls.length === 1
+      ? this.toolCallLabel(toolCalls[0])
+      : `Used ${toolCalls.length} tools`;
+  });
+
+  protected toolCallLabel(toolCall: IChatMessageToolCall): string {
+    const toolName = toolCall.toolName.split('_').join(' ');
+    switch (toolCall.status) {
+      case 'running':
+        return `Running ${toolName}…`;
+      case 'completed':
+        return `Used ${toolName}`;
+      case 'failed':
+        return `Failed to use ${toolName}`;
+    }
   }
 
   protected isChapterResponse(

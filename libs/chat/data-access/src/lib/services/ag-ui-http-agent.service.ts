@@ -21,6 +21,7 @@ export class AgUiHttpAgentService {
     return new Observable<IChatHttpResponse>((observer) => {
       let completedMessage: string | undefined;
       let completedMessageId: string | undefined;
+      const toolCallMessageIds = new Map<string, string>();
 
       const agent = this.create({
         url: url,
@@ -92,6 +93,40 @@ export class AgUiHttpAgentService {
                 messageId: event.messageId,
                 event: {
                   type: 'reasoning-end',
+                  occurredAtMs: Date.now(),
+                },
+              });
+            },
+            onToolCallStartEvent: ({ event }) => {
+              const messageId = event.parentMessageId ?? request.messageId;
+              toolCallMessageIds.set(event.toolCallId, messageId);
+              observer.next({
+                conversationId: agent.threadId,
+                messageId,
+                event: {
+                  type: 'tool-call-start',
+                  toolCallId: event.toolCallId,
+                  toolName: event.toolCallName,
+                  occurredAtMs: Date.now(),
+                },
+              });
+            },
+            onToolCallArgsEvent: () => {
+              // Tool arguments are intentionally not retained or rendered.
+            },
+            onToolCallEndEvent: () => {
+              // Completion is reported only when the result arrives.
+            },
+            onToolCallResultEvent: ({ event }) => {
+              const messageId =
+                toolCallMessageIds.get(event.toolCallId) ?? request.messageId;
+              toolCallMessageIds.delete(event.toolCallId);
+              observer.next({
+                conversationId: agent.threadId,
+                messageId,
+                event: {
+                  type: 'tool-call-complete',
+                  toolCallId: event.toolCallId,
                   occurredAtMs: Date.now(),
                 },
               });

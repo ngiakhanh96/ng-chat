@@ -28,22 +28,21 @@ export class ChatConversationComponent {
   suggestedActionSelected = output<string>();
 
   messages = computed(() => this.conversation()?.messages ?? []);
-  private readonly endOfMessages =
-    viewChild<ElementRef<HTMLElement>>('endOfMessages');
+  private readonly thread = viewChild<ElementRef<HTMLElement>>('thread');
 
   constructor() {
     afterRenderEffect({
       write: () => {
         const messages = this.messages();
-        const latestMessageId = messages[messages.length - 1]?.id;
-        const endOfMessages = this.endOfMessages();
+        const latestMessage = messages[messages.length - 1];
+        const thread = this.thread();
 
-        if (!latestMessageId || !endOfMessages) {
+        if (!latestMessage || !thread) {
           return;
         }
 
-        endOfMessages.nativeElement.scrollIntoView({
-          block: 'end',
+        thread.nativeElement.scrollTo({
+          top: thread.nativeElement.scrollHeight,
           behavior: 'smooth',
         });
       },

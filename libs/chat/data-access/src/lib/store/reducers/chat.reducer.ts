@@ -3,6 +3,7 @@ import {
   IChatConversation,
   IChatMessage,
   IChatMessageReasoning,
+  IChatMessageToolCall,
 } from '@ng-chat/shared-data-access';
 import {
   signalStore,
@@ -249,6 +250,40 @@ function withChatReducer() {
                 }),
               ),
             };
+          case 'tool-call-start':
+            return {
+              conversations: upsertStreamingAssistantMessage(
+                payload.conversationId,
+                payload.messageId,
+                state.conversations,
+                event.occurredAtMs,
+                (message) => ({
+                  ...message,
+                  reasoning: startToolCall(
+                    message.reasoning,
+                    event.toolCallId,
+                    event.toolName,
+                    event.occurredAtMs,
+                  ),
+                }),
+              ),
+            };
+          case 'tool-call-complete':
+            return {
+              conversations: upsertStreamingAssistantMessage(
+                payload.conversationId,
+                payload.messageId,
+                state.conversations,
+                event.occurredAtMs,
+                (message) => ({
+                  ...message,
+                  reasoning: completeToolCall(
+                    message.reasoning,
+                    event.toolCallId,
+                  ),
+                }),
+              ),
+            };
           case 'text-delta':
             return {
               conversations: upsertStreamingAssistantMessage(
@@ -315,11 +350,18 @@ function mapHistoryMessage(
         : parseChapterResponse(messageResponse.textMessage),
     status: 'completed',
     reasoning:
-      messageResponse.reasoningText || messageResponse.reasoningElapsedMs
+      messageResponse.reasoningText ||
+      messageResponse.reasoningElapsedMs ||
+      messageResponse.toolCalls?.length
         ? {
             status: 'completed',
             content: messageResponse.reasoningText ?? '',
             elapsedMs: messageResponse.reasoningElapsedMs ?? 0,
+            toolCalls: messageResponse.toolCalls?.map((toolCall) => ({
+              toolCallId: toolCall.toolCallId,
+              toolName: toolCall.toolName,
+              status: toolCall.completed ? 'completed' : 'failed',
+            })),
           }
         : undefined,
   };
@@ -432,6 +474,12 @@ function completeAssistantMessage(
       id: messageId,
       content,
       status: 'completed',
+      reasoning: messages[messageIndex].reasoning
+        ? completeReasoning(
+            completeRunningToolCalls(messages[messageIndex].reasoning),
+            occurredAtMs,
+          )
+        : undefined,
     };
   }
 
@@ -461,7 +509,10 @@ function markStreamingAssistantMessagesFailed(
               ...message,
               status: 'error',
               reasoning: message.reasoning
-                ? completeReasoning(message.reasoning, occurredAtMs)
+                ? completeReasoning(
+                    failRunningToolCalls(message.reasoning),
+                    occurredAtMs,
+                  )
                 : undefined,
             }),
           ),
@@ -521,6 +572,7 @@ function startReasoning(
     content: reasoning?.content ?? '',
     elapsedMs: reasoning?.elapsedMs ?? 0,
     startedAtMs: reasoning?.startedAtMs ?? occurredAtMs,
+    toolCalls: reasoning?.toolCalls ?? [],
   };
 }
 
@@ -568,9 +620,76 @@ function completeReasoning(
     : 0;
 
   return {
+    ...currentReasoning,
     status: 'completed',
     content: currentReasoning.content,
     elapsedMs: currentReasoning.elapsedMs + activeElapsedMs,
+  };
+}
+
+function startToolCall(
+  reasoning: IChatMessageReasoning | undefined,
+  toolCallId: string,
+  toolName: string,
+  occurredAtMs: number,
+): IChatMessageReasoning {
+  const currentReasoning = startReasoning(reasoning, occurredAtMs);
+  const existingToolCall = currentReasoning.toolCalls?.find(
+    (toolCall) => toolCall.toolCallId === toolCallId,
+  );
+  if (existingToolCall) {
+    return currentReasoning;
+  }
+
+  const toolCall: IChatMessageToolCall = {
+    toolCallId,
+    toolName,
+    status: 'running',
+  };
+
+  return {
+    ...currentReasoning,
+    toolCalls: [...(currentReasoning.toolCalls ?? []), toolCall],
+  };
+}
+
+function completeToolCall(
+  reasoning: IChatMessageReasoning | undefined,
+  toolCallId: string,
+): IChatMessageReasoning {
+  const currentReasoning = reasoning ?? {
+    status: 'streaming' as const,
+    content: '',
+    elapsedMs: 0,
+  };
+
+  return {
+    ...currentReasoning,
+    toolCalls: currentReasoning.toolCalls?.map((toolCall) =>
+      toolCall.toolCallId === toolCallId
+        ? { ...toolCall, status: 'completed' as const }
+        : toolCall,
+    ),
+  };
+}
+
+function completeRunningToolCalls(reasoning: IChatMessageReasoning) {
+  return updateRunningToolCalls(reasoning, 'completed');
+}
+
+function failRunningToolCalls(reasoning: IChatMessageReasoning) {
+  return updateRunningToolCalls(reasoning, 'failed');
+}
+
+function updateRunningToolCalls(
+  reasoning: IChatMessageReasoning,
+  status: Extract<IChatMessageToolCall['status'], 'completed' | 'failed'>,
+): IChatMessageReasoning {
+  return {
+    ...reasoning,
+    toolCalls: reasoning.toolCalls?.map((toolCall) =>
+      toolCall.status === 'running' ? { ...toolCall, status } : toolCall,
+    ),
   };
 }
 

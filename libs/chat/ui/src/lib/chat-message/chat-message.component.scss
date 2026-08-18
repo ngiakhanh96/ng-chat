@@ -51,9 +51,7 @@
 }
 
 .message__reasoning {
-  border-color: rgb(215 177 120 / 18%);
-  background: rgb(22 23 20 / 74%);
-  box-shadow: inset 3px 0 0 rgb(185 144 92 / 28%);
+  @apply py-1;
 }
 
 .message__reasoning-status,
@@ -73,12 +71,39 @@
 }
 
 .message__reasoning-content {
-  border-color: rgb(215 177 120 / 12%);
-  background: rgb(10 11 9 / 22%);
+  border-left: 1px solid rgb(215 177 120 / 16%);
 }
 
 .message__reasoning-text {
   color: var(--chat-text);
+}
+
+.message__tool-calls {
+  @apply grid gap-0.5 mb-0;
+}
+
+.message__reasoning-text + .message__tool-calls {
+  @apply mt-2;
+}
+
+.message__tool-call {
+  color: var(--chat-text-muted);
+}
+
+.message__tool-call nz-icon {
+  @apply w-2 shrink-0 text-[0.65rem];
+}
+
+.message__tool-call--completed nz-icon {
+  color: var(--chat-accent-strong);
+}
+
+.message__tool-call--running {
+  color: color-mix(in srgb, var(--chat-text) 78%, transparent);
+}
+
+.message__tool-call--failed {
+  color: #ffc4b5;
 }
 
 .message__title {

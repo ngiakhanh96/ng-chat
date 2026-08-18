@@ -4,11 +4,20 @@ export type ChatMessageStatus = 'completed' | 'streaming' | 'error';
 
 export type ChatMessageReasoningStatus = 'streaming' | 'completed';
 
+export type ChatMessageToolCallStatus = 'running' | 'completed' | 'failed';
+
+export interface IChatMessageToolCall {
+  toolCallId: string;
+  toolName: string;
+  status: ChatMessageToolCallStatus;
+}
+
 export interface IChatMessageReasoning {
   status: ChatMessageReasoningStatus;
   content: string;
   elapsedMs: number;
   startedAtMs?: number;
+  toolCalls?: IChatMessageToolCall[];
 }
 
 export interface IChatUserChoice {

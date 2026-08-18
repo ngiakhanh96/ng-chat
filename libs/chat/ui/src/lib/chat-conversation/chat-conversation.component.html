@@ -1,4 +1,4 @@
-<section class="thread" aria-label="Conversation thread">
+<section #thread class="thread" aria-label="Conversation thread">
   <div class="thread__inner">
     @if (messages().length > 0) {
       <div class="thread__messages">
@@ -8,7 +8,6 @@
             (suggestedActionSelected)="suggestedActionSelected.emit($event)"
           />
         }
-        <div #endOfMessages class="thread__end" aria-hidden="true"></div>
       </div>
     } @else {
       <div class="thread__empty">

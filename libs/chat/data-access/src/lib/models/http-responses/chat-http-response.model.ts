@@ -32,6 +32,17 @@ export type IChatHttpResponseEvent =
       occurredAtMs: number;
     }
   | {
+      type: 'tool-call-start';
+      toolCallId: string;
+      toolName: string;
+      occurredAtMs: number;
+    }
+  | {
+      type: 'tool-call-complete';
+      toolCallId: string;
+      occurredAtMs: number;
+    }
+  | {
       type: 'response-complete';
       content: string;
       occurredAtMs: number;
