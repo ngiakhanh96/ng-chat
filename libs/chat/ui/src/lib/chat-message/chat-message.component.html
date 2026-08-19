@@ -56,11 +56,11 @@
             class="message__reasoning-content mt-1 py-1 pl-4"
             [id]="reasoningPanelId()"
           >
-            @if (reasoning.content) {
+            @if (bufferedReasoning()) {
               <p
                 class="message__reasoning-text m-0 whitespace-pre-wrap wrap-break-word text-[0.82rem] leading-5"
               >
-                {{ reasoning.content }}
+                {{ bufferedReasoning() }}
               </p>
             }
 
@@ -138,25 +138,32 @@
     } @else {
       @if (isChapterResponse(content)) {
         <p class="message__title">
-          Chapter {{ content.chapterNumber }}: {{ content.chapterName }}
+          {{ bufferedChapterTitle() }}
         </p>
-        <p class="message__content">{{ content.content }}</p>
+        <p class="message__content">
+          {{ bufferedChapterContent() }}
+        </p>
 
         @if (content.choices.length) {
           <div class="message__choices" aria-label="Story choices">
             @for (choice of content.choices; track $index) {
-              <button
-                class="message__choice"
-                type="button"
-                (click)="suggestedActionSelected.emit(choice.choiceContent)"
-              >
-                <span>
-                  @if (choice.choiceType) {
-                    <small>{{ choice.choiceType }}</small>
-                  }
-                  <strong>{{ choice.choiceContent }}</strong>
-                </span>
-              </button>
+              @if (bufferedChoice($index)) {
+                <button
+                  class="message__choice"
+                  type="button"
+                  [disabled]="isChoiceTyping($index)"
+                  (click)="suggestedActionSelected.emit(choice.choiceContent)"
+                >
+                  <span>
+                    @if (choice.choiceType) {
+                      <small>{{ choice.choiceType }}</small>
+                    }
+                    <strong>
+                      {{ bufferedChoice($index) }}
+                    </strong>
+                  </span>
+                </button>
+              }
             }
           </div>
         }
@@ -165,7 +172,7 @@
       }
     }
 
-    @if (!isUser && message().status === 'completed' && message().content) {
+    @if (!isUser() && message().status === 'completed' && message().content) {
       <div class="message__actions" aria-label="Message actions">
         <button
           nz-button

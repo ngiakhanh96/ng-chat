@@ -2,7 +2,7 @@
   <div class="thread__inner">
     @if (messages().length > 0) {
       <div class="thread__messages">
-        @for (message of messages(); track message.id) {
+        @for (message of messages(); track message.createdAt) {
           <chat-message
             [message]="message"
             (suggestedActionSelected)="suggestedActionSelected.emit($event)"
