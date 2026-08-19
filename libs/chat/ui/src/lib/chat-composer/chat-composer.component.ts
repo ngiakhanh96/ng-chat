@@ -1,6 +1,5 @@
 import { TextFieldModule } from '@angular/cdk/text-field';
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   input,
@@ -25,7 +24,6 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
   ],
   templateUrl: './chat-composer.component.html',
   styleUrl: './chat-composer.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComposerComponent {
   placeholder = input('Ask ng-chat');

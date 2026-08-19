@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   input,
   model,
@@ -15,7 +14,6 @@ export interface IChatSelectOption {
   selector: 'chat-select',
   templateUrl: './chat-select.component.html',
   styleUrl: './chat-select.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatSelectComponent implements FormValueControl<string> {
   readonly value = model.required<string>();

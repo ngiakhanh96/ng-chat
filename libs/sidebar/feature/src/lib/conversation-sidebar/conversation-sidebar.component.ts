@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   effect,
   input,
@@ -35,7 +34,6 @@ export interface IChatSidebarSection {
   ],
   templateUrl: './conversation-sidebar.component.html',
   styleUrl: './conversation-sidebar.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConversationSidebarComponent {
   sections = input<IChatSidebarSection[]>([]);

@@ -1,6 +1,5 @@
 import {
   afterRenderEffect,
-  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -18,7 +17,6 @@ import { ChatMessageComponent } from '../chat-message/chat-message.component';
   imports: [ChatMessageComponent, NzEmptyModule],
   templateUrl: './chat-conversation.component.html',
   styleUrl: './chat-conversation.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatConversationComponent {
   conversation = input<

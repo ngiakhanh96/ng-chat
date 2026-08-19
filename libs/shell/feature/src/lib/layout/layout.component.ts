@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { BaseWithSandBoxComponent } from '@ng-chat/shared-data-access';
 
@@ -8,6 +8,5 @@ import { BaseWithSandBoxComponent } from '@ng-chat/shared-data-access';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
   host: {},
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutComponent extends BaseWithSandBoxComponent {}

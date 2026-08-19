@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   DestroyRef,
@@ -50,7 +49,6 @@ const CHARACTERS_PER_TICK = 2;
   ],
   templateUrl: './chat-message.component.html',
   styleUrl: './chat-message.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatMessageComponent {
   private readonly destroyRef = inject(DestroyRef);

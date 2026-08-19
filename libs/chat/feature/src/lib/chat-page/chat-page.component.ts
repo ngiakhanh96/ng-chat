@@ -1,6 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -44,7 +43,6 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   ],
   templateUrl: './chat-page.component.html',
   styleUrl: './chat-page.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatPageComponent extends BaseWithSandBoxComponent {
   private readonly chatStore = inject(ChatStore);
