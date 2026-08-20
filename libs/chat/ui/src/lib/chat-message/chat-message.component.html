@@ -147,7 +147,7 @@
                 <button
                   class="message__choice"
                   type="button"
-                  [disabled]="isChoiceTyping($index)"
+                  [disabled]="choicesDisabled() || isChoiceTyping($index)"
                   (click)="suggestedActionSelected.emit(choice.choiceContent)"
                 >
                   <span>

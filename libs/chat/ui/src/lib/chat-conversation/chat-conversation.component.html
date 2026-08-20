@@ -5,6 +5,7 @@
         @for (message of messages(); track message.createdAt) {
           <chat-message
             [message]="message"
+            [choicesDisabled]="!$last || actionsDisabled()"
             (suggestedActionSelected)="suggestedActionSelected.emit($event)"
           />
         }

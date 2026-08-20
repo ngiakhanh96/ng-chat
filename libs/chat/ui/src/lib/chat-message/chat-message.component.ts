@@ -54,6 +54,7 @@ export class ChatMessageComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   message = input.required<IChatMessage<string | IChapterResponse>>();
+  choicesDisabled = input(false);
   suggestedActionSelected = output<string>();
 
   isUser = computed(() => this.message().role === 'user');
