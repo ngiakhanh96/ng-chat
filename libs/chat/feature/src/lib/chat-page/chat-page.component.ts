@@ -207,7 +207,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
   }
 
   private createId(): string {
-    return globalThis.crypto.randomUUID();
+    return crypto.randomUUID();
   }
 
   private createConversationTitle(content: string): string {

@@ -137,12 +137,8 @@
       </p>
     } @else {
       @if (isChapterResponse(content)) {
-        <p class="message__title">
-          {{ bufferedChapterTitle() }}
-        </p>
-        <p class="message__content">
-          {{ bufferedChapterContent() }}
-        </p>
+        <p class="message__title">{{ bufferedChapterTitle() }}</p>
+        <p class="message__content">{{ bufferedChapterContent() }}</p>
 
         @if (content.choices.length) {
           <div class="message__choices" aria-label="Story choices">
