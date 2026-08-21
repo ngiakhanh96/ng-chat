@@ -3,8 +3,8 @@ import {
   afterNextRender,
   Component,
   computed,
-  ElementRef,
   effect,
+  ElementRef,
   inject,
   Injector,
   input,
@@ -12,7 +12,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { FormField, disabled, form } from '@angular/forms/signals';
+import { disabled, form, FormField } from '@angular/forms/signals';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -38,9 +38,8 @@ export class ChatComposerComponent {
   submitted = output<string>();
   private readonly injector = inject(Injector);
   private readonly composerModel = signal({ message: '' });
-  private readonly messageInput = viewChild<ElementRef<HTMLTextAreaElement>>(
-    'messageInput',
-  );
+  private readonly messageInput =
+    viewChild<ElementRef<HTMLTextAreaElement>>('messageInput');
   protected readonly composerForm = form(this.composerModel, (schemaPath) => {
     disabled(schemaPath.message, () => this.disabled());
   });
@@ -56,11 +55,14 @@ export class ChatComposerComponent {
         return;
       }
 
-      afterNextRender(
-        () => this.messageInput()?.nativeElement.focus(),
-        { injector: this.injector },
-      );
+      afterNextRender(() => this.focus(), { injector: this.injector });
     });
+  }
+
+  focus() {
+    if (!this.disabled()) {
+      this.messageInput()?.nativeElement.focus();
+    }
   }
 
   onSubmit(event?: SubmitEvent) {

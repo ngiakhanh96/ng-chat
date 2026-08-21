@@ -7,6 +7,7 @@ import {
   input,
   linkedSignal,
   signal,
+  viewChild,
 } from '@angular/core';
 import { FormField, form } from '@angular/forms/signals';
 import { Router } from '@angular/router';
@@ -66,6 +67,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
       !this.selectedModelEffort()
     );
   });
+  private readonly composer = viewChild(ChatComposerComponent);
   private readonly modelSelectionFormModel = linkedSignal(() => ({
     modelId: this.selectedModel()?.id ?? '',
     effortId: this.selectedModelEffortId() ?? '',
@@ -148,7 +150,7 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
 
   onNewConversation() {
     this.dispatchEvent(chatEventGroup.newConversation());
-    this.router.navigate(['/']);
+    this.router.navigate(['/']).then(() => this.composer()?.focus());
   }
 
   onConversationIdSelected(
@@ -156,7 +158,9 @@ export class ChatPageComponent extends BaseWithSandBoxComponent {
     closeAfterAction: boolean,
   ) {
     if (conversationId) {
-      this.router.navigate(['/c', conversationId]);
+      this.router
+        .navigate(['/c', conversationId])
+        .then(() => this.composer()?.focus());
     }
     if (closeAfterAction) {
       this.closeMobileSidebar();

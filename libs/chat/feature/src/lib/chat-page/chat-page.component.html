@@ -48,7 +48,7 @@
 
     <footer class="chat-shell__composer">
       <chat-composer
-        [autoFocus]="!conversationId()"
+        [autoFocus]="true"
         [disabled]="shouldDisableMessageSubmission()"
         (submitted)="onMessageSubmitted($event)"
       />
