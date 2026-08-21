@@ -7,6 +7,7 @@ import {
 import { Observable } from 'rxjs';
 import { IChatHttpRequest } from '../models/http-requests/chat-http-request.model';
 import { IChatHttpResponse } from '../models/http-responses/chat-http-response.model';
+import { agUiRetryingFetch } from './http/ag-ui-retrying-fetch';
 
 @Service()
 export class AgUiHttpAgentService {
@@ -172,10 +173,19 @@ export class AgUiHttpAgentService {
         .catch((error: unknown) => {
           observer.error(error);
         });
+
+      return () => {
+        if (agent.isRunning) {
+          agent.abortRun();
+        }
+      };
     });
   }
 
   private create(config: HttpAgentConfig): HttpAgent {
-    return new HttpAgent(config);
+    return new HttpAgent({
+      ...config,
+      fetch: agUiRetryingFetch,
+    });
   }
 }
