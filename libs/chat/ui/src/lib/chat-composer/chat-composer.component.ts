@@ -1,10 +1,16 @@
 import { TextFieldModule } from '@angular/cdk/text-field';
 import {
+  afterNextRender,
   Component,
   computed,
+  ElementRef,
+  effect,
+  inject,
+  Injector,
   input,
   output,
   signal,
+  viewChild,
 } from '@angular/core';
 import { FormField, disabled, form } from '@angular/forms/signals';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -28,8 +34,13 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 export class ChatComposerComponent {
   placeholder = input('Ask ng-chat');
   disabled = input(false);
+  autoFocus = input(false);
   submitted = output<string>();
+  private readonly injector = inject(Injector);
   private readonly composerModel = signal({ message: '' });
+  private readonly messageInput = viewChild<ElementRef<HTMLTextAreaElement>>(
+    'messageInput',
+  );
   protected readonly composerForm = form(this.composerModel, (schemaPath) => {
     disabled(schemaPath.message, () => this.disabled());
   });
@@ -38,6 +49,19 @@ export class ChatComposerComponent {
   canSend = computed(() => {
     return this.trimmedDraft().length > 0 && !this.disabled();
   });
+
+  constructor() {
+    effect(() => {
+      if (!this.autoFocus() || this.disabled()) {
+        return;
+      }
+
+      afterNextRender(
+        () => this.messageInput()?.nativeElement.focus(),
+        { injector: this.injector },
+      );
+    });
+  }
 
   onSubmit(event?: SubmitEvent) {
     event?.preventDefault();

@@ -16,8 +16,22 @@
     @let reasoning = message().reasoning;
     @if (reasoning) {
       @let toolCalls = reasoningToolCalls();
-      @let runningToolCall = activeToolCall();
       <section class="message__reasoning mb-3" aria-label="Assistant reasoning">
+        <!-- Live reasoning status -->
+        @if (reasoning.status === 'streaming') {
+          <div
+            class="message__reasoning-status flex min-h-7 w-full items-center gap-2 py-1 text-left text-xs font-medium"
+            role="status"
+            aria-live="polite"
+          >
+            <span
+              class="message__reasoning-dot h-2 w-2 shrink-0 animate-pulse rounded-full"
+              aria-hidden="true"
+            ></span>
+            <span>Thinking…</span>
+          </div>
+        }
+
         <!-- Completed reasoning disclosure -->
         @if (
           reasoning.status === 'completed' &&
@@ -98,25 +112,6 @@
                 }
               </ul>
             }
-          </div>
-        }
-
-        <!-- Live reasoning status -->
-        @if (
-          reasoning.status === 'streaming' &&
-          !runningToolCall &&
-          (!toolCalls.length || toolCalls.length === 0)
-        ) {
-          <div
-            class="message__reasoning-status flex min-h-7 w-full items-center gap-2 py-1 text-left text-xs font-medium"
-            role="status"
-            aria-live="polite"
-          >
-            <span
-              class="message__reasoning-dot h-2 w-2 shrink-0 animate-pulse rounded-full"
-              aria-hidden="true"
-            ></span>
-            <span>Thinking…</span>
           </div>
         }
       </section>
