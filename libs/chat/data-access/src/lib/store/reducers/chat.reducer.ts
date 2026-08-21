@@ -599,9 +599,14 @@ function appendReasoningText(
   occurredAtMs: number,
 ): IChatMessageReasoning {
   const currentReasoning = startReasoning(reasoning, occurredAtMs);
+  const activeElapsedMs = currentReasoning.startedAtMs
+    ? Math.max(0, occurredAtMs - currentReasoning.startedAtMs)
+    : 0;
+
   return {
     ...currentReasoning,
     content: `${currentReasoning.content}${delta}`,
+    elapsedMs: currentReasoning.elapsedMs + activeElapsedMs,
   };
 }
 
@@ -609,12 +614,7 @@ function completeReasoning(
   reasoning: IChatMessageReasoning | undefined,
   occurredAtMs: number,
 ): IChatMessageReasoning {
-  const currentReasoning = reasoning ?? {
-    status: 'streaming',
-    content: '',
-    elapsedMs: 0,
-    startedAtMs: occurredAtMs,
-  };
+  const currentReasoning = startReasoning(reasoning, occurredAtMs);
   const activeElapsedMs = currentReasoning.startedAtMs
     ? Math.max(0, occurredAtMs - currentReasoning.startedAtMs)
     : 0;

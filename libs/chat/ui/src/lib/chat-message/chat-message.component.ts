@@ -126,12 +126,13 @@ export class ChatMessageComponent {
     const activeToolCall = this.activeToolCall();
     const reasoningText = this.message().reasoning?.content;
     const toolCalls = this.reasoningToolCalls();
+    const reasoningDuration = this.reasoningDuration();
     if (activeToolCall) {
       return this.toolCallLabel(activeToolCall);
     }
 
     if (reasoningText) {
-      return `Thought for ${this.reasoningDuration()}`;
+      return `Thought for ${reasoningDuration}`;
     }
 
     return toolCalls.length === 1
