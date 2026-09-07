@@ -157,13 +157,7 @@
 }
 
 .message__error {
-  @apply mb-0 mt-3 rounded-xl border px-3 py-2 text-xs leading-5;
-}
-
-.message__error {
-  border-color: rgb(239 154 132 / 28%);
-  background: rgb(92 48 39 / 25%);
-  color: #ffc4b5;
+  @apply mb-0 mt-3 inline-block rounded-xl border border-[rgb(239_154_132_/_28%)] bg-[rgb(92_48_39_/_25%)] px-3 py-2 text-[#ffc4b5] text-xs leading-5;
 }
 
 .message__choices {
