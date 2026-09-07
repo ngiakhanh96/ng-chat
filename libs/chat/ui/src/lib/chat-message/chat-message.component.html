@@ -71,11 +71,20 @@
             [id]="reasoningPanelId()"
           >
             @if (bufferedReasoning()) {
-              <p
-                class="message__reasoning-text m-0 whitespace-pre-wrap wrap-break-word text-[0.82rem] leading-5"
-              >
-                {{ bufferedReasoning() }}
-              </p>
+              <markstream-angular
+                class="message__reasoning-text"
+                [content]="bufferedReasoning()"
+                [final]="
+                  reasoning.status === 'completed' &&
+                  bufferedReasoning() === reasoning.content
+                "
+                [fade]="false"
+                [typewriter]="false"
+                [smoothStreaming]="false"
+                [renderCodeBlocksAsPre]="true"
+                [allowHtml]="false"
+                [isDark]="true"
+              />
             }
 
             <!-- Tool activity timeline -->

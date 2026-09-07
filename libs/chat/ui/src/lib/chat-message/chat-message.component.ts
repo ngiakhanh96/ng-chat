@@ -17,6 +17,7 @@ import {
   IChatMessageToolCall,
 } from '@ng-chat/shared-data-access';
 import { DisplayDatePipe } from '@ng-chat/shared-ui';
+import { MarkstreamAngularComponent } from 'markstream-angular';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -46,6 +47,7 @@ const CHARACTERS_PER_TICK = 2;
     NzIconModule,
     NzTooltipModule,
     DisplayDatePipe,
+    MarkstreamAngularComponent,
   ],
   templateUrl: './chat-message.component.html',
   styleUrl: './chat-message.component.scss',
