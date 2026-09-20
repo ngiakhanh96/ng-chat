@@ -66,10 +66,7 @@
           (reasoning.content || toolCalls.length) &&
           (reasoning.status === 'streaming' || reasoningExpanded())
         ) {
-          <div
-            class="message__reasoning-content mt-1 py-1 pl-4"
-            [id]="reasoningPanelId()"
-          >
+          <div class="message__reasoning-content" [id]="reasoningPanelId()">
             @if (bufferedReasoning()) {
               <markstream-angular
                 class="message__reasoning-text"

@@ -72,6 +72,7 @@
 
 .message__reasoning-content {
   border-left: 1px solid rgb(215 177 120 / 16%);
+  @apply ml-0.75 mt-1 py-1 pl-4;
 }
 
 .message__reasoning-text {
