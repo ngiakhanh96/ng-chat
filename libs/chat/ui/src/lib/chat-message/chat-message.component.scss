@@ -51,20 +51,29 @@
 }
 
 .message__reasoning {
-  @apply py-1;
+  @apply mb-3 py-1;
 }
 
 .message__reasoning-status,
 .message__reasoning-summary,
 .message__reasoning-toggle {
+  @apply flex min-h-7 items-center gap-2 py-1 text-left text-xs font-medium;
   color: var(--chat-text-muted);
 }
 
+.message__reasoning-status,
+.message__reasoning-summary {
+  @apply w-full;
+}
+
 .message__reasoning-dot {
+  @apply h-2 w-2 shrink-0 animate-pulse rounded-full;
   background: var(--chat-accent-strong);
 }
 
 .message__reasoning-toggle {
+  @apply cursor-pointer border-0 bg-transparent transition;
+
   &:hover {
     color: var(--chat-text);
   }
@@ -86,7 +95,7 @@
 }
 
 .message__tool-calls {
-  @apply grid gap-0.5 mb-0;
+  @apply m-0 grid list-none gap-0.5 p-0;
 }
 
 .message__reasoning-text + .message__tool-calls {
@@ -94,6 +103,7 @@
 }
 
 .message__tool-call {
+  @apply flex min-h-7 items-center gap-2 py-1 text-xs;
   color: var(--chat-text-muted);
 }
 
@@ -130,6 +140,8 @@
 }
 
 .message__reasoning-chevron {
+  @apply text-[0.68rem] transition-transform duration-200;
+
   &--expanded {
     transform: rotate(90deg);
   }

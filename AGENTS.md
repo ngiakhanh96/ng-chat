@@ -109,6 +109,7 @@ This repo builds an Angular chat UI in the spirit of ChatGPT: fast, accessible, 
 
 - Build the actual chat surface, not a marketing page, when adding product UI.
 - Use Angular Material/CDK and existing SCSS/Tailwind setup consistently.
+- Keep static Tailwind utility classes out of component templates. Use semantic component classes in HTML and place their utilities in the paired `.scss` file with `@apply`; keep only dynamic state or modifier class bindings in templates.
 - Prefer Tailwind syntax in component styles wherever a direct utility exists. Use `@apply` for layout, spacing, sizing, typography, borders, display, flex/grid alignment, overflow, positioning, and common states before writing normal CSS declarations.
 - Keep normal CSS for values Tailwind does not express cleanly, such as CSS custom properties, theme-token assignments, complex gradients, `color-mix()`, custom `box-shadow` recipes, pseudo-element artwork, and exact grid templates.
 - Chat interactions should support keyboard-first use, visible focus states, loading/streaming states, cancellation, retry, copy actions, and error recovery.
