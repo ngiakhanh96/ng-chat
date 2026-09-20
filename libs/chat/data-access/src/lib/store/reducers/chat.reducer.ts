@@ -1,10 +1,10 @@
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import {
   IChatConversation,
   IChatMessage,
   IChatMessageReasoning,
   IChatMessageToolCall,
 } from '@ng-chat/shared-data-access';
+import { withDevtools } from '@ngrx-toolkit/core';
 import {
   signalStore,
   signalStoreFeature,

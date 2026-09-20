@@ -1,4 +1,4 @@
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
+import { withDevtools } from '@ngrx-toolkit/core';
 import {
   signalStore,
   signalStoreFeature,
